@@ -18,6 +18,10 @@ public class Offerta {
 		this.valore = valore;
 		this.data = data;
 	}
+	
+	public Offerta() {
+		
+	}
 
 	public int getId_utente() {
 		return id_utente;

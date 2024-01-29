@@ -19,6 +19,10 @@ public class Asta {
 		this.categoria = categoria;
 		this.foto = foto;
 	}
+	
+	public Asta() {
+		
+	}
 
 	public int getId() {
 		return id;

@@ -12,12 +12,17 @@ public class Utente {
 	private String biografia;
 	private String sitoweb;
 	private String paese;
+	private String tipo;
 	private byte[] avatar;
 	
 	public Utente(String username, String email, String password) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
+	}
+	
+	public Utente() {
+		
 	}
 
 	public int getId() {
@@ -82,6 +87,14 @@ public class Utente {
 
 	public void setAvatar(byte[] avatar) {
 		this.avatar = avatar;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 	
 }
