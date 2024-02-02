@@ -15,7 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import Models.Utente;
+import Repository.Asta_Inversa_Repository;
+import Repository.Asta_Repository;
+import Repository.Asta_Ribasso_Repository;
+import Repository.Asta_Silenziosa_Repository;
 import Repository.Utente_Repository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class Utente_Implementation implements Utente_Repository{
@@ -24,6 +29,15 @@ public class Utente_Implementation implements Utente_Repository{
 	private Utente_Repository utente;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private Asta_Repository Astanormale;
+	@Autowired
+	private Asta_Inversa_Repository AstaInversa;
+	@Autowired
+	private Asta_Ribasso_Repository AstaRibasso;
+	@Autowired
+	private Asta_Silenziosa_Repository AstaSilenziosa;
+	
 	
 	public Utente newRegistrazioneVenditore(Utente venditore) {
 		
@@ -65,6 +79,18 @@ public class Utente_Implementation implements Utente_Repository{
 		compratore.setTipo("Compratore");
 	    
 		return utente.save(compratore);
+	}
+	
+	
+	public boolean checkLogin(String email,String password,String tipo) {
+	Optional<Utente> user = Optional.ofNullable(utente.findByEmail(email));	
+	
+	if(user.isPresent()) {
+		Utente U = user.get();
+		if(U.getTipo().equals(tipo))
+			return passwordEncoder.matches(password, U.getPassword());
+	}
+	 return false;
 	}
 	
 	public class EmailDuplicataException extends RuntimeException{
@@ -263,6 +289,12 @@ public class Utente_Implementation implements Utente_Repository{
 	public boolean existsByEmailAndTipo(String email, String tipo) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Utente findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
