@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 @Entity
 public class Asta {
 
-	private @Id int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private int id_creatore;
 	private String nome;
 	private String descrizione;

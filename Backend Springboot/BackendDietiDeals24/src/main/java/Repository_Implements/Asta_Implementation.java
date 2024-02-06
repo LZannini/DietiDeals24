@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +12,35 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Service;
 import Models.Asta;
+import Models.Asta_Inversa;
 import Repository.Asta_Repository;
 
 @Service
 public class Asta_Implementation implements Asta_Repository{
 
+	@Autowired
+	private Asta_Inversa_Implementation astaInversa;
+	@Autowired
+	private Asta_Ribasso_Implementation astaRibasso;
+	@Autowired
+	private Asta_Silenziosa_Implementation astaSilenziosa;
+	
+	@Override
+	public Asta creaAsta(Asta asta,String tipo)
+	{
+		switch(tipo) {
+		case "AstaInversa":
+			return astaInversa.creaAstaInversa(asta);
+		case "AstaRibasso":
+			return astaRibasso.creaAstaRibasso(asta);
+		case "AstaSilenziosa":
+			return astaSilenziosa.creaAstaSilenziosa(asta);
+		default:
+			 throw new IllegalArgumentException("Tipo di asta non supportato: " + tipo);
+		}
+	}
+	
+	
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub

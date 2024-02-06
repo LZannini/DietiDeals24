@@ -1,22 +1,58 @@
 package Repository_Implements;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Service;
+
+import Models.Asta;
 import Models.Asta_Ribasso;
+import Repository.Asta_Repository;
 import Repository.Asta_Ribasso_Repository;
 
 
 @Service
 public class Asta_Ribasso_Implementation implements Asta_Ribasso_Repository{
 
+	@Autowired 
+	private Asta_Repository astaRep;
+	
+	@Override
+	public Asta creaAstaRibasso(Asta asta) {
+		
+		if(!(asta instanceof Asta_Ribasso))
+			throw new IllegalArgumentException("L'oggetto Asta deve essere un'istanza di AstaRibasso");
+		
+		Asta_Ribasso astarib = (Asta_Ribasso) asta;
+		
+		if(astarib.getPrezzo() <= 0)
+			throw new IllegalArgumentException("Il prezzo deve essere maggiore di zero!");
+		
+		if(astarib.getDecremento() <= 0)
+			throw new IllegalArgumentException("L'importo per ciascun decremento deve essere maggiore di zero!");
+		
+		if(astarib.getMinimo() <= 0)
+			throw new IllegalArgumentException("Il prezzo minimo segreto deve essere maggiore di zero!");
+			
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime timer = now.plusHours(1);
+		astarib.setTimer(timer);
+		
+		if(now.isAfter(timer))
+			throw new IllegalArgumentException("Il timer è scaduto per questa Asta Ribasso!");
+		
+		return astaRep.save(astarib);
+	}
+	
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub

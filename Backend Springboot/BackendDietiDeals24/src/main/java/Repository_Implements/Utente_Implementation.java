@@ -3,6 +3,7 @@ package Repository_Implements;
 import java.util.List;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,84 +22,50 @@ import Repository.Asta_Ribasso_Repository;
 import Repository.Asta_Silenziosa_Repository;
 import Repository.Utente_Repository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
 
 @Service
 public class Utente_Implementation implements Utente_Repository{
 
 	@Autowired
-	private Utente_Repository utente;
-	@Autowired
 	private PasswordEncoder passwordEncoder;
-	@Autowired
-	private Asta_Repository Astanormale;
-	@Autowired
-	private Asta_Inversa_Repository AstaInversa;
-	@Autowired
-	private Asta_Ribasso_Repository AstaRibasso;
-	@Autowired
-	private Asta_Silenziosa_Repository AstaSilenziosa;
 	
 	
-	public Utente newRegistrazioneVenditore(Utente venditore) {
-		
-		if(utente.existsByEmailAndTipo(venditore.getEmail(),"Venditore")) {
-			throw new EmailDuplicataException("Questa email è già in uso per un account Venditore!");
-		}
-		
-		if(venditore.getPassword().length() < 4) {
-			throw new IllegalArgumentException("La password deve contenere almeno 4 caratteri!");
-		}
-		
-		if (!venditore.getPassword().matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
-			throw new IllegalArgumentException("La password deve contenere almeno un carattere speciale!");
-		}
-		
-		venditore.setPassword(passwordEncoder.encode(venditore.getPassword()));
-		
-		venditore.setTipo("Venditore");
-		
-		return utente.save(venditore);
-	}
-	
-	public Utente newRegistrazioneCompratore(Utente compratore) {
-		
-		if(utente.existsByEmailAndTipo(compratore.getEmail(), "Compratore")) {
-			throw new EmailDuplicataException("Questa email è già in uso per un account Compratore!");
-		}
-		
-		if(compratore.getPassword().length() < 4) {
-			throw new IllegalArgumentException("La password deve contenere almeno 4 caratteri!");
-		}
-		
-		if (!compratore.getPassword().matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
-			throw new IllegalArgumentException("La password deve contenere almeno un carattere speciale!");
-		}
-		
-		compratore.setPassword(passwordEncoder.encode(compratore.getPassword()));
-		
-		compratore.setTipo("Compratore");
-	    
-		return utente.save(compratore);
-	}
-	
-	
-	public boolean checkLogin(String email,String password,String tipo) {
-	Optional<Utente> user = Optional.ofNullable(utente.findByEmail(email));	
-	
-	if(user.isPresent()) {
-		Utente U = user.get();
-		if(U.getTipo().equals(tipo))
-			return passwordEncoder.matches(password, U.getPassword());
-	}
-	 return false;
-	}
+	@Override
+    @Transactional
+    public Utente newRegistrazioneVenditore(Utente venditore) {
+        validateUtente(venditore);
+        venditore.setTipo("Venditore");
+        return saveAndFlush(venditore);
+    }
+
+    @Override
+    @Transactional
+    public Utente newRegistrazioneCompratore(Utente compratore) {
+        validateUtente(compratore);
+        compratore.setTipo("Compratore");
+        return saveAndFlush(compratore);
+    }
+
+    private void validateUtente(Utente utente) {
+    
+        Set<ConstraintViolation<Utente>> violations = Validation.buildDefaultValidatorFactory().getValidator().validate(utente);
+
+        if (!violations.isEmpty()) 
+            throw new ConstraintViolationException(violations);
+        
+
+        // Altri controlli 
+    }
 	
 	public class EmailDuplicataException extends RuntimeException{
 		public EmailDuplicataException(String message) {
 			super(message);
 		}
 	}
-	
+
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
@@ -133,12 +100,6 @@ public class Utente_Implementation implements Utente_Repository{
 	public void deleteAllInBatch() {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public Utente getOne(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -280,9 +241,15 @@ public class Utente_Implementation implements Utente_Repository{
 	}
 
 	@Override
-	public Utente register(Utente entity) {
+	public Optional<Utente> findByEmail(String email) {
 		// TODO Auto-generated method stub
-		return null;
+		return Optional.empty();
+	}
+
+	@Override
+	public boolean checkLogin(String email, String password, String tipo) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
@@ -292,9 +259,10 @@ public class Utente_Implementation implements Utente_Repository{
 	}
 
 	@Override
-	public Utente findByEmail(String email) {
+	public Utente getOne(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 }

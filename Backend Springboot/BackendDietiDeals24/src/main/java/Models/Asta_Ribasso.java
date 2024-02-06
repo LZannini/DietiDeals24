@@ -1,6 +1,9 @@
 package Models;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 
 @Entity
@@ -8,11 +11,11 @@ public class Asta_Ribasso extends Asta {
 	
 	private int id_asta;
 	private float prezzo;
-	private Date timer;
+	private LocalDateTime timer;
 	private float decremento;
 	private float minimo;
 	
-	public Asta_Ribasso(int id_creatore, String nome, String descrizione, String categoria, byte[] foto, float prezzo, Date timer, float decremento, float minimo) {
+	public Asta_Ribasso(int id_creatore, String nome, String descrizione, String categoria, byte[] foto, float prezzo, LocalDateTime timer, float decremento, float minimo) {
 		super(id_creatore, nome, descrizione, categoria, foto);
 		this.id_asta = super.getId();
 		this.prezzo = prezzo;
@@ -37,11 +40,11 @@ public class Asta_Ribasso extends Asta {
 		this.prezzo = prezzo;
 	}
 
-	public Date getTimer() {
+	public LocalDateTime getTimer() {
 		return timer;
 	}
 
-	public void setTimer(Date timer) {
+	public void setTimer(LocalDateTime timer) {
 		this.timer = timer;
 	}
 

@@ -6,4 +6,5 @@ import Models.Asta;
 
 public interface Asta_Repository extends JpaRepository<Asta, Integer>{
 
+	Asta creaAsta(Asta asta,String tipo);
 }

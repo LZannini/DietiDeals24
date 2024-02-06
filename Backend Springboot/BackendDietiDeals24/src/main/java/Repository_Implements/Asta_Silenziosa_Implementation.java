@@ -1,22 +1,48 @@
 package Repository_Implements;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Service;
+
+import Models.Asta;
 import Models.Asta_Silenziosa;
+import Repository.Asta_Repository;
 import Repository.Asta_Silenziosa_Repository;
 
 
 @Service
 public class Asta_Silenziosa_Implementation implements Asta_Silenziosa_Repository{
 
+	@Autowired
+	private Asta_Repository astaRep;
+	
+	@Override
+	public Asta creaAstaSilenziosa(Asta asta) {
+		
+		if(!(asta instanceof Asta_Silenziosa))
+			throw new IllegalArgumentException("L'oggetto deve essere un'istanza di astaSilenziosa!");
+	    
+		Asta_Silenziosa astaSil = (Asta_Silenziosa) asta;
+		
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime scadenza = astaSil.getScadenza();
+		
+		 if (scadenza != null && now.isAfter(scadenza)) 
+		        throw new IllegalArgumentException("La data di scadenza deve essere nel futuro!");
+		
+		return astaRep.save(astaSil);
+	}
+	
+	
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub

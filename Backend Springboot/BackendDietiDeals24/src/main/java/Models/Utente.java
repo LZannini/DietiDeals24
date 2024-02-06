@@ -1,13 +1,23 @@
 package Models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Utente {
 	
-	private @Id int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	@NotEmpty(message = "Il campo username non può essere vuoto")
 	private String username;
+	@NotEmpty(message = "Il campo email non può essere vuoto")
+	@Email(message = "Deve essere un indirizzo email valido")
 	private String email;
+	@NotEmpty(message = "Il campo password non può essere vuoto")
+	@Size(min = 4, message = "La password deve contenere almeno 4 caratteri")
 	private String password;
 	private String biografia;
 	private String sitoweb;

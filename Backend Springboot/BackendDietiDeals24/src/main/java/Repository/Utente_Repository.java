@@ -1,14 +1,18 @@
 package Repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import Models.Utente;
 
 public interface Utente_Repository extends JpaRepository<Utente, Integer>{
 	
-   Utente register(Utente entity);
+   Utente newRegistrazioneVenditore(Utente entity);
    
-   Utente findByEmail(String email);
+   Utente newRegistrazioneCompratore(Utente entity);
+   
+   Optional<Utente> findByEmail(String email);
    
    boolean checkLogin(String email,String password,String tipo);
 

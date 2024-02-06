@@ -35,17 +35,22 @@ public class AppController {
 	@Autowired
 	private Venditore_Repository Venditore;
 	
+	@GetMapping("/")
+	public String handledefault() {
+		return "Errore bro!";
+	}
+	
 	//Endpoint Compratore
 	@PostMapping("/registraCompratore")
 	public ResponseEntity<Utente> registraCompratore(@RequestBody Utente compratore){
-		Utente nuovoCompratore = utente.register(compratore);
+		Utente nuovoCompratore = utente.newRegistrazioneCompratore(compratore);
 		return new ResponseEntity<>(nuovoCompratore,HttpStatus.CREATED);
 	}
 	
 	//Endpoint Venditore
 	@PostMapping("/registraVenditore")
 	public ResponseEntity<Utente> registraVenditore(@RequestBody Utente venditore){
-		Utente nuovoVenditore = utente.register(venditore);
+		Utente nuovoVenditore = utente.newRegistrazioneVenditore(venditore);
 		return new ResponseEntity<>(nuovoVenditore,HttpStatus.CREATED);
 	}
 	
@@ -54,7 +59,7 @@ public class AppController {
 		Utente Venditore = new Utente();
 		Venditore.setEmail("test@email.com");
 		Venditore.setPassword("test1!");
-		Utente nuovoVenditore = utente.register(Venditore); 
+		Utente nuovoVenditore = utente.newRegistrazioneVenditore(Venditore); 
 		return new ResponseEntity<>(nuovoVenditore, HttpStatus.CREATED);
 	}
 }

@@ -1,21 +1,56 @@
 package Repository_Implements;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Service;
+
+import Models.Asta;
 import Models.Asta_Inversa;
 import Repository.Asta_Inversa_Repository;
+import Repository.Asta_Repository;
 
 @Service
 public class Asta_Inversa_Implementation implements Asta_Inversa_Repository{
 
+	@Autowired
+	private Asta_Repository astaRep;
+	
+	@Override
+	public Asta creaAstaInversa(Asta asta) {
+		
+		if(!(asta instanceof Asta_Inversa))
+		throw new IllegalArgumentException("L'oggetto Asta deve essere un'istanza di Asta_Inversa!");
+		
+		Asta_Inversa astainv = (Asta_Inversa) asta;
+		
+		if(astainv.getPrezzo()<= 0)
+		throw new IllegalArgumentException("Il prezzo iniziale deve essere maggiore di zero!");
+		
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime scadenza = astainv.getScadenza();
+		if(scadenza != null && now.isAfter(scadenza))
+			throw new IllegalArgumentException("La data di scadenza deve essere nel futuro!");
+		
+        /*INSERIRE NEL PARAMETRO IL FILE DELL'IMMAGINE
+         * astainv.setFoto(byteArrayImmagine);
+         */
+		
+		return astaRep.save(astainv);
+	}
+	
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub
