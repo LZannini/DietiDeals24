@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="Backend Springboot/BackendDietiDeals24/.mvn/wrapper/maven-wrapper.jar"/>
 	<classpathentry kind="lib" path="Backend Springboot/BackendDietiDeals24/bin/.mvn/wrapper/maven-wrapper.jar"/>
 	<classpathentry kind="lib" path="Client/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="Backend Springboot/BackendDietiDeals24/target/classes"/>
 </classpath>

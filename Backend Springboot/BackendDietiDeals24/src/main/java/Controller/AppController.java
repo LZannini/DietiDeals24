@@ -27,13 +27,9 @@ public class AppController {
 	@Autowired
 	private Asta_Silenziosa_Repository Asta_Silenziosa;
 	@Autowired
-	private Compratore_Repository Compratore;
-	@Autowired
 	private Offerta_Repository Offerta;
 	@Autowired
 	private Utente_Repository utente;
-	@Autowired
-	private Venditore_Repository Venditore;
 	
 	@GetMapping("/")
 	public String handledefault() {

@@ -47,14 +47,19 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+    <groupId>jakarta.persistence</groupId>
+    <artifactId>jakarta.persistence-api</artifactId>
+    <version>3.0.0</version> <!-- Aggiorna alla versione più recente, se necessario -->
+</dependency>
+<dependency>
+    <groupId>jakarta.validation</groupId>
+    <artifactId>jakarta.validation-api</artifactId>
+    <version>3.0.0</version> <!-- Aggiorna alla versione più recente, se necessario -->
+</dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.myphotos.demo</groupId>
-			<artifactId>MyPhotos</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

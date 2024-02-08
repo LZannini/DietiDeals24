@@ -6,12 +6,19 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
+import javax.naming.AuthenticationException;
+
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +38,10 @@ public class Utente_Implementation implements Utente_Repository{
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+	@Autowired
+	private Utente_Repository utente;
+	@Autowired
+	private AuthenticationManager authenticationmanager;
 	
 	@Override
     @Transactional
@@ -48,7 +58,8 @@ public class Utente_Implementation implements Utente_Repository{
         compratore.setTipo("Compratore");
         return saveAndFlush(compratore);
     }
-
+    
+    
     private void validateUtente(Utente utente) {
     
         Set<ConstraintViolation<Utente>> violations = Validation.buildDefaultValidatorFactory().getValidator().validate(utente);
@@ -59,12 +70,44 @@ public class Utente_Implementation implements Utente_Repository{
 
         // Altri controlli 
     }
-	
-	public class EmailDuplicataException extends RuntimeException{
-		public EmailDuplicataException(String message) {
-			super(message);
-		}
-	}
+    
+    @Override
+    public boolean checkLogin(String email, String password, String tipo) {
+    	
+    	try {
+        org.springframework.security.core.Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+        org.springframework.security.core.Authentication authenticated = authenticationmanager.authenticate(authentication);
+
+        // Verifica il tipo di utente e assegna i ruoli corrispondenti
+        if (tipo.equals("venditore")) {
+            SecurityContextHolder.getContext().setAuthentication(authenticated);
+            return true;
+        } else if (tipo.equals("compratore")) {
+            SecurityContextHolder.getContext().setAuthentication(authenticated);
+            return true;
+        } else 
+        	return false;
+            
+    	}catch(AuthenticationCredentialsNotFoundException e) {
+    		throw new AuthenticationCredentialsNotFoundException("Autenticazione fallita!");
+    	}
+        
+
+    }
+    
+    
+    public class WrongPasswordException extends RuntimeException {
+        public WrongPasswordException(String message) {
+            super(message);
+        }
+    }
+
+    public class UserNotFoundException extends RuntimeException {
+        public UserNotFoundException(String message) {
+            super(message);
+        }
+    }
+
 
 	@Override
 	public void flush() {
@@ -244,12 +287,6 @@ public class Utente_Implementation implements Utente_Repository{
 	public Optional<Utente> findByEmail(String email) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
-	}
-
-	@Override
-	public boolean checkLogin(String email, String password, String tipo) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
