@@ -32,9 +32,11 @@ public class AppController {
 	private Utente_Repository utente;
 	
 	@GetMapping("/")
-	public String handledefault() {
-		return "Errore bro!";
+	public ResponseEntity<String> handledefault() {
+	    String errorMessage = "Manneggia il cuore di Cristo!!";
+	    return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
 	}
+
 	
 	//Endpoint Compratore
 	@PostMapping("/registraCompratore")
