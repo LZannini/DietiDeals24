@@ -31,17 +31,15 @@ public class Asta_Inversa_Implementation implements Asta_Inversa_Repository{
 	@Override
 	public Asta creaAstaInversa(Asta asta) {
 		
+		Asta_Inversa astainv = (Asta_Inversa) asta;
+		
 		if(!(asta instanceof Asta_Inversa))
 		throw new IllegalArgumentException("L'oggetto Asta deve essere un'istanza di Asta_Inversa!");
-		
-		Asta_Inversa astainv = (Asta_Inversa) asta;
 		
 		if(astainv.getPrezzo()<= 0)
 		throw new IllegalArgumentException("Il prezzo iniziale deve essere maggiore di zero!");
 		
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime scadenza = astainv.getScadenza();
-		if(scadenza != null && now.isAfter(scadenza))
+		if(astainv.getScadenza() != null && LocalDateTime.now().isAfter(astainv.getScadenza()))
 			throw new IllegalArgumentException("La data di scadenza deve essere nel futuro!");
 		
         /*INSERIRE NEL PARAMETRO IL FILE DELL'IMMAGINE

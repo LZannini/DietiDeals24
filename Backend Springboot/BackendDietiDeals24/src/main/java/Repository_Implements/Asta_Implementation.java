@@ -24,6 +24,8 @@ public class Asta_Implementation implements Asta_Repository{
 	private Asta_Ribasso_Implementation astaRibasso;
 	@Autowired
 	private Asta_Silenziosa_Implementation astaSilenziosa;
+	@Autowired
+	private Asta_Repository asta_rep;
 	
 	@Override
 	public Asta creaAsta(Asta asta,String tipo)
@@ -40,6 +42,11 @@ public class Asta_Implementation implements Asta_Repository{
 		}
 	}
 	
+	
+	public List<Asta> ricercaAste(String categoria,String key)
+	{
+		return asta_rep.findPerCategoriaAndParoleChiave(categoria, key);
+	}
 	
 	@Override
 	public void flush() {
@@ -217,6 +224,13 @@ public class Asta_Implementation implements Asta_Repository{
 
 	@Override
 	public <S extends Asta, R> R findBy(Example<S> example, Function<FetchableFluentQuery<S>, R> queryFunction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Asta> findPerCategoriaAndParoleChiave(String categoria, String key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

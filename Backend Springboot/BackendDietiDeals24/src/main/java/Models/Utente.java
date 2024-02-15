@@ -1,5 +1,7 @@
 package Models;
 
+import java.util.Optional;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -106,5 +108,6 @@ public class Utente {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
+
 	
 }

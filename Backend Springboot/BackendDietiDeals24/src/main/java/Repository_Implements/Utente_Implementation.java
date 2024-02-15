@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import Models.Asta;
 import Models.Utente;
 import Repository.Asta_Inversa_Repository;
 import Repository.Asta_Repository;
@@ -39,9 +40,11 @@ public class Utente_Implementation implements Utente_Repository{
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
-	private Utente_Repository utente;
+	private Utente_Repository utente_rep;
 	@Autowired
 	private AuthenticationManager authenticationmanager;
+	@Autowired
+	private Asta_Repository asta_rep;
 	
 	@Override
     @Transactional
@@ -66,9 +69,17 @@ public class Utente_Implementation implements Utente_Repository{
 
         if (!violations.isEmpty()) 
             throw new ConstraintViolationException(violations);
-        
 
-        // Altri controlli 
+        if((utente_rep.findByEmail(utente.getEmail()).isPresent()))
+        	throw new IllegalArgumentException("Indirizzo email già in uso!");
+        
+        utente.setPassword(passwordEncoder.encode(utente.getPassword()));
+        
+        if(!(utente.getPassword().matches(".*[!@#$%^&*()_+\\\\-=\\\\[\\\\]{};':\\\"\\\\\\\\|,.<>\\\\/?].*")))
+        throw new WrongPasswordException("La password deve contenere almeno un carattere speciale!");
+        
+        if((utente_rep.findByUsername(utente.getUsername()).isPresent()))
+        	throw new IllegalArgumentException("Username  già in uso!");
     }
     
     @Override
@@ -91,9 +102,25 @@ public class Utente_Implementation implements Utente_Repository{
     	}catch(AuthenticationCredentialsNotFoundException e) {
     		throw new AuthenticationCredentialsNotFoundException("Autenticazione fallita!");
     	}
-        
-
+       
     }
+    
+    
+    @Override
+    public List<Asta> ricercaAste(String categoria,String key)
+    {
+    	List<Asta> aste = asta_rep.findPerCategoriaAndParoleChiave(categoria, key);
+    	
+    	for(Asta asta : aste) {
+    		Optional<Utente> Venditore = utente_rep.findById(asta.getId_creatore());
+    		/*RICERCA VENDITORE NEL DB E ASSOCIA IL SUO ID ALL'ID_CREATORE DELL'ASTA COSI' DA TENERE TRACCIA DI CHI
+    		*HA CREATO L'ASTA(SE ifPresent non restituisce null)*/
+    		Venditore.ifPresent(v -> asta.setId_creatore(v.getId()));
+    	}
+    	
+    	return aste;
+    }
+    
     
     
     public class WrongPasswordException extends RuntimeException {
@@ -299,6 +326,12 @@ public class Utente_Implementation implements Utente_Repository{
 	public Utente getOne(Integer id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Optional<Utente> findByUsername(String username) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
 	
 
