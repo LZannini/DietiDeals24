@@ -4,18 +4,49 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.stereotype.Service;
+
+import Models.Asta;
 import Models.Offerta;
+import Models.Utente;
+import Repository.Asta_Repository;
 import Repository.Offerta_Repository;
+import Repository.Utente_Repository;
 
 @Service
 public class Offerta_Implementation implements Offerta_Repository{
 
+	@Autowired
+	private Utente_Repository utente_rep;
+	@Autowired
+	private Asta_Repository asta_rep;
+	@Autowired
+	private Offerta_Repository Offerta_rep;
+	
+	
+	@Override
+	public Offerta presentaOfferta(Utente utente,Asta asta,float importo)
+	{
+		/*Andrebbe verificato in modo appropriato se l'asta è ancora attiva,aggiungendo un attributo scadenza 
+		 * alla superclasse Asta*/
+		if(!asta_rep.existsById(asta.getId()))
+			throw new IllegalArgumentException("L'asta specificata non esiste!");
+		
+		Offerta off = new Offerta();
+		off.setId_utente(utente.getId());
+		off.setId_asta(asta.getId());
+		off.setValore(importo);
+		
+		return Offerta_rep.save(off);
+	}
+	
+	
 	@Override
 	public void flush() {
 		// TODO Auto-generated method stub

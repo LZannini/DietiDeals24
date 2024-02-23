@@ -11,7 +11,7 @@ public class Asta_Silenziosa extends Asta {
 	private int id_asta;
 	private LocalDateTime scadenza;
 	
-	public Asta_Silenziosa(int id_creatore, String nome, String descrizione, String categoria, byte[] foto, LocalDateTime scadenza) {
+	public Asta_Silenziosa(int id_creatore, String nome, String descrizione, String categoria, byte[] foto,LocalDateTime scadenza) {
 		super(id_creatore, nome, descrizione, categoria, foto);
 		this.id_asta = super.getId();
 		this.scadenza = scadenza;

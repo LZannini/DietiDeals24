@@ -13,11 +13,11 @@ public class Asta_Inversa extends Asta {
 	private float prezzo;
 	private LocalDateTime scadenza;
 	
-	public Asta_Inversa(int id_creatore, String nome, String descrizione, String categoria, byte[] foto, float prezzo, LocalDateTime scadenza) {
+	public Asta_Inversa(int id_creatore, String nome, String descrizione, String categoria, byte[] foto, float prezzo,LocalDateTime scadenza) {
 		super(id_creatore, nome, descrizione, categoria, foto);
 		this.id_asta = super.getId();
 		this.prezzo = prezzo;
-		this.scadenza = scadenza;
+		this.scadenza = scadenza; 
 	}
 	
 	public Asta_Inversa() {
@@ -47,5 +47,4 @@ public class Asta_Inversa extends Asta {
 	public void setScadenza(LocalDateTime scadenza) {
 		this.scadenza = scadenza;
 	}
-
 }

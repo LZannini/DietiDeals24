@@ -1,5 +1,6 @@
 package Repository_Implements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -23,11 +24,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import Models.Asta;
+import Models.Offerta;
 import Models.Utente;
 import Repository.Asta_Inversa_Repository;
 import Repository.Asta_Repository;
 import Repository.Asta_Ribasso_Repository;
 import Repository.Asta_Silenziosa_Repository;
+import Repository.Offerta_Repository;
 import Repository.Utente_Repository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
@@ -121,16 +124,26 @@ public class Utente_Implementation implements Utente_Repository{
     	return aste;
     }
     
-    
+    @Override
+    public List<Utente> newAsta(Utente u ,Asta asta,String tipo)
+    {
+    	List<Utente> creatore = new ArrayList<>();
+    	if(u.getTipo().equals("Venditore") && (tipo.equals("Asta_Ribasso") || tipo.equals("Asta_Silenziosa"))) {
+    		asta = asta_rep.creaAsta(asta, tipo);
+    		creatore.add(u);
+    	}
+    	else if(u.getTipo().equals("Compratore") && tipo.equals("Asta_Inversa")) {
+    		asta = asta_rep.creaAsta(asta, tipo);
+    		creatore.add(u);
+    	}
+    	else
+    		throw new IllegalArgumentException("Tipo di utente o tipo di asta non supportato!");
+    	
+    	return creatore;
+    }
     
     public class WrongPasswordException extends RuntimeException {
         public WrongPasswordException(String message) {
-            super(message);
-        }
-    }
-
-    public class UserNotFoundException extends RuntimeException {
-        public UserNotFoundException(String message) {
             super(message);
         }
     }

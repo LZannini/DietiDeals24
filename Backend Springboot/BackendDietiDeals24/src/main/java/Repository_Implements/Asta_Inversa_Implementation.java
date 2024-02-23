@@ -42,6 +42,8 @@ public class Asta_Inversa_Implementation implements Asta_Inversa_Repository{
 		if(astainv.getScadenza() != null && LocalDateTime.now().isAfter(astainv.getScadenza()))
 			throw new IllegalArgumentException("La data di scadenza deve essere nel futuro!");
 		
+		astainv.setScadenza(LocalDateTime.now().plusHours(1));
+		
         /*INSERIRE NEL PARAMETRO IL FILE DELL'IMMAGINE
          * astainv.setFoto(byteArrayImmagine);
          */

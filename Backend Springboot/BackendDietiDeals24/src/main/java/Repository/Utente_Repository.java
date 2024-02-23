@@ -25,4 +25,6 @@ public interface Utente_Repository extends JpaRepository<Utente, Integer>{
    boolean existsByEmailAndTipo(String email,String tipo);
    
    List<Asta> ricercaAste(String categoria,String key);
+   
+   List<Utente> newAsta(Utente u ,Asta asta,String tipo);
 }

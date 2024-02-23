@@ -1,6 +1,7 @@
 package Models;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
@@ -10,9 +11,9 @@ public class Offerta {
 	private int id_utente;
 	private int id_asta;
 	private float valore;
-	private Date data;
+	private LocalDateTime data;
 	
-	public Offerta(int id_utente, int id_asta, float valore, Date data) {
+	public Offerta(int id_utente, int id_asta, float valore, LocalDateTime data) {
 		this.id_utente = id_utente;
 		this.id_asta = id_asta;
 		this.valore = valore;
@@ -47,11 +48,11 @@ public class Offerta {
 		this.valore = valore;
 	}
 
-	public Date getData() {
+	public LocalDateTime getData() {
 		return data;
 	}
 
-	public void setData(Date data) {
+	public void setData(LocalDateTime data) {
 		this.data = data;
 	}
 	

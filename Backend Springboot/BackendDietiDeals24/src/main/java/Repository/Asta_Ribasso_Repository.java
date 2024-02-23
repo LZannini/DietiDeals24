@@ -11,4 +11,5 @@ public interface Asta_Ribasso_Repository extends JpaRepository<Asta_Ribasso, Int
 
 	Asta creaAstaRibasso(Asta asta);
 	
+	void decrementoPrezzo(Asta_Ribasso asta);
 }

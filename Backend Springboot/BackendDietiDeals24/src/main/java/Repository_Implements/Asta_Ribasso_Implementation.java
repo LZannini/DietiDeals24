@@ -29,19 +29,13 @@ public class Asta_Ribasso_Implementation implements Asta_Ribasso_Repository{
 	@Override
 	public Asta creaAstaRibasso(Asta asta) {
 		
+		Asta_Ribasso astarib = (Asta_Ribasso) asta;
+		
 		if(!(asta instanceof Asta_Ribasso))
 			throw new IllegalArgumentException("L'oggetto Asta deve essere un'istanza di AstaRibasso");
 		
-		Asta_Ribasso astarib = (Asta_Ribasso) asta;
-		
-		if(astarib.getPrezzo() <= 0)
-			throw new IllegalArgumentException("Il prezzo deve essere maggiore di zero!");
-		
-		if(astarib.getDecremento() <= 0)
-			throw new IllegalArgumentException("L'importo per ciascun decremento deve essere maggiore di zero!");
-		
-		if(astarib.getMinimo() <= 0)
-			throw new IllegalArgumentException("Il prezzo minimo segreto deve essere maggiore di zero!");
+		if(astarib.getPrezzo() <= 0 || astarib.getDecremento() <= 0 || astarib.getMinimo() <= 0)
+			throw new IllegalArgumentException("Gli importi in euro devono essere maggiori di zero!");
 			
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime timer = now.plusHours(1);
@@ -50,7 +44,21 @@ public class Asta_Ribasso_Implementation implements Asta_Ribasso_Repository{
 		if(now.isAfter(timer))
 			throw new IllegalArgumentException("Il timer è scaduto per questa Asta Ribasso!");
 		
+		decrementoPrezzo((Asta_Ribasso) asta);
+		
 		return astaRep.save(astarib);
+	}
+    
+	@Override
+	public void decrementoPrezzo(Asta_Ribasso asta)
+	{
+		if(LocalDateTime.now().isEqual(asta.getTimer()) || LocalDateTime.now().isAfter(asta.getTimer())) {
+			float decremento = asta.getPrezzo() - asta.getDecremento();
+			if(decremento > asta.getMinimo())
+			asta.setPrezzo(decremento);
+			else
+				throw new IllegalArgumentException("Asta Ribasso Fallita!");
+		}
 	}
 	
 	@Override

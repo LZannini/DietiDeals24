@@ -28,10 +28,10 @@ public class Asta_Silenziosa_Implementation implements Asta_Silenziosa_Repositor
 	@Override
 	public Asta creaAstaSilenziosa(Asta asta) {
 		
+		Asta_Silenziosa astaSil = (Asta_Silenziosa) asta;
+		
 		if(!(asta instanceof Asta_Silenziosa))
 			throw new IllegalArgumentException("L'oggetto deve essere un'istanza di astaSilenziosa!");
-	    
-		Asta_Silenziosa astaSil = (Asta_Silenziosa) asta;
 		
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime scadenza = astaSil.getScadenza();
