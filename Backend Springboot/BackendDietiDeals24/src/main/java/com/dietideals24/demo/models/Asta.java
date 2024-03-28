@@ -1,5 +1,6 @@
 package com.dietideals24.demo.models;
 
+import com.dietideals24.demo.enums.Categoria;
 import com.dietideals24.demo.enums.TipoAsta;
 
 import jakarta.persistence.*;
@@ -13,11 +14,11 @@ public class Asta {
 	private int id_creatore;
 	private String nome;
 	private String descrizione;
-	private String categoria;
+	private Categoria categoria;
 	private TipoAsta tipo;
 	private byte[] foto;
 	
-	public Asta(int id_creatore, String nome, String descrizione, String categoria, byte[] foto) {
+	public Asta(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto) {
 		this.id_creatore = id_creatore;
 		this.nome = nome;
 		this.descrizione = descrizione;
@@ -61,11 +62,11 @@ public class Asta {
 		this.descrizione = descrizione;
 	}
 
-	public String getCategoria() {
+	public Categoria getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(String categoria) {
+	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
 

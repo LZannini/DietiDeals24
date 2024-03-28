@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.dietideals24.demo.enums.Categoria;
+
 import jakarta.persistence.Entity;
 
 @Entity
@@ -13,7 +15,7 @@ public class Asta_Inversa extends Asta {
 	private float prezzo;
 	private LocalDateTime scadenza;
 	
-	public Asta_Inversa(int id_creatore, String nome, String descrizione, String categoria, byte[] foto, float prezzo,LocalDateTime scadenza) {
+	public Asta_Inversa(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo,LocalDateTime scadenza) {
 		super(id_creatore, nome, descrizione, categoria, foto);
 		this.id_asta = super.getId();
 		this.prezzo = prezzo;

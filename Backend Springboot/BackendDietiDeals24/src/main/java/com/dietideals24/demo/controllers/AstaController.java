@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dietideals24.demo.enums.Categoria;
+import com.dietideals24.demo.enums.TipoAsta;
 import com.dietideals24.demo.models.Asta;
 import com.dietideals24.demo.models.Utente;
 import com.dietideals24.demo.models.dto.AstaDTO;
@@ -48,19 +50,51 @@ public class AstaController {
 	@PostMapping("/asta/rimuovi_asta")
 	public void rimuovi(@RequestParam Integer id) {
 		if (id == null)
-			throw new IllegalArgumentException("Errore Rimozione Asta: Parametro inserito non valido!\n");
+			throw new IllegalArgumentException("Errore Rimozione Asta: Campo 'id' nullo!\n");
 		astaService.rimuoviAsta(id);
 	}
 	
-	@GetMapping("/asta/cerca_per_nome")
-	public ResponseEntity<List<AstaDTO>> cercaPerNome(@RequestParam String nome) {
-		if (nome == null)
-			throw new IllegalArgumentException("Errore Ricerca Asta: Campo 'nome' non valido!\n");
-		List<AstaDTO> lista_asteDTO = astaService.trovaAstePerNome(nome);
+	@GetMapping("/asta/cerca_per_tipo")
+	public ResponseEntity<List<AstaDTO>> cercaPerTipo(@RequestParam TipoAsta tipo) {
+		if (tipo == null)
+			throw new IllegalArgumentException("Errore Ricerca Asta (per tipo): Campo 'tipo' nullo!\n");
+		List<AstaDTO> lista_asteDTO = astaService.trovaAstePerTipo(tipo);
+		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
+			return ResponseEntity.notFound().build();
+					
+		return ResponseEntity.ok(lista_asteDTO);
+	}
+	
+	@GetMapping("asta/cerca_per_chiave")
+	public ResponseEntity<List<AstaDTO>> cercaPerParolaChiave(@RequestParam String chiave) {
+		if (chiave == null)
+			throw new IllegalArgumentException("Errore Ricerca Asta (per parola chiave): Campo 'chiave' nullo!\n");
+		List<AstaDTO> lista_asteDTO = astaService.trovaAstePerParolaChiave(chiave);
+		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
+			return ResponseEntity.notFound().build();
+					
+		return ResponseEntity.ok(lista_asteDTO);
+	}
+	
+	@GetMapping("asta/cerca_per_categoria")
+	public ResponseEntity<List<AstaDTO>> cercaPerCategoria(@RequestParam Categoria categoria) {
+		if (categoria == null)
+			throw new IllegalArgumentException("Errore Ricerca Asta (per categoria): Campo 'categoria' nullo!\n");
+		List<AstaDTO> lista_asteDTO = astaService.trovaAstePerCategoria(categoria);
+		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
+			return ResponseEntity.notFound().build();
+					
+		return ResponseEntity.ok(lista_asteDTO);
+	}
+	
+	@GetMapping("asta/cerca_per_chiave_categoria")
+	public ResponseEntity<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@RequestParam String chiave, @RequestParam Categoria categoria) {
+		if (chiave == null || categoria == null)
+			throw new IllegalArgumentException("Errore Ricerca Asta (per chiave e categoria): Campi nulli!\n");
+		List<AstaDTO> lista_asteDTO = astaService.trovaAstePerParolaChiaveAndCategoria(chiave, categoria);
 		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
 			return ResponseEntity.notFound().build();
 		
 		return ResponseEntity.ok(lista_asteDTO);
 	}
-
-}
+ }

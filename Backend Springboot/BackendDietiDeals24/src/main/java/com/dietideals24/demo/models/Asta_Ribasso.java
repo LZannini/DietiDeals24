@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.dietideals24.demo.enums.Categoria;
+
 import jakarta.persistence.Entity;
 
 @Entity
@@ -15,7 +17,7 @@ public class Asta_Ribasso extends Asta {
 	private float decremento;
 	private float minimo;
 	
-	public Asta_Ribasso(int id_creatore, String nome, String descrizione, String categoria, byte[] foto, float prezzo, LocalDateTime timer, float decremento, float minimo) {
+	public Asta_Ribasso(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, LocalDateTime timer, float decremento, float minimo) {
 		super(id_creatore, nome, descrizione, categoria, foto);
 		this.id_asta = super.getId();
 		this.prezzo = prezzo;
