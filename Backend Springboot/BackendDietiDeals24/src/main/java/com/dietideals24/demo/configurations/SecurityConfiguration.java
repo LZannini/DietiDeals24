@@ -2,14 +2,9 @@ package com.dietideals24.demo.configurations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.SecurityBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
@@ -17,14 +12,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration {
 
 	public void configure(HttpSecurity http) throws Exception {
-		http.httpBasic()
-	    .and()
-	    .authorizeRequests()
-	    .requestMatchers("/api/home")
-	    .hasRole("ADMIN")
-	    .requestMatchers("/api/product/*")
-	    .hasRole("ADMIN")
-	    .and()
-	    .formLogin();
-    }
+		http.csrf().disable().authorizeRequests().anyRequest().permitAll(); 
+	}
+	
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	    http
+	                .authorizeRequests()
+	                .requestMatchers("/**").permitAll() // Consenti l'accesso a tutte le risorse
+	                .anyRequest().permitAll() // Consenti l'accesso a tutte le altre richieste
+	                .and()
+	            .csrf().disable() // Disabilita CSRF per semplificare la comunicazione da Postman
+	            .headers().frameOptions().disable();
+
+	        return http.build();
+	    }
 }
