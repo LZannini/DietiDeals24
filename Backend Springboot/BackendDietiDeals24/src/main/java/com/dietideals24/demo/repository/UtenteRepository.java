@@ -21,19 +21,4 @@ public interface UtenteRepository extends CrudRepository<Utente, Integer>{
 	
 	@Query("SELECT u FROM Utente u WHERE u.email = :email AND u.id = :id")
     Optional<Utente> findByEmailAndId(@Param("email") String email, @Param("id") int id);
-  /* Utente newRegistrazioneVenditore(Utente entity);
-   
-   Utente newRegistrazioneCompratore(Utente entity);
-   
-   Optional<Utente> findByEmail(String email);
-   
-   Optional<Utente> findByUsername(String username);
-   
-   boolean checkLogin(String email, String password, String tipo);
-
-   boolean existsByEmailAndTipo(String email,String tipo);
-   
-   List<Asta> ricercaAste(String categoria,String key);
-   
-   List<Utente> newAsta(Utente u ,Asta asta,String tipo);*/
 }

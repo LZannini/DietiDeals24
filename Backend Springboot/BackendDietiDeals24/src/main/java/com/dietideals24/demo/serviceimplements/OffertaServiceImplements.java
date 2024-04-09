@@ -27,6 +27,24 @@ public class OffertaServiceImplements implements OffertaService {
 		offerta.setData(offertaDTO.getData());
 		offertaRepository.save(offerta);
 	}
+	
+	@Override
+	public void rimuoviOfferta(int id) {
+		offertaRepository.eliminaOfferta(id);
+	}
+	
+	@Override
+	public OffertaDTO getOffertaMinima(int id_asta) {
+		Offerta offertaMin = offertaRepository.trovaOffertaMinima(id_asta);
+		if (offertaMin == null)
+			return null;
+		OffertaDTO offertaMin_DTO = new OffertaDTO();
+		offertaMin_DTO.setId_asta(offertaMin.getId_asta());
+		offertaMin_DTO.setId_utente(offertaMin.getId_utente());
+		offertaMin_DTO.setValore(offertaMin.getValore());
+        offertaMin_DTO.setData(offertaMin.getData());
+		return offertaMin_DTO;
+	}
 
 	@Override
 	public List<OffertaDTO> getOfferte(int id_asta) {
@@ -46,4 +64,21 @@ public class OffertaServiceImplements implements OffertaService {
         return lista_offerteDTO;
 	}
 
+	@Override
+	public List<OffertaDTO> getOfferteOrdinate(int id_asta) {
+		List<Offerta> offerte = offertaRepository.trovaOfferteOrdinate(id_asta);
+		if (offerte.isEmpty())
+			return null;
+		List<OffertaDTO> lista_offerteDTO = new ArrayList<>();
+        for (Offerta o : offerte) {
+            OffertaDTO offertaDTO = new OffertaDTO();
+            offertaDTO.setId_asta(o.getId_asta());
+            offertaDTO.setId_utente(o.getId_utente());
+            offertaDTO.setValore(o.getValore());
+            offertaDTO.setData(o.getData()); 
+
+            lista_offerteDTO.add(offertaDTO);
+        }
+        return lista_offerteDTO;
+	}
 }

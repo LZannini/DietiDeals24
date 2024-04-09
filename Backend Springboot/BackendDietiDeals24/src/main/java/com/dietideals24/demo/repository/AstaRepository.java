@@ -14,11 +14,12 @@ import com.dietideals24.demo.models.dto.AstaDTO;
 
 @Repository
 public interface AstaRepository extends CrudRepository<Asta, Integer>{
-
-	//Asta creaAsta(Asta asta,String tipo);
 	
 	@Query("DELETE from Asta a WHERE a.id = :id")
 	void eliminaAsta(@Param("id") int id);
+	
+	@Query("SELECT a FROM Asta a WHERE a.id_creatore = :id_creatore")
+	List<Asta> filtraPerUtente(@Param("id_creatore") int id_creatore);
 	
 	@Query("SELECT a FROM Asta a WHERE a.tipo = :tipo")
 	List<Asta> filtraPerTipo(@Param("tipo") TipoAsta tipo);

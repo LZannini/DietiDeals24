@@ -40,21 +40,39 @@ public class AstaController {
 	@Autowired
 	private Asta_Silenziosa_Repository Asta_Silenziosa;
 	
-	@GetMapping("/asta/lista_aste")
+	@GetMapping("/asta/lista")
 	public Iterable<Asta> getAll() {
 		List<Asta> list = new ArrayList<>();
 		
 		return list;
 	}
 	
-	@PostMapping("/asta/rimuovi_asta")
+	@PostMapping("/asta/crea")
+	public ResponseEntity<AstaDTO> crea(@RequestBody AstaDTO asta) {
+		
+		astaService.creaAsta(asta);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping("/asta/rimuovi")
 	public void rimuovi(@RequestParam Integer id) {
 		if (id == null)
 			throw new IllegalArgumentException("Errore Rimozione Asta: Campo 'id' nullo!\n");
 		astaService.rimuoviAsta(id);
 	}
 	
-	@GetMapping("/asta/cerca_per_tipo")
+	@GetMapping("/asta/cercaPerUtente")
+	public ResponseEntity<List<AstaDTO>> cercaPerUtente(@RequestParam Integer id_creatore) {
+		if (id_creatore == null)
+			throw new IllegalArgumentException("Errore Ricerca Asta (per utente): Campo 'id_creatore' nullo!\n");
+		List<AstaDTO> lista_asteDTO = astaService.trovaAsteUtente(id_creatore);
+		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(lista_asteDTO);
+	}
+	
+	@GetMapping("/asta/cercaPerTipo")
 	public ResponseEntity<List<AstaDTO>> cercaPerTipo(@RequestParam TipoAsta tipo) {
 		if (tipo == null)
 			throw new IllegalArgumentException("Errore Ricerca Asta (per tipo): Campo 'tipo' nullo!\n");
@@ -65,7 +83,7 @@ public class AstaController {
 		return ResponseEntity.ok(lista_asteDTO);
 	}
 	
-	@GetMapping("asta/cerca_per_chiave")
+	@GetMapping("/asta/cercaPerChiave")
 	public ResponseEntity<List<AstaDTO>> cercaPerParolaChiave(@RequestParam String chiave) {
 		if (chiave == null)
 			throw new IllegalArgumentException("Errore Ricerca Asta (per parola chiave): Campo 'chiave' nullo!\n");
@@ -76,7 +94,7 @@ public class AstaController {
 		return ResponseEntity.ok(lista_asteDTO);
 	}
 	
-	@GetMapping("asta/cerca_per_categoria")
+	@GetMapping("/asta/cercaPerCategoria")
 	public ResponseEntity<List<AstaDTO>> cercaPerCategoria(@RequestParam Categoria categoria) {
 		if (categoria == null)
 			throw new IllegalArgumentException("Errore Ricerca Asta (per categoria): Campo 'categoria' nullo!\n");
@@ -87,7 +105,7 @@ public class AstaController {
 		return ResponseEntity.ok(lista_asteDTO);
 	}
 	
-	@GetMapping("asta/cerca_per_chiave_categoria")
+	@GetMapping("/asta/cercaPerChiaveAndCategoria")
 	public ResponseEntity<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@RequestParam String chiave, @RequestParam Categoria categoria) {
 		if (chiave == null || categoria == null)
 			throw new IllegalArgumentException("Errore Ricerca Asta (per chiave e categoria): Campi nulli!\n");

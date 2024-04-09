@@ -36,6 +36,26 @@ public class AstaServiceImplements implements AstaService {
 	public void rimuoviAsta(int id) {
 		astaRepository.eliminaAsta(id);
 	}
+	
+	@Override
+	public List<AstaDTO> trovaAsteUtente(int id_creatore) {
+		List<AstaDTO> aste_trovate = new ArrayList<>();
+		List<Asta> check_aste = astaRepository.filtraPerUtente(id_creatore);
+		if (!check_aste.isEmpty()) {
+			for (Asta a : check_aste) {
+				AstaDTO astaDTO = new AstaDTO();
+				astaDTO.setNome(a.getNome());
+				astaDTO.setId(a.getId());
+				astaDTO.setId_creatore(a.getId_creatore());
+				astaDTO.setCategoria(a.getCategoria());
+				astaDTO.setTipo(a.getTipo());
+				astaDTO.setDescrizione(a.getDescrizione());
+				astaDTO.setFoto(a.getFoto());
+				aste_trovate.add(astaDTO);
+			}
+		}
+		return aste_trovate;
+	}
 
 	@Override
 	public List<AstaDTO> trovaAstePerTipo(TipoAsta tipo) {

@@ -21,21 +21,37 @@ public class OffertaController {
 	@Autowired
     @Qualifier("OffertaService")
     private OffertaService offertaService;
-	@Autowired
-	private OffertaRepository offertaRepository;
 	
-	@PostMapping("/offerta/crea_offerta")
+	@PostMapping("/offerta/crea")
 	public void crea(@RequestBody OffertaDTO offertaDTO) {
 		if (offertaDTO == null)
 			throw new IllegalArgumentException("Errore Creazione Offerta: parametro inserito non valido!\n");
 		offertaService.creaOfferta(offertaDTO);
 	}
 	
-	@GetMapping("/offerta/recupera_offerte")
+	@PostMapping("/offerta/rimuovi")
+	public void rimuovi(@RequestParam Integer id) {
+		if (id == null)
+			throw new IllegalArgumentException("Errore Rimozione Offerta: Il parametro 'id' è null!\n");
+		offertaService.rimuoviOfferta(id);
+	}
+	
+	@GetMapping("/offerta/recupera")
 	public ResponseEntity<List<OffertaDTO>> getOfferte(@RequestParam Integer id_asta) throws IllegalArgumentException {
 		if (id_asta == null) 
 			throw new IllegalArgumentException("Errore Recupero Offerte: Il parametro 'id_asta' è null!\n");
 		List<OffertaDTO> lista_offerteDTO = offertaService.getOfferte(id_asta);  
+		if (lista_offerteDTO == null || lista_offerteDTO.isEmpty())
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(lista_offerteDTO);
+	}
+	
+	@GetMapping("/offerta/recuperaOrdinate")
+	public ResponseEntity<List<OffertaDTO>> getOfferteOrdinate(@RequestParam Integer id_asta) throws IllegalArgumentException {
+		if (id_asta == null) 
+			throw new IllegalArgumentException("Errore Recupero Offerte Ordinate: Il parametro 'id_asta' è null!\n");
+		List<OffertaDTO> lista_offerteDTO = offertaService.getOfferteOrdinate(id_asta);  
 		if (lista_offerteDTO == null || lista_offerteDTO.isEmpty())
 			return ResponseEntity.notFound().build();
 		

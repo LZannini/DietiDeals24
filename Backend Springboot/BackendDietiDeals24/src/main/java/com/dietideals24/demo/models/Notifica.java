@@ -1,36 +1,35 @@
 package com.dietideals24.demo.models;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-public class Offerta {
+public class Notifica {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int id_utente;
-	private int id_asta;
-	private float valore;
+	private String testo;
 	private LocalDateTime data;
+	private boolean letta;
 	
-	public Offerta(int id, int id_utente, int id_asta, float valore, LocalDateTime data) {
+	public Notifica(int id, int id_utente, String testo, LocalDateTime data, boolean letta) {
 		this.id = id;
 		this.id_utente = id_utente;
-		this.id_asta = id_asta;
-		this.valore = valore;
+		this.testo = testo;
 		this.data = data;
+		this.letta = letta;
 	}
-	
-	public Offerta() {
-		
-	}
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -43,28 +42,28 @@ public class Offerta {
 		this.id_utente = id_utente;
 	}
 
-	public int getId_asta() {
-		return id_asta;
+	public String getTesto() {
+		return testo;
 	}
 
-	public void setId_asta(int id_asta) {
-		this.id_asta = id_asta;
+	public void setTesto(String testo) {
+		this.testo = testo;
 	}
-
-	public float getValore() {
-		return valore;
-	}
-
-	public void setValore(float valore) {
-		this.valore = valore;
-	}
-
+	
 	public LocalDateTime getData() {
 		return data;
 	}
-
+	
 	public void setData(LocalDateTime data) {
 		this.data = data;
+	}
+
+	public boolean isLetta() {
+		return letta;
+	}
+
+	public void setLetta(boolean letta) {
+		this.letta = letta;
 	}
 	
 }

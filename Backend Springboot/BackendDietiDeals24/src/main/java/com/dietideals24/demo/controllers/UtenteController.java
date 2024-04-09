@@ -23,7 +23,7 @@ public class UtenteController {
     @Qualifier("UtenteService")
     private UtenteService utenteService;
 	
-	@PostMapping("utente/registra_utente")
+	@PostMapping("/utente/registra")
 	public ResponseEntity<UtenteDTO> registra(@RequestBody UtenteDTO utenteDTO) {
 		String username = utenteDTO.getUsername(), email = utenteDTO.getEmail(), password = utenteDTO.getPassword();
 		
@@ -33,26 +33,27 @@ public class UtenteController {
 		return ResponseEntity.ok(utenteService.registraUtente(utenteDTO));
 	}
 	
-	@PostMapping("utente/login_utente")
+	@PostMapping("/utente/login")
 	public ResponseEntity<UtenteDTO> login(@RequestBody UtenteDTO utenteDTO) {
 		if (utenteDTO == null)
 			throw new IllegalArgumentException("Errore Login: Utente non trovato!");
 		return ResponseEntity.ok(utenteService.loginUtente(utenteDTO));
 	}
 	
-	@PostMapping("utente/aggiorna_utente")
-	public void aggiorna(@RequestBody UtenteDTO utenteDTO) {
-		if (utenteDTO == null)
-			throw new IllegalArgumentException("Errore Aggiornamento: Utente non valido!");
-		utenteService.aggiornaUtente(utenteDTO);
-	}
 	
-	@GetMapping("utente/cerca_utente")
+	@GetMapping("/utente/cerca")
 	public ResponseEntity<UtenteDTO> cerca(@RequestParam Integer id, @RequestParam String email) {
 		if (id == null || email == null)
 			throw new IllegalArgumentException("Errore Ricerca: Parametri non validi!");
 		
 		UtenteDTO utenteDTO = utenteService.recuperaUtente(id, email);
         return ResponseEntity.ok(utenteDTO);
+	}
+	
+	@PostMapping("/utente/aggiorna")
+	public void aggiorna(@RequestBody UtenteDTO utenteDTO) {
+		if (utenteDTO == null)
+			throw new IllegalArgumentException("Errore Aggiornamento: Utente non valido!");
+		utenteService.aggiornaUtente(utenteDTO);
 	}
 }

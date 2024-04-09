@@ -4,12 +4,21 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class OffertaDTO implements Serializable {
-
+	
+	private int id;
 	private int id_utente;
 	private int id_asta;
 	private float valore;
 	private LocalDateTime data;
 
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public int getId_utente() {
 		return id_utente;
 	}

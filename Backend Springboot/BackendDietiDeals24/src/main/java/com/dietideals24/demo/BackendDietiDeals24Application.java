@@ -14,4 +14,4 @@ public class BackendDietiDeals24Application {
 	public static void main(String[] args) {
 		SpringApplication.run(BackendDietiDeals24Application.class, args);
 	}
-}
+}		
