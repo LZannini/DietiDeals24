@@ -1,3 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DietiDeals24</string>
+    <!-- login strings -->
+
+    <string name="app_name">Page 1</string>
+    <string name="ek_img_content">ExportKit Image</string>
+    <string name="login_ek3_string">Login</string>
+    <string name="inserisci_le_tue_credenziali_string">Inserisci le tue credenziali </string>
+    <string name="password_string">Password</string>
+    <string name="email_string">Email</string>
+    <string name="google_string">Accedi con Google</string>
+    <string name="facebook_string">Accedi con Facebook</string>
+    <string name="non_hai_un_account__registrati__string">Non hai un account? Registrati! </string>
+    <string name="oppure_string">oppure</string>
 </resources>
