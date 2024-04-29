@@ -3,7 +3,6 @@ package com.dietideals24.demo.models.dto;
 import java.io.Serializable;
 
 import com.dietideals24.demo.enums.Categoria;
-import com.dietideals24.demo.enums.TipoAsta;
 
 public class AstaDTO implements Serializable {
 	
@@ -12,7 +11,6 @@ public class AstaDTO implements Serializable {
 	private String nome;
 	private String descrizione;
 	private Categoria categoria;
-	private TipoAsta tipo;
 	private byte[] foto;
 
 	public int getId() {
@@ -61,13 +59,5 @@ public class AstaDTO implements Serializable {
 
 	public void setFoto(byte[] foto) {
 		this.foto = foto;
-	}
-	
-	public TipoAsta getTipo() {
-		return tipo;
-	}
-	
-	public void setTipo(TipoAsta tipo) {
-		this.tipo = tipo;
 	}
 }

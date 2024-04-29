@@ -24,12 +24,7 @@ public class NotificaServiceImplements implements NotificaService {
 			return null;
 		List<NotificaDTO> notificheDTO = new ArrayList<>();
 		for (Notifica n : notifiche) {
-			NotificaDTO notificaDTO = new NotificaDTO();
-			notificaDTO.setId(n.getId());
-			notificaDTO.setId_utente(n.getId_utente());
-			notificaDTO.setTesto(n.getTesto());
-			notificaDTO.setData(n.getData());
-			notificaDTO.setLetta(n.isLetta());
+			NotificaDTO notificaDTO = creaNotificaDTO(n);
 			notificheDTO.add(notificaDTO);
 		}
 		return notificheDTO;
@@ -42,12 +37,7 @@ public class NotificaServiceImplements implements NotificaService {
 			return null;
 		List<NotificaDTO> notificheDTO = new ArrayList<>();
 		for (Notifica n : notifiche) {
-			NotificaDTO notificaDTO = new NotificaDTO();
-			notificaDTO.setId(n.getId());
-			notificaDTO.setId_utente(n.getId_utente());
-			notificaDTO.setTesto(n.getTesto());
-			notificaDTO.setData(n.getData());
-			notificaDTO.setLetta(n.isLetta());
+			NotificaDTO notificaDTO = creaNotificaDTO(n);
 			notificheDTO.add(notificaDTO);
 		}
 		return notificheDTO;
@@ -60,12 +50,7 @@ public class NotificaServiceImplements implements NotificaService {
 			return null;
 		List<NotificaDTO> notificheDTO = new ArrayList<>();
 		for (Notifica n : notifiche) {
-			NotificaDTO notificaDTO = new NotificaDTO();
-			notificaDTO.setId(n.getId());
-			notificaDTO.setId_utente(n.getId_utente());
-			notificaDTO.setTesto(n.getTesto());
-			notificaDTO.setData(n.getData());
-			notificaDTO.setLetta(n.isLetta());
+			NotificaDTO notificaDTO = creaNotificaDTO(n);
 			notificheDTO.add(notificaDTO);
 		}
 		return notificheDTO;
@@ -91,4 +76,13 @@ public class NotificaServiceImplements implements NotificaService {
 		notificaRepository.eliminaNotificheLette(id_utente);
 	}
 	
+	private NotificaDTO creaNotificaDTO(Notifica notifica) {
+		NotificaDTO notificaDTO = new NotificaDTO();
+		notificaDTO.setId(notifica.getId());
+		notificaDTO.setId_utente(notifica.getId_utente());
+		notificaDTO.setTesto(notifica.getTesto());
+		notificaDTO.setData(notifica.getData());
+		notificaDTO.setLetta(notifica.isLetta());
+		return notificaDTO;
+	}
 }

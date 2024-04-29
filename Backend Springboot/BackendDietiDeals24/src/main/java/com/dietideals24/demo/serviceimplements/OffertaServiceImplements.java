@@ -20,7 +20,6 @@ public class OffertaServiceImplements implements OffertaService {
 	@Override
 	public void creaOfferta(OffertaDTO offertaDTO) {
 		Offerta offerta = new Offerta();
-		
 		offerta.setId_utente(offertaDTO.getId_utente());
 		offerta.setId_asta(offertaDTO.getId_asta());
 		offerta.setValore(offertaDTO.getValore());
@@ -38,11 +37,7 @@ public class OffertaServiceImplements implements OffertaService {
 		Offerta offertaMin = offertaRepository.trovaOffertaMinima(id_asta);
 		if (offertaMin == null)
 			return null;
-		OffertaDTO offertaMin_DTO = new OffertaDTO();
-		offertaMin_DTO.setId_asta(offertaMin.getId_asta());
-		offertaMin_DTO.setId_utente(offertaMin.getId_utente());
-		offertaMin_DTO.setValore(offertaMin.getValore());
-        offertaMin_DTO.setData(offertaMin.getData());
+		OffertaDTO offertaMin_DTO = creaOffertaDTO(offertaMin);
 		return offertaMin_DTO;
 	}
 
@@ -53,12 +48,7 @@ public class OffertaServiceImplements implements OffertaService {
 			return null;
 		List<OffertaDTO> lista_offerteDTO = new ArrayList<>();
         for (Offerta o : offerte) {
-            OffertaDTO offertaDTO = new OffertaDTO();
-            offertaDTO.setId_asta(o.getId_asta());
-            offertaDTO.setId_utente(o.getId_utente());
-            offertaDTO.setValore(o.getValore());
-            offertaDTO.setData(o.getData()); 
-
+            OffertaDTO offertaDTO = creaOffertaDTO(o);
             lista_offerteDTO.add(offertaDTO);
         }
         return lista_offerteDTO;
@@ -71,14 +61,18 @@ public class OffertaServiceImplements implements OffertaService {
 			return null;
 		List<OffertaDTO> lista_offerteDTO = new ArrayList<>();
         for (Offerta o : offerte) {
-            OffertaDTO offertaDTO = new OffertaDTO();
-            offertaDTO.setId_asta(o.getId_asta());
-            offertaDTO.setId_utente(o.getId_utente());
-            offertaDTO.setValore(o.getValore());
-            offertaDTO.setData(o.getData()); 
-
+            OffertaDTO offertaDTO = creaOffertaDTO(o);
             lista_offerteDTO.add(offertaDTO);
         }
         return lista_offerteDTO;
+	}
+	
+	private OffertaDTO creaOffertaDTO(Offerta offerta) {
+		OffertaDTO offertaDTO = new OffertaDTO();
+        offertaDTO.setId_asta(offerta.getId_asta());
+        offertaDTO.setId_utente(offerta.getId_utente());
+        offertaDTO.setValore(offerta.getValore());
+        offertaDTO.setData(offerta.getData());
+        return offertaDTO;
 	}
 }

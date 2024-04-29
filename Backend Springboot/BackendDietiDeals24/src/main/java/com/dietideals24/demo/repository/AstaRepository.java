@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.dietideals24.demo.enums.Categoria;
-import com.dietideals24.demo.enums.TipoAsta;
 import com.dietideals24.demo.models.Asta;
 import com.dietideals24.demo.models.dto.AstaDTO;
 
@@ -18,11 +17,11 @@ public interface AstaRepository extends CrudRepository<Asta, Integer>{
 	@Query("DELETE from Asta a WHERE a.id = :id")
 	void eliminaAsta(@Param("id") int id);
 	
+	@Query("SELECT a FROM Asta a WHERE a.id = :id")
+	Asta getAsta(@Param("id") int id);
+	
 	@Query("SELECT a FROM Asta a WHERE a.id_creatore = :id_creatore")
 	List<Asta> filtraPerUtente(@Param("id_creatore") int id_creatore);
-	
-	@Query("SELECT a FROM Asta a WHERE a.tipo = :tipo")
-	List<Asta> filtraPerTipo(@Param("tipo") TipoAsta tipo);
 	
 	@Query("SELECT a FROM Asta a WHERE a.nome LIKE %:parola_chiave% OR a.descrizione LIKE %:chiave%")
 	List<Asta> filtraPerParolaChiave(@Param("chiave") String chiave);

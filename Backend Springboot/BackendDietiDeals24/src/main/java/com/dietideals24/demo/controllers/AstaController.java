@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dietideals24.demo.enums.Categoria;
-import com.dietideals24.demo.enums.TipoAsta;
 import com.dietideals24.demo.models.Asta;
 import com.dietideals24.demo.models.Utente;
 import com.dietideals24.demo.models.dto.AstaDTO;
@@ -47,18 +46,30 @@ public class AstaController {
 		return list;
 	}
 	
-	@PostMapping("/asta/crea")
+	/*@PostMapping("/asta/crea")
 	public ResponseEntity<AstaDTO> crea(@RequestBody AstaDTO asta) {
 		
 		astaService.creaAsta(asta);
 		return ResponseEntity.ok().build();
-	}
+	}*/
+	
 	
 	@PostMapping("/asta/rimuovi")
 	public void rimuovi(@RequestParam Integer id) {
 		if (id == null)
 			throw new IllegalArgumentException("Errore Rimozione Asta: Campo 'id' nullo!\n");
 		astaService.rimuoviAsta(id);
+	}
+	
+	@GetMapping("/asta/recupera")
+	public ResponseEntity<AstaDTO> recupera(@RequestParam Integer id) {
+		if (id == null)
+			throw new IllegalArgumentException("Errore Recupera Asta: Campo 'id nullo!\n");
+		AstaDTO astaDTO = astaService.trovaAsta(id);
+		if (astaDTO == null)
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(astaDTO);
 	}
 	
 	@GetMapping("/asta/cercaPerUtente")
@@ -69,17 +80,6 @@ public class AstaController {
 		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
 			return ResponseEntity.notFound().build();
 		
-		return ResponseEntity.ok(lista_asteDTO);
-	}
-	
-	@GetMapping("/asta/cercaPerTipo")
-	public ResponseEntity<List<AstaDTO>> cercaPerTipo(@RequestParam TipoAsta tipo) {
-		if (tipo == null)
-			throw new IllegalArgumentException("Errore Ricerca Asta (per tipo): Campo 'tipo' nullo!\n");
-		List<AstaDTO> lista_asteDTO = astaService.trovaAstePerTipo(tipo);
-		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
-			return ResponseEntity.notFound().build();
-					
 		return ResponseEntity.ok(lista_asteDTO);
 	}
 	
