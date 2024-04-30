@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dietideals24.demo.enums.TipoUtente;
 import com.dietideals24.demo.models.Utente;
 import com.dietideals24.demo.models.dto.UtenteDTO;
 import com.dietideals24.demo.repository.UtenteRepository;
@@ -26,7 +27,8 @@ public class UtenteController {
 	@PostMapping("/utente/registra")
 	public ResponseEntity<UtenteDTO> registra(@RequestBody UtenteDTO utenteDTO) {
 		String username = utenteDTO.getUsername(), email = utenteDTO.getEmail(), password = utenteDTO.getPassword();
-		
+		TipoUtente tipo = utenteDTO.getTipo();
+				
 		if (username.isBlank() || email.isBlank() || password.isBlank())
 			throw new IllegalArgumentException("Errore Registrazione: Campi credenziali vuoti!");
 		

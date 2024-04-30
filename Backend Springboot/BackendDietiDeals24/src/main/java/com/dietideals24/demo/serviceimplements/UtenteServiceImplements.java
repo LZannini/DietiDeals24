@@ -23,6 +23,7 @@ public class UtenteServiceImplements implements UtenteService {
         if (check_utente.isPresent()) {
         	Utente utente = check_utente.get();
             utenteDTO.setId(utente.getId());
+            
         }
         
         return utenteDTO;
@@ -81,6 +82,7 @@ public class UtenteServiceImplements implements UtenteService {
         utente.setUsername(utenteDTO.getUsername());
         utente.setEmail(utenteDTO.getEmail());
         utente.setPassword(utenteDTO.getPassword());
+        utente.setTipo(utenteDTO.getTipo());
 
         return utente;
     }
