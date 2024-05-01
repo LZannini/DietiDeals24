@@ -22,6 +22,8 @@ import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,6 +58,8 @@ public class RegistrazioneActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     selezioneAccount.add(TipoUtente.COMPRATORE);
+                } else {
+                    selezioneAccount.remove(TipoUtente.COMPRATORE);
                 }
             }
         });
@@ -65,6 +69,8 @@ public class RegistrazioneActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     selezioneAccount.add(TipoUtente.VENDITORE);
+                } else {
+                    selezioneAccount.remove(TipoUtente.VENDITORE);
                 }
             }
         });
@@ -89,6 +95,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
         btnR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String username = usernameEditText.getText().toString();
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
@@ -126,16 +133,18 @@ public class RegistrazioneActivity extends AppCompatActivity {
                             utente.setTipo(TipoUtente.COMPLETO);
                         }
 
+                        System.out.println(utente.getTipo().toString());
                         apiService.registraUtente(utente)
                                 .enqueue(new Callback<UtenteDTO>() {
                                     @Override
                                     public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
-                                        Toast.makeText(RegistrazioneActivity.this, "Registrazione effettuata con successo!", Toast.LENGTH_SHORT);
+                                        openSceltaAccountActivity();
                                     }
 
                                     @Override
                                     public void onFailure(Call<UtenteDTO> call, Throwable t) {
                                         Toast.makeText(RegistrazioneActivity.this, "Errore durante la registrazione!", Toast.LENGTH_SHORT).show();
+                                        Logger.getLogger(RegistrazioneActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                     }
                                 });
                     } catch (Exception e) {
@@ -151,6 +160,11 @@ public class RegistrazioneActivity extends AppCompatActivity {
 
     public void openActivityLogin(){
         Intent intentR = new Intent(this, LoginActivity.class);
+        startActivity(intentR);
+    }
+
+    public void openSceltaAccountActivity() {
+        Intent intentR = new Intent(this, SceltaAccountActivity.class);
         startActivity(intentR);
     }
 }

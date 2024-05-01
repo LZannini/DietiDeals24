@@ -1,9 +1,6 @@
 package com.dietideals24.demo.models;
 
-import java.util.Optional;
-
 import com.dietideals24.demo.enums.TipoUtente;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -26,6 +23,7 @@ public class Utente {
 	private String biografia;
 	private String sitoweb;
 	private String paese;
+	@Enumerated(EnumType.STRING)
 	private TipoUtente tipo;
 	private byte[] avatar;
 	

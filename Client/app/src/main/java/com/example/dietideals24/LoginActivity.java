@@ -18,6 +18,9 @@ import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<UtenteDTO> call, Throwable t) {
                                 Toast.makeText(LoginActivity.this, "Email e/o password non corretti, riprova!", Toast.LENGTH_SHORT);
+                                Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                             }
                         });
             }
