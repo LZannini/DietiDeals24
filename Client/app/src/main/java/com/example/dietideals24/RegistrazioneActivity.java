@@ -138,7 +138,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
                                 .enqueue(new Callback<UtenteDTO>() {
                                     @Override
                                     public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
-                                        openSceltaAccountActivity();
+                                        Toast.makeText(RegistrazioneActivity.this, "Registrazione effettuata con successo!", Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
