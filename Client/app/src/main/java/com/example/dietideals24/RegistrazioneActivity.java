@@ -138,7 +138,11 @@ public class RegistrazioneActivity extends AppCompatActivity {
                                 .enqueue(new Callback<UtenteDTO>() {
                                     @Override
                                     public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
-                                        Toast.makeText(RegistrazioneActivity.this, "Registrazione effettuata con successo!", Toast.LENGTH_SHORT).show();
+                                        if(response.isSuccessful()) {
+                                            Toast.makeText(RegistrazioneActivity.this, "Registrazione effettuata con successo!", Toast.LENGTH_SHORT).show();
+                                        } else if(response.code() == 409) {
+                                            Toast.makeText(RegistrazioneActivity.this, "Questa email risulta già registrata, prova ad effettuare il login!", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
 
                                     @Override
@@ -160,11 +164,6 @@ public class RegistrazioneActivity extends AppCompatActivity {
 
     public void openActivityLogin(){
         Intent intentR = new Intent(this, LoginActivity.class);
-        startActivity(intentR);
-    }
-
-    public void openSceltaAccountActivity() {
-        Intent intentR = new Intent(this, SceltaAccountActivity.class);
         startActivity(intentR);
     }
 }
