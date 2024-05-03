@@ -10,6 +10,22 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.DietiDeals24"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".NotificaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfiloActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CercaAstaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreaAstaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/border_background" />
