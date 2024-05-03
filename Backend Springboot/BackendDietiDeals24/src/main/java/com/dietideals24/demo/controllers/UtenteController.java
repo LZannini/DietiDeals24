@@ -2,6 +2,7 @@ package com.dietideals24.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,15 +33,25 @@ public class UtenteController {
 		if (username.isBlank() || email.isBlank() || password.isBlank())
 			throw new IllegalArgumentException("Errore Registrazione: Campi credenziali vuoti!");
 		
-		return ResponseEntity.ok(utenteService.registraUtente(utenteDTO));
+		try {
+	        UtenteDTO utenteRegistrato = utenteService.registraUtente(utenteDTO);
+	        return ResponseEntity.ok(utenteRegistrato);
+	    } catch (DataIntegrityViolationException e) {
+	        String errorMessage = "L'utente con questa email è già registrato.";
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // Passa null come corpo della risposta
+	    }
 	}
 	
 	@PostMapping("/utente/login")
 	public ResponseEntity<UtenteDTO> login(@RequestBody UtenteDTO utenteDTO) {
-		if (utenteDTO == null)
-			throw new IllegalArgumentException("Errore Login: Utente non trovato!");
-		return ResponseEntity.ok(utenteService.loginUtente(utenteDTO));
+		try {
+			UtenteDTO utenteLoggato = utenteService.loginUtente(utenteDTO);
+			return ResponseEntity.ok(utenteLoggato);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
+
 	
 	
 	@GetMapping("/utente/cerca")

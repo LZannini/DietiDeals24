@@ -79,7 +79,7 @@ public class UtenteDTO implements Serializable {
 	public void setAvatar(byte[] avatar) {
 		this.avatar = avatar;
 	}
-
+ 
 	public TipoUtente getTipo() {
 		return tipo;
 	}
