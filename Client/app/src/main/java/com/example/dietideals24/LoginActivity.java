@@ -85,6 +85,12 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                                 Toast.makeText(LoginActivity.this, "Login effettuato con successo!", Toast.LENGTH_SHORT);
+                                UtenteDTO utente = response.body();
+                                if(utente.getTipo() == TipoUtente.COMPLETO) {
+                                    openActivitySceltaAccount();
+                                } else {
+                                    openActivityHome();
+                                }
                             }
 
                             @Override
@@ -100,6 +106,16 @@ public class LoginActivity extends AppCompatActivity {
 
     public void openActivityRegistrazione(){
         Intent intentR = new Intent(this, RegistrazioneActivity.class);
+        startActivity(intentR);
+    }
+
+    public void openActivitySceltaAccount() {
+        Intent intentR = new Intent(this, SceltaAccountActivity.class);
+        startActivity(intentR);
+    }
+
+    public void openActivityHome() {
+        Intent intentR = new Intent(this, HomeActivity.class);
         startActivity(intentR);
     }
 }

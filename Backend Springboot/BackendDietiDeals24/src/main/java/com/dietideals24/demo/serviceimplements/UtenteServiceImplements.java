@@ -32,11 +32,12 @@ public class UtenteServiceImplements implements UtenteService {
 	@Override
 	public UtenteDTO loginUtente(UtenteDTO utenteDTO) {
 		java.util.Optional<Utente> check_utente = utenteRepository.findByEmailAndPassword(utenteDTO.getEmail(), utenteDTO.getPassword());
-        if (!check_utente.isPresent()) 
-        	 throw new IllegalArgumentException("Utente non trovato!");
-  
-        Utente utente = check_utente.get();
-        return UtenteServiceImplements.creaUtenteLogin(utente);
+        if (!check_utente.isPresent()) {
+        	throw new IllegalArgumentException("Utente non trovato!");	
+        } else {
+        	Utente utente = check_utente.get();
+        	return UtenteServiceImplements.creaUtenteLogin(utente);
+        }
 	}
 	
 
@@ -97,6 +98,7 @@ public class UtenteServiceImplements implements UtenteService {
         utenteDTO.setPaese(utente.getPaese());
         utenteDTO.setSitoweb(utente.getSitoweb());
         utenteDTO.setAvatar(utente.getAvatar());
+        utenteDTO.setTipo(utente.getTipo());
 
         return utenteDTO;
     }

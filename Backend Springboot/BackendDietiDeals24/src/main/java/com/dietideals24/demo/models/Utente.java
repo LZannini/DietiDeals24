@@ -23,6 +23,7 @@ public class Utente {
 	private String biografia;
 	private String sitoweb;
 	private String paese;
+	@Enumerated
 	private TipoUtente tipo;
 	private byte[] avatar;
 	

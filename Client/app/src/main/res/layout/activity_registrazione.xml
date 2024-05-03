@@ -11,8 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/page_background"
-    android:padding="16dp"
-    tools:context=".LoginActivity">
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="388dp"
