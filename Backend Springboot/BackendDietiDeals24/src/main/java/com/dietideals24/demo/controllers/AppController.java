@@ -18,11 +18,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.dietideals24.demo.models.*;
+import com.dietideals24.demo.models.dto.MessageDto;
 import com.dietideals24.demo.repository.*;
 
 @RestController
 @RequestMapping("/api")
 public class AppController {
+	
+	
+	@GetMapping("/messages")
+    public ResponseEntity<MessageDto> privateMessages(@AuthenticationPrincipal(expression = "name") String name) {
+        return ResponseEntity.ok(new MessageDto("private content " + name));
+    }
 	
 	@GetMapping("/")
 	public String home(Model model,@AuthenticationPrincipal OAuth2User user) {
