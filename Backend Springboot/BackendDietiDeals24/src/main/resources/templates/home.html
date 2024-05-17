@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Benvenuto</title>
+</head>
+<body>
+    <h1 th:if="${benvenutoMessage}" th:text="${benvenutoMessage}">Benvenuto!</h1>
+    <h1 th:unless="${benvenutoMessage}">Benvenuto!</h1>
+</body>
+</html>

@@ -1,9 +1,12 @@
 package com.dietideals24.demo.controllers;
 
+import java.security.Principal;
 import java.util.List;
+
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,34 +21,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.dietideals24.demo.models.*;
-import com.dietideals24.demo.models.dto.MessageDto;
 import com.dietideals24.demo.repository.*;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
-@RequestMapping("/api")
 public class AppController {
 	
 	
-	@GetMapping("/messages")
-    public ResponseEntity<MessageDto> privateMessages(@AuthenticationPrincipal(expression = "name") String name) {
-        return ResponseEntity.ok(new MessageDto("private content " + name));
+	@GetMapping("/google")
+    public String welcomeGoogle() {
+    	return "Welcome to Google!!";
     }
 	
-	@GetMapping("/")
-	public String home(Model model,@AuthenticationPrincipal OAuth2User user) {
-		if(user!=null)
-		model.addAttribute("userName",user.getAttribute("name"));
-		return "CiaoRegaz!";
-	}
+	 @GetMapping("/facebook")
+	    public String welcomeFacebook() {
+	        return "Welcome to Facebook!!";
+	    }
+    
 	
-	@GetMapping("/dice")
-	public ResponseEntity<String> handledefault() {
-	    String errorMessage = "Non si dice!";
-	    return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
-	}
+    @GetMapping("/user")
+    public Principal user(Principal principal) {
+    	System.out.println("username: " + principal.getName());
+    	return principal;
+    }
 	
-	@GetMapping("/secure")
-	public String secure() {
-		return "index";
-	}
+    
+    
+	
 }
