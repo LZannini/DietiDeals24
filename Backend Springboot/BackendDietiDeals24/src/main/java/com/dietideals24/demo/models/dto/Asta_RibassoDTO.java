@@ -1,32 +1,25 @@
-package com.dietideals24.demo.models;
+package com.dietideals24.demo.models.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import com.dietideals24.demo.enums.Categoria;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
-
-@Entity
-@PrimaryKeyJoinColumn(name = "id_asta")
-public class Asta_Ribasso extends Asta {
+public class Asta_RibassoDTO extends AstaDTO implements Serializable {
 	
+	private int id_asta;
 	private float prezzo;
 	private LocalDateTime timer;
 	private float decremento;
 	private float minimo;
-	
-	public Asta_Ribasso(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, LocalDateTime timer, float decremento, float minimo) {
-		super(id_creatore, nome, descrizione, categoria, foto);
-		this.prezzo = prezzo;
-		this.timer = timer;
-		this.decremento = decremento;
-		this.minimo = minimo;
+
+	public int getId_asta() {
+		return id_asta;
 	}
-	
-	public Asta_Ribasso() {}
+
+	public void setId_asta(int id_asta) {
+		this.id_asta = id_asta;
+	}
 
 	public float getPrezzo() {
 		return prezzo;

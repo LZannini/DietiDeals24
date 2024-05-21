@@ -4,6 +4,8 @@ import com.dietideals24.demo.enums.Categoria;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "asta")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Asta {
 
 	@Id

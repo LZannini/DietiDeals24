@@ -8,18 +8,83 @@ import org.springframework.stereotype.Service;
 
 import com.dietideals24.demo.enums.Categoria;
 import com.dietideals24.demo.models.Asta;
+import com.dietideals24.demo.models.Asta_Inversa;
+import com.dietideals24.demo.models.Asta_Ribasso;
+import com.dietideals24.demo.models.Asta_Silenziosa;
 import com.dietideals24.demo.models.dto.AstaDTO;
+import com.dietideals24.demo.models.dto.Asta_InversaDTO;
+import com.dietideals24.demo.models.dto.Asta_RibassoDTO;
+import com.dietideals24.demo.models.dto.Asta_SilenziosaDTO;
 import com.dietideals24.demo.repository.AstaRepository;
+import com.dietideals24.demo.repository.Asta_Inversa_Repository;
+import com.dietideals24.demo.repository.Asta_Ribasso_Repository;
+import com.dietideals24.demo.repository.Asta_Silenziosa_Repository;
 import com.dietideals24.demo.service.AstaService;
+
+import jakarta.transaction.Transactional;
 
 @Service("AstaService")
 public class AstaServiceImplements implements AstaService {
 	
 	@Autowired
 	private AstaRepository astaRepository;
+	@Autowired
+	private Asta_Inversa_Repository astaInversaRepository;
+	@Autowired
+	private Asta_Ribasso_Repository astaAlRibassoRepository;
+	@Autowired
+	private Asta_Silenziosa_Repository astaSilenziosaRepository;
 
 	@Override
+	@Transactional
+	public void creaAstaInversa(Asta_InversaDTO astaDTO) {
+		Asta asta = new Asta();
+		asta.setId_creatore(astaDTO.getId_creatore());
+		asta.setNome(astaDTO.getNome());
+		asta.setDescrizione(astaDTO.getDescrizione());
+		asta.setCategoria(astaDTO.getCategoria());
+		asta.setFoto(astaDTO.getFoto());
+		astaRepository.save(asta);
+		astaInversaRepository.insertAstaInversa(asta.getId(), astaDTO.getPrezzo(), astaDTO.getScadenza());
+	}
+	
+	@Override
+	@Transactional
+	public void creaAstaAlRibasso(Asta_RibassoDTO astaDTO) {
+		Asta asta = new Asta();
+		asta.setId_creatore(astaDTO.getId_creatore());
+		asta.setNome(astaDTO.getNome());
+		asta.setDescrizione(astaDTO.getDescrizione());
+		asta.setCategoria(astaDTO.getCategoria());
+		asta.setFoto(astaDTO.getFoto());
+		astaRepository.save(asta);
+		astaAlRibassoRepository.insertAstaAlRibasso(asta.getId(), astaDTO.getPrezzo(), astaDTO.getTimer(), astaDTO.getDecremento(), astaDTO.getMinimo());
+	}
+	
+	@Override
+	@Transactional
+	public void creaAstaSilenziosa(Asta_SilenziosaDTO astaDTO) {
+		Asta asta = new Asta();
+        asta.setId_creatore(astaDTO.getId_creatore());
+        asta.setNome(astaDTO.getNome());
+        asta.setDescrizione(astaDTO.getDescrizione());
+        asta.setCategoria(astaDTO.getCategoria());
+        asta.setFoto(astaDTO.getFoto());
+        astaRepository.save(asta);
+        astaSilenziosaRepository.insertAstaSilenziosa(asta.getId(), astaDTO.getScadenza());
+	}
+	
+	@Override
 	public void rimuoviAsta(int id) {
+		Asta_Inversa astaI = astaInversaRepository.getAstaInversa(id);
+		Asta_Ribasso astaR = astaAlRibassoRepository.getAstaAlRibasso(id);
+		Asta_Silenziosa astaS = astaSilenziosaRepository.getAstaSilenziosa(id);
+		if (astaI != null) 
+			astaInversaRepository.eliminaAstaInversa(id);	
+		else if (astaR != null) 
+			astaAlRibassoRepository.eliminaAstaAlRibasso(id);	
+		else if (astaS != null) 
+			astaSilenziosaRepository.eliminaAstaSilenziosa(id);
 		astaRepository.eliminaAsta(id);
 	}
 	
@@ -83,17 +148,6 @@ public class AstaServiceImplements implements AstaService {
 			}
 		}
 		return aste_trovate;
-	}
-	
-	private Asta creaAsta(AstaDTO astaDTO) {
-		Asta asta = new Asta();
-		asta.setNome(astaDTO.getNome());
-		asta.setId(astaDTO.getId());
-		asta.setId_creatore(astaDTO.getId_creatore());
-		asta.setCategoria(astaDTO.getCategoria());;
-		asta.setDescrizione(astaDTO.getDescrizione());
-		asta.setFoto(astaDTO.getFoto());
-		return asta;
 	}
 	
 	private AstaDTO creaAstaDTO(Asta asta) {
