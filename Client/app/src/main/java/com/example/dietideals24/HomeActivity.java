@@ -1,5 +1,6 @@
 package com.example.dietideals24;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,6 +31,9 @@ public class HomeActivity extends AppCompatActivity {
         buttonCerca = findViewById(R.id.button_cerca);
         buttonProfilo = findViewById(R.id.button_profilo);
         buttonDisconnetti = findViewById(R.id.button_disconnetti);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         buttonCrea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +86,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void openActivityCercaAsta() {
-        Intent intentR = new Intent(this, CreaAstaActivity.class);
+        Intent intentR = new Intent(this, CercaAstaActivity.class);
         startActivity(intentR);
     }
 

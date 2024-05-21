@@ -11,6 +11,9 @@
         android:theme="@style/Theme.DietiDeals24"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ModificaPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".NotificaActivity"
             android:exported="false" />
         <activity
