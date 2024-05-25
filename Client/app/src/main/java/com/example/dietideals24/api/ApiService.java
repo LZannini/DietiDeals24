@@ -12,4 +12,10 @@ public interface ApiService {
 
     @POST("/utente/login")
     Call<UtenteDTO> loginUtente(@Body UtenteDTO utenteDTO);
+
+    @POST("/utente/aggiorna")
+    Call<UtenteDTO> aggiornaUtente(@Body UtenteDTO utenteDTO);
+
+    @POST("/utente/modPassword")
+    Call<UtenteDTO> modificaPassword(@Body UtenteDTO utenteDTO);
 }

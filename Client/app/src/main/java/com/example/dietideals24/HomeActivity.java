@@ -12,6 +12,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.models.Utente;
+
 public class HomeActivity extends AppCompatActivity {
 
     private LinearLayout buttonCrea;
@@ -26,6 +29,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        UtenteDTO utenteDTO = (UtenteDTO) getIntent().getSerializableExtra("utente");
+        Utente utente = creaUtenteLoggato(utenteDTO);
+
 
         buttonCrea = findViewById(R.id.button_crea);
         buttonCerca = findViewById(R.id.button_cerca);
@@ -52,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         buttonProfilo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityProfilo();
+                openActivityProfilo(utente);
             }
         });
 
@@ -80,6 +87,21 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    public Utente creaUtenteLoggato(UtenteDTO utenteDTO) {
+        Utente u = new Utente();
+        u.setId(utenteDTO.getId());
+        u.setUsername(utenteDTO.getUsername());
+        u.setEmail(utenteDTO.getEmail());
+        u.setPassword(utenteDTO.getPassword());
+        u.setTipo(utenteDTO.getTipo());
+        if(utenteDTO.getAvatar() != null) u.setAvatar(utenteDTO.getAvatar());
+        if(utenteDTO.getBiografia() != null) u.setBiografia(utenteDTO.getBiografia());
+        if(utenteDTO.getPaese() != null) u.setPaese(utenteDTO.getPaese());
+        if(utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
+        return u;
+    }
+
     public void openActivityCreaAsta() {
         Intent intentR = new Intent(this, CreaAstaActivity.class);
         startActivity(intentR);
@@ -90,8 +112,9 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
-    public void openActivityProfilo() {
+    public void openActivityProfilo(Utente utente) {
         Intent intentR = new Intent(this, ProfiloActivity.class);
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 
