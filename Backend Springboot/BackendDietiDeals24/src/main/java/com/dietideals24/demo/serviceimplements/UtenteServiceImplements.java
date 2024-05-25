@@ -1,6 +1,5 @@
 package com.dietideals24.demo.serviceimplements;
 
-import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +50,7 @@ public class UtenteServiceImplements implements UtenteService {
 		utente.setBiografia(utenteDTO.getBiografia());
 		utente.setPaese(utenteDTO.getPaese());
 		utente.setSitoweb(utenteDTO.getSitoweb());
+		utente.setTipo(utenteDTO.getTipo());
 		utente.setAvatar(utenteDTO.getAvatar());
 		utenteRepository.save(utente);
 	}
@@ -73,6 +73,7 @@ public class UtenteServiceImplements implements UtenteService {
 			utenteDTO.setBiografia(utente.getBiografia());
 			utenteDTO.setPaese(utente.getPaese());
 			utenteDTO.setSitoweb(utente.getSitoweb());
+			utenteDTO.setTipo(utente.getTipo());
 			utenteDTO.setAvatar(utente.getAvatar());
 		}
 		return utenteDTO;
@@ -97,8 +98,8 @@ public class UtenteServiceImplements implements UtenteService {
         utenteDTO.setBiografia(utente.getBiografia());
         utenteDTO.setPaese(utente.getPaese());
         utenteDTO.setSitoweb(utente.getSitoweb());
-        utenteDTO.setAvatar(utente.getAvatar());
         utenteDTO.setTipo(utente.getTipo());
+        utenteDTO.setAvatar(utente.getAvatar());
 
         return utenteDTO;
     }

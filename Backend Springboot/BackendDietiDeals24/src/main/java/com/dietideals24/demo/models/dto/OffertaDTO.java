@@ -3,6 +3,7 @@ package com.dietideals24.demo.models.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@SuppressWarnings("serial")
 public class OffertaDTO implements Serializable {
 	
 	private int id;

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import com.dietideals24.demo.models.Asta;
 import com.dietideals24.demo.models.Asta_Silenziosa;
 
 import jakarta.transaction.Transactional;
@@ -20,6 +19,8 @@ public interface Asta_Silenziosa_Repository extends CrudRepository<Asta_Silenzio
     @Query(value = "INSERT INTO asta_silenziosa (id_asta, scadenza) VALUES (:id_asta, :scadenza)", nativeQuery = true)
     void insertAstaSilenziosa(@Param("id_asta") int id_asta, @Param("scadenza") LocalDateTime scadenza);
 	
+	@Transactional
+	@Modifying
 	@Query("DELETE from Asta_Silenziosa a WHERE a.id = :id")
 	void eliminaAstaSilenziosa(@Param("id") int id);
 	

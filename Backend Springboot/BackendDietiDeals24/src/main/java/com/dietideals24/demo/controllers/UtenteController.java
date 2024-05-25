@@ -5,17 +5,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dietideals24.demo.enums.TipoUtente;
-import com.dietideals24.demo.models.Utente;
 import com.dietideals24.demo.models.dto.UtenteDTO;
-import com.dietideals24.demo.repository.UtenteRepository;
 import com.dietideals24.demo.service.UtenteService;
 
 @RestController
@@ -28,7 +24,6 @@ public class UtenteController {
 	@PostMapping("/utente/registra")
 	public ResponseEntity<UtenteDTO> registra(@RequestBody UtenteDTO utenteDTO) {
 		String username = utenteDTO.getUsername(), email = utenteDTO.getEmail(), password = utenteDTO.getPassword();
-		TipoUtente tipo = utenteDTO.getTipo();
 				
 		if (username.isBlank() || email.isBlank() || password.isBlank())
 			throw new IllegalArgumentException("Errore Registrazione: Campi credenziali vuoti!");
@@ -37,8 +32,7 @@ public class UtenteController {
 	        UtenteDTO utenteRegistrato = utenteService.registraUtente(utenteDTO);
 	        return ResponseEntity.ok(utenteRegistrato);
 	    } catch (DataIntegrityViolationException e) {
-	        String errorMessage = "L'utente con questa email è già registrato.";
-	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // Passa null come corpo della risposta
+	        return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
 	    }
 	}
 	

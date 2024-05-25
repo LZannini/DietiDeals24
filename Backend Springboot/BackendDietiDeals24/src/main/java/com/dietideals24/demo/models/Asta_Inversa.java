@@ -1,13 +1,10 @@
 package com.dietideals24.demo.models;
 
 import java.time.LocalDateTime;
-
 import com.dietideals24.demo.enums.Categoria;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id_asta")

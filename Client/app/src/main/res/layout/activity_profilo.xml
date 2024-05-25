@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,18 +14,177 @@
     android:padding="16dp">
 
     <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="794dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="0dp"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/icon"
-            android:layout_width="333dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/icona_menu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:src="@drawable/baseline_menu_24" />
+
+        <ImageView
+            android:id="@+id/foto_profilo"
+            android:layout_width="155dp"
+            android:layout_height="155dp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/logo_text" />
+            android:src="@drawable/add_profile_photo" />
+
+        <TextView
+            android:id="@+id/text_nomeProfilo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:hint="Nome"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/info_container"
+                android:gravity="center_vertical"
+                android:hint="Email"
+                android:textColor="#88000000"
+                android:textSize="20dp"
+                android:enabled="false"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_bio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Short bio"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/shortBio"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/info_container"
+                android:gravity="center_vertical"
+                android:hint="Bio"
+                android:textColor="#88000000"
+                android:textSize="20dp"
+                android:enabled="false"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_sitoWeb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Sito web"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/sito"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/info_container"
+                android:gravity="center_vertical"
+                android:hint="Website"
+                android:textColor="#88000000"
+                android:textSize="20dp"
+                android:enabled="false"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_paese"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Paese"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/paese"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:background="@drawable/info_container"
+                android:gravity="center_vertical"
+                android:hint="Country"
+                android:textColor="#88000000"
+                android:textSize="20dp"
+                android:enabled="false"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="122dp">
+
+            <Button
+                android:id="@+id/asteCreate_button"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/text_container"
+                android:backgroundTint="#B6EFF6"
+                android:gravity="center"
+                android:padding="18dp"
+                android:text="Visualizza aste create"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/asteVinte_button"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/text_container"
+                android:backgroundTint="#B6EFF6"
+                android:gravity="center"
+                android:padding="18dp"
+                android:text="Visualizza aste vinte"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>
+</ScrollView>

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.dietideals24.demo.enums.Categoria;
 
+@SuppressWarnings("serial")
 public class AstaDTO implements Serializable {
 	
 	private int id;
