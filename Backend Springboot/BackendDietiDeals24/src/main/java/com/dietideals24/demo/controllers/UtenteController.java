@@ -58,9 +58,22 @@ public class UtenteController {
 	}
 	
 	@PostMapping("/utente/aggiorna")
-	public void aggiorna(@RequestBody UtenteDTO utenteDTO) {
-		if (utenteDTO == null)
-			throw new IllegalArgumentException("Errore Aggiornamento: Utente non valido!");
-		utenteService.aggiornaUtente(utenteDTO);
-	}
+		public ResponseEntity<UtenteDTO> aggiorna(@RequestBody UtenteDTO utenteDTO) {
+			try {
+				UtenteDTO utenteModificato = utenteService.updateUtente(utenteDTO);;
+				return ResponseEntity.ok(utenteModificato);
+			} catch (IllegalArgumentException e) {
+				return ResponseEntity.notFound().build();
+			}
+		}
+		
+		@PostMapping("/utente/modPassword")
+		public ResponseEntity<UtenteDTO> modifica_password(@RequestBody UtenteDTO utenteDTO) {
+			try {
+				UtenteDTO utenteModificato = utenteService.modificaPassword(utenteDTO.getId(), utenteDTO.getPassword());
+				return ResponseEntity.ok(utenteModificato);
+			} catch (IllegalArgumentException e) {
+				return ResponseEntity.notFound().build();
+			}
+		}
 }

@@ -7,6 +7,7 @@ public interface UtenteService {
 	UtenteDTO registraUtente(UtenteDTO utenteDTO);
 	UtenteDTO loginUtente(UtenteDTO utenteDTO);
 	UtenteDTO recuperaUtente(int id, String email);
-	void aggiornaUtente(UtenteDTO utenteDTO);
+	UtenteDTO updateUtente(UtenteDTO utenteDTO);
+	UtenteDTO modificaPassword(int id, String password);
 
 }
