@@ -1,5 +1,6 @@
 package com.example.dietideals24;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +11,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.models.Utente;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -26,10 +30,17 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        UtenteDTO utenteDTO = (UtenteDTO) getIntent().getSerializableExtra("utente");
+        Utente utente = creaUtenteLoggato(utenteDTO);
+
+
         buttonCrea = findViewById(R.id.button_crea);
         buttonCerca = findViewById(R.id.button_cerca);
         buttonProfilo = findViewById(R.id.button_profilo);
         buttonDisconnetti = findViewById(R.id.button_disconnetti);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         buttonCrea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         buttonProfilo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityProfilo();
+                openActivityProfilo(utente);
             }
         });
 
@@ -76,18 +87,34 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    public Utente creaUtenteLoggato(UtenteDTO utenteDTO) {
+        Utente u = new Utente();
+        u.setId(utenteDTO.getId());
+        u.setUsername(utenteDTO.getUsername());
+        u.setEmail(utenteDTO.getEmail());
+        u.setPassword(utenteDTO.getPassword());
+        u.setTipo(utenteDTO.getTipo());
+        if(utenteDTO.getAvatar() != null) u.setAvatar(utenteDTO.getAvatar());
+        if(utenteDTO.getBiografia() != null) u.setBiografia(utenteDTO.getBiografia());
+        if(utenteDTO.getPaese() != null) u.setPaese(utenteDTO.getPaese());
+        if(utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
+        return u;
+    }
+
     public void openActivityCreaAsta() {
         Intent intentR = new Intent(this, CreaAstaActivity.class);
         startActivity(intentR);
     }
 
     public void openActivityCercaAsta() {
-        Intent intentR = new Intent(this, CreaAstaActivity.class);
+        Intent intentR = new Intent(this, CercaAstaActivity.class);
         startActivity(intentR);
     }
 
-    public void openActivityProfilo() {
+    public void openActivityProfilo(Utente utente) {
         Intent intentR = new Intent(this, ProfiloActivity.class);
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 

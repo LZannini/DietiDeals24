@@ -1,17 +1,15 @@
 package com.dietideals24.demo.models;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import com.dietideals24.demo.enums.Categoria;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+
 
 @Entity
+@PrimaryKeyJoinColumn(name = "id_asta")
 public class Asta_Ribasso extends Asta {
 	
-	private int id_asta;
 	private float prezzo;
 	private LocalDateTime timer;
 	private float decremento;
@@ -19,20 +17,13 @@ public class Asta_Ribasso extends Asta {
 	
 	public Asta_Ribasso(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, LocalDateTime timer, float decremento, float minimo) {
 		super(id_creatore, nome, descrizione, categoria, foto);
-		this.id_asta = super.getId();
 		this.prezzo = prezzo;
 		this.timer = timer;
 		this.decremento = decremento;
 		this.minimo = minimo;
 	}
-
-	public int getId_asta() {
-		return id_asta;
-	}
-
-	public void setId_asta(int id_asta) {
-		this.id_asta = id_asta;
-	}
+	
+	public Asta_Ribasso() {}
 
 	public float getPrezzo() {
 		return prezzo;

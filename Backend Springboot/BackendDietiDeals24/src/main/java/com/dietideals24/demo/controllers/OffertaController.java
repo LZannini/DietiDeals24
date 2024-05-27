@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dietideals24.demo.models.dto.OffertaDTO;
-import com.dietideals24.demo.repository.OffertaRepository;
 import com.dietideals24.demo.service.OffertaService;
 
 @RestController

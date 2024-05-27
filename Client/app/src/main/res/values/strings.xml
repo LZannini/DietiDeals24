@@ -2,7 +2,7 @@
 <resources>
     <!-- login strings -->
 
-    <string name="app_name">Page 1</string>
+    <string name="app_name">DietiDeals24</string>
     <string name="ek_img_content">ExportKit Image</string>
     <string name="login_ek3_string">Login</string>
     <string name="inserisci_le_tue_credenziali_string">Inserisci le tue credenziali </string>
@@ -12,4 +12,8 @@
     <string name="facebook_string">Accedi con Facebook</string>
     <string name="non_hai_un_account__registrati__string">Non hai un account? Registrati! </string>
     <string name="oppure_string">oppure</string>
+
+
+    <!-- Cerca Asta -->
+    <string name="Seleziona">seleziona</string>
 </resources>

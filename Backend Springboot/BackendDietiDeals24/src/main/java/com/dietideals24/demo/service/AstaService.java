@@ -1,14 +1,18 @@
 package com.dietideals24.demo.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.dietideals24.demo.enums.Categoria;
 import com.dietideals24.demo.models.dto.AstaDTO;
+import com.dietideals24.demo.models.dto.Asta_InversaDTO;
+import com.dietideals24.demo.models.dto.Asta_RibassoDTO;
+import com.dietideals24.demo.models.dto.Asta_SilenziosaDTO;
 
 public interface AstaService {
 	
-	
+	void creaAstaInversa(Asta_InversaDTO astaDTO);
+	void creaAstaAlRibasso(Asta_RibassoDTO astaDTO);
+	void creaAstaSilenziosa(Asta_SilenziosaDTO astaDTO);
 	void rimuoviAsta(int id);
 	AstaDTO trovaAsta(int id);
 	List<AstaDTO> trovaAsteUtente(int id_creatore);

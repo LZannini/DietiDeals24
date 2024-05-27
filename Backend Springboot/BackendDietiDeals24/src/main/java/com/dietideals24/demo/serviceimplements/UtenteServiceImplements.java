@@ -1,6 +1,5 @@
 package com.dietideals24.demo.serviceimplements;
 
-import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,13 +35,31 @@ public class UtenteServiceImplements implements UtenteService {
         	throw new IllegalArgumentException("Utente non trovato!");	
         } else {
         	Utente utente = check_utente.get();
-        	return UtenteServiceImplements.creaUtenteLogin(utente);
+        	return UtenteServiceImplements.creaUtenteDTO(utente);
         }
 	}
 	
 
 	@Override
-	public void aggiornaUtente(UtenteDTO utenteDTO) {
+	public UtenteDTO updateUtente(UtenteDTO utenteDTO) {
+		utenteRepository.save(UtenteServiceImplements.aggiornaUtente(utenteDTO));
+		
+		return utenteDTO;
+	}
+	
+	public UtenteDTO modificaPassword(int id, String password) {
+		utenteRepository.updatePassword(password, id);
+		
+		java.util.Optional<Utente> utente_modificato = utenteRepository.findById(id);
+		if(!utente_modificato.isPresent()) {
+			throw new IllegalArgumentException("Utente non trovato!");
+		} else {
+			Utente utente = utente_modificato.get();
+			return UtenteServiceImplements.creaUtenteDTO(utente);
+		}
+	}
+	
+	private static Utente aggiornaUtente(UtenteDTO utenteDTO) {
 		Utente utente = new Utente();
 		utente.setId(utenteDTO.getId());
 		utente.setUsername(utenteDTO.getUsername());
@@ -52,7 +69,9 @@ public class UtenteServiceImplements implements UtenteService {
 		utente.setPaese(utenteDTO.getPaese());
 		utente.setSitoweb(utenteDTO.getSitoweb());
 		utente.setAvatar(utenteDTO.getAvatar());
-		utenteRepository.save(utente);
+		utente.setTipo(utenteDTO.getTipo());
+		
+		return utente;
 	}
 	
 	@Override
@@ -73,6 +92,7 @@ public class UtenteServiceImplements implements UtenteService {
 			utenteDTO.setBiografia(utente.getBiografia());
 			utenteDTO.setPaese(utente.getPaese());
 			utenteDTO.setSitoweb(utente.getSitoweb());
+			utenteDTO.setTipo(utente.getTipo());
 			utenteDTO.setAvatar(utente.getAvatar());
 		}
 		return utenteDTO;
@@ -88,7 +108,7 @@ public class UtenteServiceImplements implements UtenteService {
         return utente;
     }
 	
-	private static UtenteDTO creaUtenteLogin(Utente utente) {
+	private static UtenteDTO creaUtenteDTO(Utente utente) {
         UtenteDTO utenteDTO = new UtenteDTO();
         utenteDTO.setId(utente.getId());
         utenteDTO.setUsername(utente.getUsername());
@@ -97,8 +117,8 @@ public class UtenteServiceImplements implements UtenteService {
         utenteDTO.setBiografia(utente.getBiografia());
         utenteDTO.setPaese(utente.getPaese());
         utenteDTO.setSitoweb(utente.getSitoweb());
-        utenteDTO.setAvatar(utente.getAvatar());
         utenteDTO.setTipo(utente.getTipo());
+        utenteDTO.setAvatar(utente.getAvatar());
 
         return utenteDTO;
     }

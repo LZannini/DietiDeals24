@@ -9,19 +9,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dietideals24.demo.enums.Categoria;
 import com.dietideals24.demo.models.Asta;
-import com.dietideals24.demo.models.Utente;
 import com.dietideals24.demo.models.dto.AstaDTO;
-import com.dietideals24.demo.repository.AstaRepository;
-import com.dietideals24.demo.repository.Asta_Inversa_Repository;
-import com.dietideals24.demo.repository.Asta_Ribasso_Repository;
-import com.dietideals24.demo.repository.Asta_Silenziosa_Repository;
-import com.dietideals24.demo.repository.UtenteRepository;
+import com.dietideals24.demo.models.dto.Asta_InversaDTO;
+import com.dietideals24.demo.models.dto.Asta_RibassoDTO;
+import com.dietideals24.demo.models.dto.Asta_SilenziosaDTO;
 import com.dietideals24.demo.service.AstaService;
 
 @RestController
@@ -30,14 +26,6 @@ public class AstaController {
 	@Autowired
     @Qualifier("AstaService")
     private AstaService astaService;
-	@Autowired
-	private Asta_Inversa_Repository Asta_Inversa;
-	@Autowired
-	private AstaRepository Asta;
-	@Autowired
-	private Asta_Ribasso_Repository Asta_Ribasso;
-	@Autowired
-	private Asta_Silenziosa_Repository Asta_Silenziosa;
 	
 	@GetMapping("/asta/lista")
 	public Iterable<Asta> getAll() {
@@ -46,12 +34,23 @@ public class AstaController {
 		return list;
 	}
 	
-	/*@PostMapping("/asta/crea")
-	public ResponseEntity<AstaDTO> crea(@RequestBody AstaDTO asta) {
-		
-		astaService.creaAsta(asta);
+	@PostMapping("/asta/creaAstaInversa")
+	public ResponseEntity<AstaDTO> crea(@RequestBody Asta_InversaDTO asta) {
+		astaService.creaAstaInversa(asta);
 		return ResponseEntity.ok().build();
-	}*/
+	}
+	
+	@PostMapping("/asta/creaAstaAlRibasso")
+	public ResponseEntity<AstaDTO> crea(@RequestBody Asta_RibassoDTO asta) {
+		astaService.creaAstaAlRibasso(asta);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping("/asta/creaAstaSilenziosa")
+	public ResponseEntity<AstaDTO> crea(@RequestBody Asta_SilenziosaDTO asta) {
+		astaService.creaAstaSilenziosa(asta);
+		return ResponseEntity.ok().build();
+	}
 	
 	
 	@PostMapping("/asta/rimuovi")

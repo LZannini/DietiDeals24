@@ -1,8 +1,6 @@
 package com.dietideals24.demo.models;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -15,8 +13,7 @@ public class Offerta {
 	private float valore;
 	private LocalDateTime data;
 	
-	public Offerta(int id, int id_utente, int id_asta, float valore, LocalDateTime data) {
-		this.id = id;
+	public Offerta(int id_utente, int id_asta, float valore, LocalDateTime data) {
 		this.id_utente = id_utente;
 		this.id_asta = id_asta;
 		this.valore = valore;

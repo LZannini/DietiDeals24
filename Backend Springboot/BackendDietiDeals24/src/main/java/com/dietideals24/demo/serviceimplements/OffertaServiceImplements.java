@@ -69,6 +69,7 @@ public class OffertaServiceImplements implements OffertaService {
 	
 	private OffertaDTO creaOffertaDTO(Offerta offerta) {
 		OffertaDTO offertaDTO = new OffertaDTO();
+		offertaDTO.setId(offerta.getId());
         offertaDTO.setId_asta(offerta.getId_asta());
         offertaDTO.setId_utente(offerta.getId_utente());
         offertaDTO.setValore(offerta.getValore());

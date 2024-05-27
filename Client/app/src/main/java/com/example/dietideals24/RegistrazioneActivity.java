@@ -133,7 +133,6 @@ public class RegistrazioneActivity extends AppCompatActivity {
                             utente.setTipo(TipoUtente.COMPLETO);
                         }
 
-                        System.out.println(utente.getTipo().toString());
                         apiService.registraUtente(utente)
                                 .enqueue(new Callback<UtenteDTO>() {
                                     @Override
@@ -156,6 +155,19 @@ public class RegistrazioneActivity extends AppCompatActivity {
                     }
 
 
+                } else {
+                    builder.setMessage("Le password non corrispondono, riprova")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    usernameEditText.setText("");
+                    emailEditText.setText("");
+                    passwordEditText.setText("");
+                    confPasswordEditText.setText("");
                 }
             }
         });

@@ -51,6 +51,7 @@
             android:padding="18dp"
             android:textColor="@android:color/secondary_text_light"
             android:textColorHint="@color/black"
+            android:maxLines="1"
             android:textSize="20sp"></EditText>
 
         <EditText
@@ -65,6 +66,7 @@
             android:padding="18dp"
             android:textColor="@android:color/secondary_text_light"
             android:textColorHint="@color/black"
+            android:maxLines="1"
             android:textSize="20sp"></EditText>
 
         <EditText
@@ -79,6 +81,7 @@
             android:padding="18dp"
             android:textColor="@android:color/secondary_text_light"
             android:textColorHint="@android:color/secondary_text_light"
+            android:maxLines="1"
             android:textSize="20sp"></EditText>
 
         <EditText
@@ -92,6 +95,7 @@
             android:padding="18dp"
             android:textColor="@android:color/secondary_text_light"
             android:textColorHint="@android:color/secondary_text_light"
+            android:maxLines="1"
             android:textSize="20sp"></EditText>
 
         <LinearLayout

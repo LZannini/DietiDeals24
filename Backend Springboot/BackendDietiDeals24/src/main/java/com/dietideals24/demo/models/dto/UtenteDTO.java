@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.dietideals24.demo.enums.TipoUtente;
 
+@SuppressWarnings("serial")
 public class UtenteDTO implements Serializable {
 	
 	private int id;

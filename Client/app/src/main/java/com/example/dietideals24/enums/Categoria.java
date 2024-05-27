@@ -1,0 +1,5 @@
+package com.example.dietideals24.enums;
+
+public enum Categoria {
+    ABBIGLIAMENTO, ACCESSORI, ARREDAMENTO, ARTE, COLLEZIONISMO, CUCINA, ELETTRONICA, LETTURA, MOTORI, SERVIZI, SPORT, SVAGO;
+}

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.TipoUtente;
+import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.util.logging.Level;
@@ -85,11 +86,11 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                                 Toast.makeText(LoginActivity.this, "Login effettuato con successo!", Toast.LENGTH_SHORT);
-                                UtenteDTO utente = response.body();
+                                UtenteDTO utenteDTO = response.body();
                                 if(utente.getTipo() == TipoUtente.COMPLETO) {
                                     openActivitySceltaAccount();
                                 } else {
-                                    openActivityHome();
+                                    openActivityHome(utenteDTO);
                                 }
                             }
 
@@ -114,8 +115,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
-    public void openActivityHome() {
+    public void openActivityHome(UtenteDTO utente) {
         Intent intentR = new Intent(this, HomeActivity.class);
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 }
