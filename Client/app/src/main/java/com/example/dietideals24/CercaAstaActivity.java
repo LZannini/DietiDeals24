@@ -108,7 +108,7 @@ public class CercaAstaActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<AstaDTO>> call, Throwable t) {
-                Toast.makeText(CercaAstaActivity.this, "Errore nella chiamata di rete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CercaAstaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(CercaAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });

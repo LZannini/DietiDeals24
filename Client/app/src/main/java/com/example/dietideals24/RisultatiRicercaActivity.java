@@ -35,7 +35,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity {
             noResultsText.setVisibility(View.GONE);
             List<String> nomiAste = new ArrayList<>();
             for(AstaDTO asta : listaAste){
-                nomiAste.add(asta.getNome() + " - " + asta.getCategoria().toString());
+                nomiAste.add(asta.getNome() + " - " + asta.getCategoria().toString() + " - " + asta.getDescrizione());
             }
             adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,nomiAste);
             listView.setAdapter(adapter);
