@@ -41,9 +41,6 @@ public class CercaAstaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cerca_asta);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         vaiButton = findViewById(R.id.vai_button);
 
         cercaAstaInput = findViewById(R.id.cerca_asta_input);
@@ -115,17 +112,6 @@ public class CercaAstaActivity extends AppCompatActivity {
                 Logger.getLogger(CercaAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });
-=======
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
-=======
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
-=======
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
+
     }
 }

@@ -16,26 +16,12 @@ public interface ApiService {
 
     @POST("/utente/login")
     Call<UtenteDTO> loginUtente(@Body UtenteDTO utenteDTO);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
-=======
-
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
-=======
-
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
     @POST("/utente/aggiorna")
     Call<UtenteDTO> aggiornaUtente(@Body UtenteDTO utenteDTO);
 
     @POST("/utente/modPassword")
     Call<UtenteDTO> modificaPassword(@Body UtenteDTO utenteDTO);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     @GET("/asta/cercaPerChiave")
     Call<List<AstaDTO>> cercaPerParolaChiave(@Query("chiave") String chiave);
@@ -45,10 +31,5 @@ public interface ApiService {
 
     @GET("/asta/cercaPerChiaveAndCategoria")
     Call<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@Query("chiave") String chiave, @Query("categoria") String categoria);
-=======
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
-=======
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
-=======
->>>>>>> b93a37852ba927f9049e7a3707ca702d6aa6d91a
+
 }
