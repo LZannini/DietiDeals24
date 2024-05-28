@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
@@ -32,6 +33,7 @@ public class CercaAstaActivity extends AppCompatActivity {
 
     private EditText cercaAstaInput;
     private Button vaiButton;
+    private ImageButton back_button;
     String[] items = {"Nome", "Categoria"};
     AutoCompleteTextView autoCompleteTxt;
     ArrayAdapter<String> adapterItems;
@@ -50,6 +52,15 @@ public class CercaAstaActivity extends AppCompatActivity {
         adapterItems = new ArrayAdapter<String>(this, R.layout.activity_list_item,items);
 
         autoCompleteTxt.setAdapter(adapterItems);
+
+        back_button = findViewById(R.id.back_button);
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

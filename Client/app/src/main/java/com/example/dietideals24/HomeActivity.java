@@ -42,6 +42,8 @@ public class HomeActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+
+
         buttonCrea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

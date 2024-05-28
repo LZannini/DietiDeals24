@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ public class ModificaPasswordActivity extends AppCompatActivity {
     private EditText nuovaPassword;
     private EditText confermaPassword;
     private Button salvaButton;
-    private ImageView backButton;
+    private ImageButton back_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +47,20 @@ public class ModificaPasswordActivity extends AppCompatActivity {
         nuovaPassword = findViewById(R.id.nuova_password);
         confermaPassword = findViewById(R.id.conferma_password);
         salvaButton = findViewById(R.id.salva_button);
-        backButton = findViewById(R.id.back_button);
+        back_button = findViewById(R.id.back_button);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ModificaPasswordActivity.this);
 
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         salvaButton.setOnClickListener(new View.OnClickListener() {
             @Override

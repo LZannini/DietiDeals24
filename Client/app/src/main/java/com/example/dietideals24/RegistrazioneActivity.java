@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
     private CheckBox tipoVenditore;
     private List<TipoUtente> selezioneAccount = new ArrayList<>();
     private TextView buttonLogin;
+    private ImageButton back_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,14 @@ public class RegistrazioneActivity extends AppCompatActivity {
         confPasswordEditText = findViewById(R.id.conferma_password_input);
         tipoCompratore = findViewById(R.id.checkbox_compratore);
         tipoVenditore = findViewById(R.id.checkbox_venditore);
+        back_button = findViewById(R.id.back_button);
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         tipoCompratore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

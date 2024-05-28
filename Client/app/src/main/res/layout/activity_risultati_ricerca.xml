@@ -12,6 +12,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="left"
+            android:background="@null"
+            android:src="@drawable/baseline_arrow_back_24" />
+
         <!-- Messaggio per nessun risultato trovato -->
         <TextView
             android:id="@+id/no_results_text"

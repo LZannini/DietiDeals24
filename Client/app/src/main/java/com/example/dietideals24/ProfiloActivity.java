@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -38,6 +39,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private Utente utenteOriginale;
     private UtenteDTO utenteModificato;
     private Boolean info_mod = false;
+    private ImageButton back_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class ProfiloActivity extends AppCompatActivity {
         countryEditText = findViewById(R.id.paese);
         pulsantiAste = findViewById(R.id.pulsanti_aste);
         buttonSalva = findViewById(R.id.salva_button);
+        back_button = findViewById(R.id.back_button);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -64,6 +67,13 @@ public class ProfiloActivity extends AppCompatActivity {
         bioEditText.setText(utenteOriginale.getBiografia());
         webSiteEditText.setText(utenteOriginale.getSitoweb());
         countryEditText.setText(utenteOriginale.getPaese());
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override

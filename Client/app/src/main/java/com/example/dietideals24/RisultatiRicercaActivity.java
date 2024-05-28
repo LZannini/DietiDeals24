@@ -3,6 +3,7 @@ package com.example.dietideals24;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity {
     private TextView noResultsText;
     private ArrayAdapter<String> adapter;
     private List<AstaDTO> listaAste;
+    private ImageButton back_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -26,6 +28,14 @@ public class RisultatiRicercaActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.risultati_list_view);
         noResultsText = findViewById(R.id.no_results_text);
+        back_button = findViewById(R.id.back_button);
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         listaAste = (List<AstaDTO>)getIntent().getSerializableExtra("listaAste");
 
