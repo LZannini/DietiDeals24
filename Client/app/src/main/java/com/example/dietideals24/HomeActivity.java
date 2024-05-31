@@ -80,10 +80,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-        RetrofitService retrofitService = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            retrofitService = new RetrofitService();
-        }
+        RetrofitService retrofitService = new RetrofitService();
+
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
         buttonNotifica.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dietideals24.dto.AstaDTO;
@@ -29,6 +30,9 @@ public class RisultatiRicercaActivity extends AppCompatActivity {
         listView = findViewById(R.id.risultati_list_view);
         noResultsText = findViewById(R.id.no_results_text);
         back_button = findViewById(R.id.back_button);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         String criterioRicerca = getIntent().getStringExtra("criterioRicerca");
 
