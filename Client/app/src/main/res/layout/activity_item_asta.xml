@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- Foto -->
+    <TextView
+        android:id="@+id/foto_asta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Foto"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+
+    <!-- Nome -->
+    <TextView
+        android:id="@+id/nome_asta"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Nome"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+
+    <!-- Prezzo -->
+    <TextView
+        android:id="@+id/prezzo_asta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prezzo"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+
+    <!-- Tipo -->
+    <TextView
+        android:id="@+id/tipo_asta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo"
+        android:textSize="16sp"
+        android:textColor="@color/black"/>
+
+    <!-- ImageView per il tipo di asta -->
+    <ImageView
+        android:id="@+id/tipo_asta_image"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_below="@id/tipo_asta"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ribasso" />
+
+</LinearLayout>

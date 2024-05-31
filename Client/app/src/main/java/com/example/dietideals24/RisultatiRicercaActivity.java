@@ -30,6 +30,12 @@ public class RisultatiRicercaActivity extends AppCompatActivity {
         noResultsText = findViewById(R.id.no_results_text);
         back_button = findViewById(R.id.back_button);
 
+        String criterioRicerca = getIntent().getStringExtra("criterioRicerca");
+
+        TextView risultatiRicerca = findViewById(R.id.risultati_title);
+
+        risultatiRicerca.setText("Risultati Per "+ criterioRicerca);
+
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

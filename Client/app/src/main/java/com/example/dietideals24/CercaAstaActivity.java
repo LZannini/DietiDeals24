@@ -1,9 +1,10 @@
 package com.example.dietideals24;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
+import com.example.dietideals24.enums.Categoria;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
@@ -32,28 +34,25 @@ import retrofit2.Response;
 public class CercaAstaActivity extends AppCompatActivity {
 
     private EditText cercaAstaInput;
-    private Button vaiButton;
-    private ImageButton back_button;
-    String[] items = {"Nome", "Categoria"};
-    AutoCompleteTextView autoCompleteTxt;
-    ArrayAdapter<String> adapterItems;
+    private final Categoria[] items = Categoria.values();
+    private AutoCompleteTextView autoCompleteTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cerca_asta);
 
-        vaiButton = findViewById(R.id.vai_button);
+        Button vaiButton = findViewById(R.id.vai_button);
 
         cercaAstaInput = findViewById(R.id.cerca_asta_input);
 
         autoCompleteTxt = findViewById(R.id.auto_complete_txt);
 
-        adapterItems = new ArrayAdapter<String>(this, R.layout.activity_list_item,items);
+        ArrayAdapter<Categoria> adapterItems = new ArrayAdapter<>(this, R.layout.activity_list_item, items);
 
         autoCompleteTxt.setAdapter(adapterItems);
 
-        back_button = findViewById(R.id.back_button);
+        ImageButton back_button = findViewById(R.id.back_button);
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,49 +79,58 @@ public class CercaAstaActivity extends AppCompatActivity {
                 String filtro = autoCompleteTxt.getText().toString();
                 String query = cercaAstaInput.getText().toString();
 
-                if(query.isEmpty())
-                    Toast.makeText(CercaAstaActivity.this,"Inserisci un termine di ricerca",Toast.LENGTH_SHORT).show();
+                if(query.isEmpty() && filtro.isEmpty())
+                    Toast.makeText(CercaAstaActivity.this,"Inserisci un termine di ricerca o Seleziona una Categoria",Toast.LENGTH_SHORT).show();
                 else
                     cercaAsta(apiService,filtro,query);
             }
         });
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.hide();
 
     }
 
-    private void cercaAsta(ApiService apiService,String filtro, String query) {
-    Call<List<AstaDTO>> call;
-        if (filtro.isEmpty() || filtro.equals("Nome"))
+    private void cercaAsta(ApiService apiService, String filtro, String query) {
+        Call<List<AstaDTO>> call;
+        String searchCriteria ;
+
+        if (!query.isEmpty() && !filtro.isEmpty()) {
+            call = apiService.cercaPerParolaChiaveAndCategoria(query, filtro.toUpperCase());
+            searchCriteria = query + " in " + filtro;
+        } else if (!query.isEmpty()) {
             call = apiService.cercaPerParolaChiave(query);
-         else if (filtro.equals("Categoria"))
-            call = apiService.cercaPerCategoria(query); // Assumendo che query sia il nome della categoria
-         else
-            call = apiService.cercaPerParolaChiaveAndCategoria(query, filtro); // Assumendo che filtro sia la categoria
+            searchCriteria = query;
+        } else {
+            call = apiService.cercaPerCategoria(filtro.toUpperCase());
+            searchCriteria = filtro;
+        }
 
-
+        String finalSearchCriteria = searchCriteria;
         call.enqueue(new Callback<List<AstaDTO>>() {
             @Override
-            public void onResponse(Call<List<AstaDTO>> call, Response<List<AstaDTO>> response) {
+            public void onResponse(@NonNull Call<List<AstaDTO>> call, @NonNull Response<List<AstaDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<AstaDTO> aste = response.body();
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", (Serializable) aste);
+                    intent.putExtra("criterioRicerca", finalSearchCriteria);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", new ArrayList<AstaDTO>());
+                    intent.putExtra("criterioRicerca", finalSearchCriteria);
                     startActivity(intent);
                 }
             }
 
             @Override
-            public void onFailure(Call<List<AstaDTO>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<AstaDTO>> call, @NonNull Throwable t) {
                 Toast.makeText(CercaAstaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(CercaAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });
-
     }
+
 }

@@ -20,6 +20,18 @@
             android:background="@null"
             android:src="@drawable/baseline_arrow_back_24" />
 
+        <!-- Titolo -->
+        <TextView
+            android:id="@+id/risultati_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"/>
+
         <!-- Messaggio per nessun risultato trovato -->
         <TextView
             android:id="@+id/no_results_text"
@@ -38,6 +50,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="16dp" />
+
+        <!-- RecycleView per i risultati delle aste
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/risultati_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+            -->
+
+
     </LinearLayout>
+
+
 
 </RelativeLayout>
