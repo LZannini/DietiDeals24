@@ -10,20 +10,36 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.dietideals24.api.ApiService;
+import com.example.dietideals24.dto.NotificaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Utente;
+
+import com.example.dietideals24.retrofit.RetrofitService;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
     private LinearLayout buttonCrea;
     private LinearLayout buttonCerca;
     private LinearLayout buttonProfilo;
+    private Button buttonNotifica;
     private LinearLayout buttonDisconnetti;
     private AlertDialog.Builder builder;
-
-
+    private Utente utente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,18 +47,16 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         UtenteDTO utenteDTO = (UtenteDTO) getIntent().getSerializableExtra("utente");
-        Utente utente = creaUtenteLoggato(utenteDTO);
-
+        utente = creaUtenteLoggato(utenteDTO);
 
         buttonCrea = findViewById(R.id.button_crea);
         buttonCerca = findViewById(R.id.button_cerca);
         buttonProfilo = findViewById(R.id.button_profilo);
+        buttonNotifica = findViewById(R.id.button_notifica);
         buttonDisconnetti = findViewById(R.id.button_disconnetti);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-
-
 
         buttonCrea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +79,17 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
+        RetrofitService retrofitService = new RetrofitService();
+
+        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        buttonNotifica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recuperaNotifiche(apiService);
+            }
+        });
+
         buttonDisconnetti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,9 +108,38 @@ public class HomeActivity extends AppCompatActivity {
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i) { }
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
                         })
                         .show();
+            }
+        });
+    }
+
+    private void recuperaNotifiche(ApiService apiService) {
+        Call<List<NotificaDTO>> call;
+
+        call = apiService.mostraNotifiche(utente.getId());
+
+        call.enqueue(new Callback<List<NotificaDTO>>() {
+            @Override
+            public void onResponse(Call<List<NotificaDTO>> call, Response<List<NotificaDTO>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    List<NotificaDTO> notifiche = response.body();
+                    Intent intent = new Intent(HomeActivity.this, NotificaActivity.class);
+                    intent.putExtra("listaNotifiche", (Serializable) notifiche);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(HomeActivity.this, NotificaActivity.class);
+                    intent.putExtra("listaNotifiche", new ArrayList<NotificaDTO>());
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NotificaDTO>> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Errore durante il caricamento delle notifiche, riprova!", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(HomeActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });
     }
@@ -97,24 +151,24 @@ public class HomeActivity extends AppCompatActivity {
         u.setEmail(utenteDTO.getEmail());
         u.setPassword(utenteDTO.getPassword());
         u.setTipo(utenteDTO.getTipo());
-        if(utenteDTO.getAvatar() != null) u.setAvatar(utenteDTO.getAvatar());
-        if(utenteDTO.getBiografia() != null) u.setBiografia(utenteDTO.getBiografia());
-        if(utenteDTO.getPaese() != null) u.setPaese(utenteDTO.getPaese());
-        if(utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
+        if (utenteDTO.getAvatar() != null) u.setAvatar(utenteDTO.getAvatar());
+        if (utenteDTO.getBiografia() != null) u.setBiografia(utenteDTO.getBiografia());
+        if (utenteDTO.getPaese() != null) u.setPaese(utenteDTO.getPaese());
+        if (utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
         return u;
     }
 
-    public void openActivityCreaAsta() {
+    private void openActivityCreaAsta() {
         Intent intentR = new Intent(this, CreaAstaActivity.class);
         startActivity(intentR);
     }
 
-    public void openActivityCercaAsta() {
+    private void openActivityCercaAsta() {
         Intent intentR = new Intent(this, CercaAstaActivity.class);
         startActivity(intentR);
     }
 
-    public void openActivityProfilo(Utente utente) {
+    private void openActivityProfilo(Utente utente) {
         Intent intentR = new Intent(this, ProfiloActivity.class);
         intentR.putExtra("utente", utente);
         startActivity(intentR);

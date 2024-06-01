@@ -25,6 +25,8 @@ public class Notifica {
 		this.data = data;
 		this.letta = letta;
 	}
+	
+	public Notifica() {}
 
 	public int getId() {
 		return id;

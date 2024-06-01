@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -31,5 +32,14 @@ public interface ApiService {
 
     @GET("/asta/cercaPerChiaveAndCategoria")
     Call<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@Query("chiave") String chiave, @Query("categoria") String categoria);
+
+    @GET("/notifica/mostraTutte")
+    Call<List<NotificaDTO>> mostraNotifiche(@Query("id_utente") Integer id_utente);
+
+    @POST("/notifica/rimuovi")
+    Call<Void> rimuoviNotifica(@Query("id") Integer id);
+
+    @PUT("/notifica/segna")
+    Call<Void> segnaNotifica(@Query("id") Integer id);
 
 }

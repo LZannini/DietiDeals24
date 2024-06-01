@@ -1,34 +1,42 @@
 package com.example.dietideals24;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dietideals24.dto.AstaDTO;
+import com.example.dietideals24.models.Asta;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RisultatiRicercaActivity extends AppCompatActivity {
-    private ListView listView;
-    private TextView noResultsText;
-    private ArrayAdapter<String> adapter;
-    private List<AstaDTO> listaAste;
-    private ImageButton back_button;
+public class RisultatiRicercaActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener{
 
+    private List<AstaDTO> listaAste;
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_risultati_ricerca);
 
-        listView = findViewById(R.id.risultati_list_view);
-        noResultsText = findViewById(R.id.no_results_text);
-        back_button = findViewById(R.id.back_button);
+        TextView noResultsText = findViewById(R.id.no_results_text);
+        ImageButton back_button = findViewById(R.id.back_button);
+
+
+
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.hide();
 
         String criterioRicerca = getIntent().getStringExtra("criterioRicerca");
 
@@ -43,18 +51,22 @@ public class RisultatiRicercaActivity extends AppCompatActivity {
             }
         });
 
-        listaAste = (List<AstaDTO>)getIntent().getSerializableExtra("listaAste");
+        RecyclerView recyclerView = findViewById(R.id.risultati_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        listaAste = (List<AstaDTO>) getIntent().getSerializableExtra("listaAste");
+        AuctionAdapter adapter = new AuctionAdapter(listaAste,this);
+        recyclerView.setAdapter(adapter);
 
         if(listaAste == null || listaAste.isEmpty())
             noResultsText.setVisibility(View.VISIBLE);
-        else{
+        else
             noResultsText.setVisibility(View.GONE);
-            List<String> nomiAste = new ArrayList<>();
-            for(AstaDTO asta : listaAste){
-                nomiAste.add(asta.getNome() + " - " + asta.getCategoria().toString() + " - " + asta.getDescrizione());
-            }
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,nomiAste);
-            listView.setAdapter(adapter);
-        }
+    }
+
+    @Override
+    public void onAstaClick(int position) {
+     AstaDTO asta = listaAste.get(position);
+
     }
 }

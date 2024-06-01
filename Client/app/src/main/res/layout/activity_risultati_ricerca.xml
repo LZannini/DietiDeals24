@@ -44,19 +44,12 @@
             android:padding="16dp"
             android:textColor="@color/black" />
 
-        <!-- ListView per i risultati delle aste -->
-        <ListView
-            android:id="@+id/risultati_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp" />
 
-        <!-- RecycleView per i risultati delle aste
-        <androidx.recyclerview.widget.RecyclerView
+        <!-- RecycleView per i risultati delle aste -->
+       <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/risultati_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-            -->
 
 
     </LinearLayout>

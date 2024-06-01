@@ -3,55 +3,111 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_margin="8dp">
 
-    <!-- Foto -->
-    <TextView
-        android:id="@+id/foto_asta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Foto"
-        android:textSize="16sp"
-        android:textColor="@color/black"/>
+    <!-- Intestazioni -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
-    <!-- Nome -->
-    <TextView
-        android:id="@+id/nome_asta"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="Nome"
-        android:textSize="16sp"
-        android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Foto"
+            android:textSize="16sp"
+            android:textColor="@color/gray"/>
 
-    <!-- Prezzo -->
-    <TextView
-        android:id="@+id/prezzo_asta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prezzo"
-        android:textSize="16sp"
-        android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="Nome"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            android:gravity="center"/>
 
-    <!-- Tipo -->
-    <TextView
-        android:id="@+id/tipo_asta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tipo"
-        android:textSize="16sp"
-        android:textColor="@color/black"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Prezzo"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            android:gravity="center"/>
 
-    <!-- ImageView per il tipo di asta -->
-    <ImageView
-        android:id="@+id/tipo_asta_image"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_below="@id/tipo_asta"
-        android:layout_alignParentStart="true"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tipo"
+            android:textSize="16sp"
+            android:textColor="@color/gray"
+            android:gravity="center"/>
+    </LinearLayout>
+
+
+    <!-- Dati delle Aste -->
+    <LinearLayout
+        android:id="@+id/layout_contenitore"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/ribasso" />
+        android:background="@drawable/text_container"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
+        <ImageView
+            android:id="@+id/foto_asta_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/logo_text" />
+
+        <!-- Vertical Divider -->
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/black" />
+
+        <TextView
+            android:id="@+id/nome_asta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <!-- Vertical Divider -->
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/black" />
+
+        <TextView
+            android:id="@+id/prezzo_asta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <!-- Vertical Divider -->
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="@color/black" />
+
+        <ImageView
+            android:id="@+id/tipo_asta_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>

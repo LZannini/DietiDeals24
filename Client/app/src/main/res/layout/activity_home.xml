@@ -8,9 +8,8 @@
     android:padding="16dp">
 
     <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="794dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -21,18 +20,21 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
             android:src="@drawable/logo_text" />
-        
-        <ImageView
+
+        <Button
             android:id="@+id/button_notifica"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/notifica" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/notifica"
+            android:orientation="horizontal"
+            app:backgroundTint="@color/black"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <LinearLayout
             android:layout_width="349dp"
             android:layout_height="214dp"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/button_crea"
@@ -47,7 +49,6 @@
                     android:layout_width="125dp"
                     android:layout_height="125dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="40dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/create_deal" />
 
@@ -75,7 +76,6 @@
                     android:layout_width="125dp"
                     android:layout_height="125dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="40dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/search_deal" />
 
@@ -96,7 +96,7 @@
             android:layout_width="349dp"
             android:layout_height="214dp"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/button_profilo"
@@ -111,7 +111,6 @@
                     android:layout_width="125dp"
                     android:layout_height="125dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="40dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/profile" />
 
@@ -140,7 +139,6 @@
                     android:layout_width="125dp"
                     android:layout_height="125dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="40dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/disconnect" />
 
@@ -158,6 +156,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </RelativeLayout>
