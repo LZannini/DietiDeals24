@@ -38,6 +38,9 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         assert actionBar != null;
         actionBar.hide();
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         String criterioRicerca = getIntent().getStringExtra("criterioRicerca");
 
         TextView risultatiRicerca = findViewById(R.id.risultati_title);
