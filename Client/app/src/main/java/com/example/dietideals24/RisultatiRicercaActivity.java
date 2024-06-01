@@ -3,10 +3,7 @@ package com.example.dietideals24;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -15,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dietideals24.dto.AstaDTO;
-import com.example.dietideals24.models.Asta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +34,6 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         assert actionBar != null;
         actionBar.hide();
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
 
         String criterioRicerca = getIntent().getStringExtra("criterioRicerca");
 
