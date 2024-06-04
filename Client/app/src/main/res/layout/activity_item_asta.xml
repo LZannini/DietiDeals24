@@ -7,50 +7,6 @@
     android:padding="8dp"
     android:layout_margin="8dp">
 
-    <!-- Intestazioni -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Foto"
-            android:textSize="16sp"
-            android:textColor="@color/gray"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:text="Nome"
-            android:textSize="16sp"
-            android:textColor="@color/gray"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Prezzo"
-            android:textSize="16sp"
-            android:textColor="@color/gray"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tipo"
-            android:textSize="16sp"
-            android:textColor="@color/gray"
-            android:gravity="center"/>
-    </LinearLayout>
-
-
     <!-- Dati delle Aste -->
     <LinearLayout
         android:id="@+id/layout_contenitore"
@@ -110,4 +66,5 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
     </LinearLayout>
+
 </LinearLayout>

@@ -15,7 +15,8 @@
             android:exported="false" />
         <activity
             android:name=".NotificaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ProfiloActivity"
             android:exported="false" />

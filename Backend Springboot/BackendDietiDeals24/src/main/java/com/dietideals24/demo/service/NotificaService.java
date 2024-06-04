@@ -10,6 +10,7 @@ public interface NotificaService {
 	List<NotificaDTO> getNotificheLette(int id_utente);
 	List<NotificaDTO> getNotificheNonLette(int id_utente);
 	void setNotificaAsLetta(int id);
+	void setAllNotificheAsLette(int id_utente);
 	void rimuoviNotifica(int id);
 	void rimuoviNotifiche(int id_utente);
 	void rimuoviNotificheLette(int id_utente);

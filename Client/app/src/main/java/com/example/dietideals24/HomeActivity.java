@@ -128,10 +128,12 @@ public class HomeActivity extends AppCompatActivity {
                     List<NotificaDTO> notifiche = response.body();
                     Intent intent = new Intent(HomeActivity.this, NotificaActivity.class);
                     intent.putExtra("listaNotifiche", (Serializable) notifiche);
+                    intent.putExtra("utente", utente);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(HomeActivity.this, NotificaActivity.class);
                     intent.putExtra("listaNotifiche", new ArrayList<NotificaDTO>());
+                    intent.putExtra("utente", utente);
                     startActivity(intent);
                 }
             }

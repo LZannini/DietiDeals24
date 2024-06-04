@@ -57,6 +57,11 @@ public class NotificaServiceImplements implements NotificaService {
 	}
 	
 	@Override
+	public void setAllNotificheAsLette(int id_utente) {
+		notificaRepository.segnaAllNotificheComeLette(id_utente);
+	}
+	
+	@Override
 	public void setNotificaAsLetta(int id) {
 		notificaRepository.segnaNotificaComeLetta(id);
 	}

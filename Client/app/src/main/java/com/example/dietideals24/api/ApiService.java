@@ -39,7 +39,16 @@ public interface ApiService {
     @POST("/notifica/rimuovi")
     Call<Void> rimuoviNotifica(@Query("id") Integer id);
 
+    @POST("/notifica/rimuoviLette")
+    Call<Void> rimuoviAllNotificheLette(@Query("id_utente") Integer id_utente);
+
+    @POST("notifica/svuota")
+    Call<Void> svuotaNotifiche(@Query("id_utente") Integer id_utente);
+
     @PUT("/notifica/segna")
     Call<Void> segnaNotifica(@Query("id") Integer id);
+
+    @PUT("/notifica/segnaTutte")
+    Call<Void> segnaTutteLeNotifiche(@Query("id_utente") Integer id_utente);
 
 }

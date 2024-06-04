@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_mark_all_read"
+        android:icon="@android:drawable/checkbox_on_background"
+        android:showAsAction="always"
+        android:title="Segna tutto" />
+    <item
+        android:id="@+id/action_delete_read"
+        android:icon="@android:drawable/ic_input_delete"
+        android:showAsAction="always"
+        android:title="Rimuovi lette" />
+    <item
+        android:id="@+id/action_delete_all"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="Rimuovi tutto"
+        android:showAsAction="always" />
+</menu>

@@ -29,6 +29,11 @@ public interface NotificaRepository extends CrudRepository<Notifica, Integer> {
 	
 	@Transactional
 	@Modifying
+	@Query("UPDATE Notifica n SET n.letta = true WHERE n.id_utente = :id_utente")
+	void segnaAllNotificheComeLette(@Param("id_utente") int id_utente);
+	
+	@Transactional
+	@Modifying
 	@Query("DELETE FROM Notifica n WHERE n.id = :id")
 	void eliminaNotifica(@Param("id") int id);
 	

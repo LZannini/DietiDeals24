@@ -61,6 +61,13 @@ public class NotificaController {
 		notificaService.setNotificaAsLetta(id);
 	}
 	
+	@PutMapping("notifica/segnaTutte")
+	public void marcaTutte(@RequestParam Integer id_utente) {
+		if (id_utente == null)
+			throw new IllegalArgumentException("Errore Marcatura Notifiche: Il parametro 'id_utente' è null!\n");
+		notificaService.setAllNotificheAsLette(id_utente);
+	}
+	
 	@PostMapping("/notifica/rimuovi")
 	public void rimuovi(@RequestParam Integer id) {
 		if (id == null)

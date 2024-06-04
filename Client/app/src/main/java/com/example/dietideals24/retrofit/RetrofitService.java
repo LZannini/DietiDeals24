@@ -36,7 +36,7 @@ public class RetrofitService {
         httpClient.addInterceptor(loggingInterceptor);
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.31.15:8080")
+                .baseUrl("http://{tuo_id}}:8080")
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .build();
     }

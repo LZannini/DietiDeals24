@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dietideals24.dto.AstaDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RisultatiRicercaActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener{
@@ -55,10 +54,12 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         AuctionAdapter adapter = new AuctionAdapter(listaAste,this);
         recyclerView.setAdapter(adapter);
 
-        if(listaAste == null || listaAste.isEmpty())
+        if(listaAste == null || listaAste.isEmpty()) {
             noResultsText.setVisibility(View.VISIBLE);
-        else
+            risultatiRicerca.setText(" ");
+        }else
             noResultsText.setVisibility(View.GONE);
+
     }
 
     @Override
