@@ -52,7 +52,7 @@ public class AstaServiceImplements implements AstaService {
 	@Transactional
 	public void creaAstaAlRibasso(Asta_RibassoDTO astaDTO) {
 		Asta asta = new Asta();
-		asta.setId_creatore(astaDTO.getId_creatore());
+		asta.setId_creatore(astaDTO.getIdCreatore());
 		asta.setNome(astaDTO.getNome());
 		asta.setDescrizione(astaDTO.getDescrizione());
 		asta.setCategoria(astaDTO.getCategoria());

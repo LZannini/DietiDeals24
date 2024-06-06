@@ -23,11 +23,6 @@ public class UtenteController {
 	
 	@PostMapping("/utente/registra")
 	public ResponseEntity<UtenteDTO> registra(@RequestBody UtenteDTO utenteDTO) {
-		String username = utenteDTO.getUsername(), email = utenteDTO.getEmail(), password = utenteDTO.getPassword();
-				
-		if (username.isBlank() || email.isBlank() || password.isBlank())
-			throw new IllegalArgumentException("Errore Registrazione: Campi credenziali vuoti!");
-		
 		try {
 	        UtenteDTO utenteRegistrato = utenteService.registraUtente(utenteDTO);
 	        return ResponseEntity.ok(utenteRegistrato);
