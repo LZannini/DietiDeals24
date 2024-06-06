@@ -68,7 +68,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
 
              astaTipoImage.setImageResource(R.drawable.silenziosa); //<- foto del tipo
 
-            if (asta instanceof Asta_RibassoDTO) {
+            /*if (asta instanceof Asta_RibassoDTO) {
                 Asta_RibassoDTO ribasso = (Asta_RibassoDTO) asta;
                 astaPrezzo.setText(String.valueOf(ribasso.getPrezzo()));
                 astaTipoImage.setImageResource(R.drawable.ribasso);
@@ -83,7 +83,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
                 astaTipoImage.setImageResource(R.drawable.inversa);
                 Log.d("AuctionAdapter", "Asta di tipo Inversa: " + inversa.getNome());
             } else
-                Log.d("AuctionAdapter", "Tipo di asta sconosciuto: " + asta.getNome());
+                Log.d("AuctionAdapter", "Tipo di asta sconosciuto: " + asta.getNome());*/
         }
 
         @Override

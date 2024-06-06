@@ -2,16 +2,15 @@ package com.example.dietideals24.models;
 
 import com.example.dietideals24.enums.Categoria;
 
-import java.time.LocalDateTime;
 
 public class Asta_Ribasso extends Asta {
 
     private float prezzo;
-    private LocalDateTime timer;
+    private String timer;
     private float decremento;
     private float minimo;
 
-    public Asta_Ribasso(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, LocalDateTime timer, float decremento, float minimo) {
+    public Asta_Ribasso(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, String timer, float decremento, float minimo) {
         super(id_creatore, nome, descrizione, categoria, foto);
         this.prezzo = prezzo;
         this.timer = timer;
@@ -29,11 +28,11 @@ public class Asta_Ribasso extends Asta {
         this.prezzo = prezzo;
     }
 
-    public LocalDateTime getTimer() {
+    public String getTimer() {
         return timer;
     }
 
-    public void setTimer(LocalDateTime timer) {
+    public void setTimer(String timer) {
         this.timer = timer;
     }
 

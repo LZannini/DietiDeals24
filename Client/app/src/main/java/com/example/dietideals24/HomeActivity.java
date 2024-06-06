@@ -61,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         buttonCrea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityCreaAsta();
+                openActivityCreaAsta(utente);
             }
         });
 
@@ -160,8 +160,9 @@ public class HomeActivity extends AppCompatActivity {
         return u;
     }
 
-    private void openActivityCreaAsta() {
+    private void openActivityCreaAsta(Utente u) {
         Intent intentR = new Intent(this, CreaAstaActivity.class);
+        intentR.putExtra("utente", u);
         startActivity(intentR);
     }
 

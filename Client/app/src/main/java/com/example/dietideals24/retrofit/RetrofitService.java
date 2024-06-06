@@ -1,18 +1,8 @@
 package com.example.dietideals24.retrofit;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
+import com.example.dietideals24.utils.ByteArrayToBase64TypeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-
-import java.lang.reflect.Type;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -21,12 +11,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitService {
     private Retrofit retrofit;
-
+    private Gson gson;
 
     public RetrofitService() {
         inizializeRetrofit();
     }
-
 
     private void inizializeRetrofit() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -35,9 +24,13 @@ public class RetrofitService {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(loggingInterceptor);
 
+        gson = new GsonBuilder()
+                .registerTypeAdapter(byte[].class, new ByteArrayToBase64TypeAdapter())
+                .create();
+
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://{tuo_id}}:8080")
-                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .baseUrl("http://192.168.178.119:8080")
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }
 

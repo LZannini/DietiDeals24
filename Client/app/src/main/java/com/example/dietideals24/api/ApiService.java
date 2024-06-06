@@ -33,6 +33,9 @@ public interface ApiService {
     @GET("/asta/cercaPerChiaveAndCategoria")
     Call<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@Query("chiave") String chiave, @Query("categoria") String categoria);
 
+    @POST("/asta/creaAstaAlRibasso")
+    Call<Void> creaAstaAlRibasso(@Body Asta_RibassoDTO astaDTO);
+
     @GET("/notifica/mostraTutte")
     Call<List<NotificaDTO>> mostraNotifiche(@Query("id_utente") Integer id_utente);
 

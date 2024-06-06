@@ -2,7 +2,9 @@ package com.example.dietideals24.models;
 
 import com.example.dietideals24.enums.Categoria;
 
-public class Asta {
+import java.io.Serializable;
+
+public class Asta implements Serializable {
 
     private int id;
     private int id_creatore;

@@ -1,13 +1,17 @@
 package com.example.dietideals24.dto;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.example.dietideals24.enums.Categoria;
 
-public class Asta_RibassoDTO extends AstaDTO implements Serializable {
+public class Asta_RibassoDTO {
 
+    private int idCreatore;
+    private String nome;
+    private String descrizione;
+    private Categoria categoria;
+    private byte[] foto;
     private int id_asta;
     private float prezzo;
-    private LocalDateTime timer;
+    private String timer;
     private float decremento;
     private float minimo;
 
@@ -19,6 +23,40 @@ public class Asta_RibassoDTO extends AstaDTO implements Serializable {
         this.id_asta = id_asta;
     }
 
+    public int getIdCreatore() {
+        return idCreatore;
+    }
+
+    public void setIdCreatore(int idCreatore) {
+        this.idCreatore = idCreatore;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+    public Categoria getCategoria() {return categoria;}
+    public void setCategoria(Categoria categoria) {this.categoria = categoria;}
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+
     public float getPrezzo() {
         return prezzo;
     }
@@ -27,11 +65,11 @@ public class Asta_RibassoDTO extends AstaDTO implements Serializable {
         this.prezzo = prezzo;
     }
 
-    public LocalDateTime getTimer() {
+    public String getTimer() {
         return timer;
     }
 
-    public void setTimer(LocalDateTime timer) {
+    public void setTimer(String timer) {
         this.timer = timer;
     }
 

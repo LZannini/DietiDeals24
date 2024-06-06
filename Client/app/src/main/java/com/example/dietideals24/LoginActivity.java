@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -85,18 +87,18 @@ public class LoginActivity extends AppCompatActivity {
                         .enqueue(new Callback<UtenteDTO>() {
                             @Override
                             public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
-                                Toast.makeText(LoginActivity.this, "Login effettuato con successo!", Toast.LENGTH_SHORT);
-                                UtenteDTO utenteDTO = response.body();
-                                if(utente.getTipo() == TipoUtente.COMPLETO) {
-                                    openActivitySceltaAccount();
-                                } else {
+                                if(response.isSuccessful()) {
+                                    Toast.makeText(LoginActivity.this, "Login effettuato con successo!", Toast.LENGTH_SHORT).show();
+                                    UtenteDTO utenteDTO = response.body();
+
                                     openActivityHome(utenteDTO);
+                                } else if(response.code() == 404) {
+                                    Toast.makeText(LoginActivity.this, "Email e/o password non corretti, riprova!", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<UtenteDTO> call, Throwable t) {
-                                Toast.makeText(LoginActivity.this, "Email e/o password non corretti, riprova!", Toast.LENGTH_SHORT);
                                 Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                             }
                         });

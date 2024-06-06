@@ -42,9 +42,9 @@ public class NotificaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifica);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        /*Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Notifiche");
+        toolbar.setTitle("Notifiche");*/
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
         noResultsText = findViewById(R.id.no_results_text);
@@ -52,12 +52,15 @@ public class NotificaActivity extends AppCompatActivity {
         RetrofitService retrofitService = new RetrofitService();
         apiService = retrofitService.getRetrofit().create(ApiService.class);
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
             actionBar.setTitle("Notifiche");
-        }
+        }*/
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
         listView = findViewById(R.id.notifiche_list_view);
 
