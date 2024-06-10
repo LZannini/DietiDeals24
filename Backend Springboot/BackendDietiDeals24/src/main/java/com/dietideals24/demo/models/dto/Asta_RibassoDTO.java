@@ -1,11 +1,7 @@
 package com.dietideals24.demo.models.dto;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-
 import com.dietideals24.demo.enums.Categoria;
 
-@SuppressWarnings("serial")
 public class Asta_RibassoDTO {
 
     private int idCreatore;

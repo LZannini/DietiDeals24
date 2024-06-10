@@ -33,8 +33,14 @@ public interface ApiService {
     @GET("/asta/cercaPerChiaveAndCategoria")
     Call<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@Query("chiave") String chiave, @Query("categoria") String categoria);
 
+    @POST("/asta/creaAstaInversa")
+    Call<Void> creaAstaInversa(@Body Asta_InversaDTO astaDTO);
+
     @POST("/asta/creaAstaAlRibasso")
     Call<Void> creaAstaAlRibasso(@Body Asta_RibassoDTO astaDTO);
+
+    @POST("/asta/creaAstaSilenziosa")
+    Call<Void> creaAstaSilenziosa(@Body Asta_SilenziosaDTO astaDTO);
 
     @GET("/notifica/mostraTutte")
     Call<List<NotificaDTO>> mostraNotifiche(@Query("id_utente") Integer id_utente);

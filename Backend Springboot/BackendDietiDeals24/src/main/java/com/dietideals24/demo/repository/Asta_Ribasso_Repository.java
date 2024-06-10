@@ -1,7 +1,5 @@
 package com.dietideals24.demo.repository;
 
-import java.time.LocalDateTime;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

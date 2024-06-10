@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Asta;
@@ -51,7 +52,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         buttonSilenziosa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityAstaSilenziosa();
+                openActivityAstaSilenziosa(asta);
             }
         });
 
@@ -67,7 +68,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         buttonInversa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityAstaInversa();
+                openActivityAstaInversa(asta);
             }
         });
     }
@@ -88,8 +89,9 @@ public class TipoAstaActivity extends AppCompatActivity {
         button.setAlpha(0.5f);
     }
 
-    public void openActivityAstaSilenziosa() {
-        Intent intentR = new Intent(this, TipoAstaActivity.class);
+    public void openActivityAstaSilenziosa(Asta asta) {
+        Intent intentR = new Intent(this, CreaAstaSilenziosaActivity.class);
+        intentR.putExtra("asta", asta);
         startActivity(intentR);
     }
 
@@ -99,8 +101,9 @@ public class TipoAstaActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
-    public void openActivityAstaInversa() {
-        Intent intentR = new Intent(this, TipoAstaActivity.class);
+    public void openActivityAstaInversa(Asta asta) {
+        Intent intentR = new Intent(this, CreaAstaInversaActivity.class);
+        intentR.putExtra("asta", asta);
         startActivity(intentR);
     }
 }

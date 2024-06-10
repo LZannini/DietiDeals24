@@ -1,5 +1,7 @@
 package com.example.dietideals24.dto;
 
+import com.example.dietideals24.enums.Categoria;
+
 import java.io.Serializable;
 
 public class AstaDTO implements Serializable {

@@ -55,7 +55,6 @@ public class CreaAstaActivity extends AppCompatActivity {
 
         Utente utente = (Utente) getIntent().getSerializableExtra("utente");
 
-
         fotoProdotto = findViewById(R.id.aggiungi_immagine);
         nomeProdotto = findViewById(R.id.nome_prodotto);
         descrizioneProdotto = findViewById(R.id.descrizione);
@@ -99,8 +98,8 @@ public class CreaAstaActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(CreaAstaActivity.this);
 
-                if(nomeP.length() == 0 || descrizioneP.length() == 0 || categoriaP.length() == 0) {
-                    builder.setMessage("Bisogna riempire tutti i campi!")
+                if(nomeP.length() == 0 || categoriaP.length() == 0) {
+                    builder.setMessage("Bisogna riempire obbligatoriamente i campi nome e categoria!")
                             .setCancelable(false)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -114,10 +113,6 @@ public class CreaAstaActivity extends AppCompatActivity {
                 } else {
                     try {
                         Categoria categoria = Categoria.valueOf(categoriaP.toUpperCase());
-                        if (imageBytes == null) {
-                            Toast.makeText(CreaAstaActivity.this, "Aggiungi un'immagine del prodotto", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
                         Asta asta = new Asta(utente.getId(), nomeP, descrizioneP, categoria, imageBytes);
                         openActivityTipoAsta(asta, utente.getTipo());
                     } catch (IllegalArgumentException e) {

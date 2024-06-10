@@ -6,21 +6,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.media.Image;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.Asta_RibassoDTO;
 import com.example.dietideals24.models.Asta;
-import com.example.dietideals24.models.Asta_Ribasso;
-import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import retrofit2.Call;
@@ -185,6 +182,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                     if (response.isSuccessful()) {
                                         Toast.makeText(CreaAstaRibassoActivity.this, "Asta creata con successo!", Toast.LENGTH_SHORT).show();
+                                        finish();
                                     }
                                 }
 
