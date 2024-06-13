@@ -22,6 +22,9 @@ public interface AstaRepository extends CrudRepository<Asta, Integer>{
 	@Query("SELECT a FROM Asta a WHERE a.id = :id")
 	Asta getAsta(@Param("id") int id);
 	
+	@Query("SELECT a FROM Asta a ORDER BY a.nome")
+	List<Asta> cercaTutte();
+	
 	@Query("SELECT a FROM Asta a WHERE a.id_creatore = :id_creatore")
 	List<Asta> filtraPerUtente(@Param("id_creatore") int id_creatore);
 	

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
+import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.Categoria;
 import com.example.dietideals24.retrofit.RetrofitService;
 
@@ -36,6 +37,7 @@ public class CercaAstaActivity extends AppCompatActivity {
     private EditText cercaAstaInput;
     private final Categoria[] items = Categoria.values();
     private AutoCompleteTextView autoCompleteTxt;
+    private UtenteDTO utente_home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +54,14 @@ public class CercaAstaActivity extends AppCompatActivity {
 
         autoCompleteTxt.setAdapter(adapterItems);
 
+        utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente");
+
         ImageButton back_button = findViewById(R.id.back_button);
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openActivityHome(utente_home);
                 finish();
             }
         });
@@ -78,11 +83,7 @@ public class CercaAstaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String filtro = autoCompleteTxt.getText().toString();
                 String query = cercaAstaInput.getText().toString();
-
-                if(query.isEmpty() && filtro.isEmpty())
-                    Toast.makeText(CercaAstaActivity.this,"Inserisci un termine di ricerca o Seleziona una Categoria",Toast.LENGTH_SHORT).show();
-                else
-                    cercaAsta(apiService,filtro,query);
+                cercaAsta(apiService,filtro,query);
             }
         });
 
@@ -92,20 +93,35 @@ public class CercaAstaActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityHome(utente_home);
+        finish();
+    }
+
+    private void openActivityHome(UtenteDTO utente) {
+        Intent intentH = new Intent(this, HomeActivity.class);
+        intentH.putExtra("utente", utente);
+        startActivity(intentH);
+    }
+
     private void cercaAsta(ApiService apiService, String filtro, String query) {
         Call<List<AstaDTO>> call;
-        String searchCriteria ;
+        String searchCriteria = null;
 
         if (!query.isEmpty() && !filtro.isEmpty()) {
             call = apiService.cercaPerParolaChiaveAndCategoria(query, filtro.toUpperCase());
             searchCriteria = query + " in " + filtro;
-        } else if (!query.isEmpty()) {
+        } else if (!query.isEmpty() && filtro.isEmpty()) {
             call = apiService.cercaPerParolaChiave(query);
             searchCriteria = query;
-        } else {
+        } else if (query.isEmpty() && !filtro.isEmpty()) {
             call = apiService.cercaPerCategoria(filtro.toUpperCase());
             searchCriteria = filtro;
         }
+        else
+            call = apiService.cercaTutte();
 
         String finalSearchCriteria = searchCriteria;
         call.enqueue(new Callback<List<AstaDTO>>() {
@@ -116,11 +132,13 @@ public class CercaAstaActivity extends AppCompatActivity {
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", (Serializable) aste);
                     intent.putExtra("criterioRicerca", finalSearchCriteria);
+                    intent.putExtra("utente", utente_home);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", new ArrayList<AstaDTO>());
                     intent.putExtra("criterioRicerca", finalSearchCriteria);
+                    intent.putExtra("utente", utente_home);
                     startActivity(intent);
                 }
             }

@@ -15,6 +15,7 @@ public interface AstaService {
 	void creaAstaSilenziosa(Asta_SilenziosaDTO astaDTO);
 	void rimuoviAsta(int id);
 	AstaDTO trovaAsta(int id);
+	List<AstaDTO> trovaTutte();
 	List<AstaDTO> trovaAsteUtente(int id_creatore);
 	List<AstaDTO> trovaAstePerParolaChiave(String chiave);
 	List<AstaDTO> trovaAstePerCategoria(Categoria categoria);

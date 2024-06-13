@@ -107,6 +107,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
     public void openActivityRegistrazione(){
         Intent intentR = new Intent(this, RegistrazioneActivity.class);
         startActivity(intentR);

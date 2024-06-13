@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Asta_Ribasso;
@@ -21,6 +22,7 @@ public class TipoAstaActivity extends AppCompatActivity {
     private LinearLayout buttonRibasso;
     private LinearLayout buttonInversa;
     private ImageButton back_button;
+    private Utente utente_intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,8 @@ public class TipoAstaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        utente_intent = (Utente) getIntent().getSerializableExtra("utente");
+        UtenteDTO utente = creaUtenteDTO(utente_intent);
         TipoUtente tipoUtente = (TipoUtente) getIntent().getSerializableExtra("tipoUtente");
         Asta asta = (Asta) getIntent().getSerializableExtra("asta");
 
@@ -45,6 +49,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openActivityCreaAsta(utente_intent);
                 finish();
             }
         });
@@ -52,7 +57,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         buttonSilenziosa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityAstaSilenziosa(asta);
+                openActivityAstaSilenziosa(asta, utente);
             }
         });
 
@@ -60,7 +65,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         buttonRibasso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityAstaRibasso(asta);
+                openActivityAstaRibasso(asta, utente);
             }
         });
 
@@ -68,7 +73,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         buttonInversa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityAstaInversa(asta);
+                openActivityAstaInversa(asta, utente);
             }
         });
     }
@@ -84,26 +89,56 @@ public class TipoAstaActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityCreaAsta(utente_intent);
+        finish();
+    }
+
     private void disabilitaBottone(LinearLayout button) {
         button.setEnabled(false);
         button.setAlpha(0.5f);
     }
 
-    public void openActivityAstaSilenziosa(Asta asta) {
+    private void openActivityCreaAsta(Utente utente) {
+        Intent intent = new Intent(this, CreaAstaActivity.class);
+        intent.putExtra("utente", utente);
+        startActivity(intent);
+    }
+
+    public void openActivityAstaSilenziosa(Asta asta, UtenteDTO utente) {
         Intent intentR = new Intent(this, CreaAstaSilenziosaActivity.class);
         intentR.putExtra("asta", asta);
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 
-    public void openActivityAstaRibasso(Asta asta) {
+    public void openActivityAstaRibasso(Asta asta, UtenteDTO utente) {
         Intent intentR = new Intent(this, CreaAstaRibassoActivity.class);
         intentR.putExtra("asta", asta);
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 
-    public void openActivityAstaInversa(Asta asta) {
+    public void openActivityAstaInversa(Asta asta, UtenteDTO utente) {
         Intent intentR = new Intent(this, CreaAstaInversaActivity.class);
         intentR.putExtra("asta", asta);
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
+    }
+
+    private UtenteDTO creaUtenteDTO(Utente u) {
+        UtenteDTO utente = new UtenteDTO();
+        utente.setId(u.getId());
+        utente.setUsername(u.getUsername());
+        utente.setEmail(u.getEmail());
+        utente.setPassword(u.getPassword());
+        utente.setBiografia(u.getBiografia());
+        utente.setSitoweb(u.getSitoweb());
+        utente.setPaese(u.getPaese());
+        utente.setTipo(u.getTipo());
+        utente.setAvatar(u.getAvatar());
+        return utente;
     }
 }

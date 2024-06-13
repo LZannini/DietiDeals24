@@ -73,6 +73,4 @@ public class Asta implements Serializable {
         this.foto = foto;
     }
 
-
-
 }

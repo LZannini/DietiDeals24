@@ -49,7 +49,6 @@ public class ProfiloActivity extends AppCompatActivity {
     private UtenteDTO utenteModificato;
     private Boolean info_mod = false;
     private byte[] imageBytes;
-
     private ImageButton back_button;
 
     @Override
@@ -58,6 +57,7 @@ public class ProfiloActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profilo);
 
         utenteOriginale = (Utente) getIntent().getSerializableExtra("utente");
+        utenteModificato = creaUtenteDTO(utenteOriginale);
 
         menuButton = findViewById(R.id.icona_menu);
         avatarSelector = findViewById(R.id.foto_profilo);
@@ -86,6 +86,7 @@ public class ProfiloActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openActivityHome();
                 finish();
             }
         });
@@ -230,17 +231,31 @@ public class ProfiloActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(info_mod == true) {
-            Intent intent = new Intent(this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("utente", utenteModificato);
+        super.onBackPressed();
+        openActivityHome();
+        finish();
+    }
 
-            startActivity(intent);
+    private UtenteDTO creaUtenteDTO(Utente u) {
+        UtenteDTO utente = new UtenteDTO();
+        utente.setId(u.getId());
+        utente.setUsername(u.getUsername());
+        utente.setEmail(u.getEmail());
+        utente.setPassword(u.getPassword());
+        utente.setBiografia(u.getBiografia());
+        utente.setSitoweb(u.getSitoweb());
+        utente.setPaese(u.getPaese());
+        utente.setTipo(u.getTipo());
+        utente.setAvatar(u.getAvatar());
+        return utente;
+    }
 
-            finish();
-        } else {
-            super.onBackPressed();
-        }
+    private void openActivityHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("utente", utenteModificato);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -264,11 +279,9 @@ public class ProfiloActivity extends AppCompatActivity {
         return stream.toByteArray();
     }
 
-
     private void openActivityModificaPassword(Utente utente) {
         Intent intentR = new Intent(this, ModificaPasswordActivity.class);
-        intentR.putExtra("id", utente.getId());
-        intentR.putExtra("pass", utente.getPassword());
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 

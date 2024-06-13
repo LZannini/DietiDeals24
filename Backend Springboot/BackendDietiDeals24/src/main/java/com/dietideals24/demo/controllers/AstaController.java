@@ -71,6 +71,15 @@ public class AstaController {
 		return ResponseEntity.ok(astaDTO);
 	}
 	
+	@GetMapping("/asta/cercaTutte")
+	public ResponseEntity<List<AstaDTO>> findAllAuctions() {
+		List<AstaDTO> lista_asteDTO = astaService.trovaTutte();
+		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(lista_asteDTO);
+	}
+	
 	@GetMapping("/asta/cercaPerUtente")
 	public ResponseEntity<List<AstaDTO>> cercaPerUtente(@RequestParam Integer id_creatore) {
 		if (id_creatore == null)

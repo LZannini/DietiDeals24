@@ -24,6 +24,9 @@ public interface ApiService {
     @POST("/utente/modPassword")
     Call<UtenteDTO> modificaPassword(@Body UtenteDTO utenteDTO);
 
+    @GET("/asta/cercaTutte")
+    Call<List<AstaDTO>> cercaTutte();
+
     @GET("/asta/cercaPerChiave")
     Call<List<AstaDTO>> cercaPerParolaChiave(@Query("chiave") String chiave);
 

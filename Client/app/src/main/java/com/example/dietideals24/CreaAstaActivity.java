@@ -44,6 +44,7 @@ public class CreaAstaActivity extends AppCompatActivity {
     private Button btnAvanti;
     private byte[] imageBytes;
     private ImageButton back_button;
+    private UtenteDTO utente_home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +55,14 @@ public class CreaAstaActivity extends AppCompatActivity {
         actionBar.hide();
 
         Utente utente = (Utente) getIntent().getSerializableExtra("utente");
+        utente_home = creaUtenteDTO(utente);
 
         fotoProdotto = findViewById(R.id.aggiungi_immagine);
         nomeProdotto = findViewById(R.id.nome_prodotto);
         descrizioneProdotto = findViewById(R.id.descrizione);
-        categoriaProdotto = findViewById(R.id.categoria);
+        categoriaProdotto = findViewById(R.id.auto_complete_txt);
         btnAvanti = findViewById(R.id.avanti_button);
         back_button = findViewById(R.id.back_button);
-
 
         Categoria[] categorieDisponibili = Categoria.values();
         String[] nomiCategorie = new String[categorieDisponibili.length];
@@ -75,6 +76,7 @@ public class CreaAstaActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openActivityHome(utente_home);
                 finish();
             }
         });
@@ -114,7 +116,7 @@ public class CreaAstaActivity extends AppCompatActivity {
                     try {
                         Categoria categoria = Categoria.valueOf(categoriaP.toUpperCase());
                         Asta asta = new Asta(utente.getId(), nomeP, descrizioneP, categoria, imageBytes);
-                        openActivityTipoAsta(asta, utente.getTipo());
+                        openActivityTipoAsta(asta, utente.getTipo(), utente);
                     } catch (IllegalArgumentException e) {
                         Toast.makeText(CreaAstaActivity.this, "Categoria non valida, inserisci una categoria valida", Toast.LENGTH_SHORT).show();
                     }
@@ -138,12 +140,38 @@ public class CreaAstaActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityHome(utente_home);
+        finish();
+    }
 
+    private void openActivityHome(UtenteDTO utente) {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.putExtra("utente", utente);
+        startActivity(intent);
+    }
 
-    public void openActivityTipoAsta(Asta asta, TipoUtente tipoUtente) {
+    private UtenteDTO creaUtenteDTO(Utente u) {
+        UtenteDTO utente = new UtenteDTO();
+        utente.setId(u.getId());
+        utente.setUsername(u.getUsername());
+        utente.setEmail(u.getEmail());
+        utente.setPassword(u.getPassword());
+        utente.setBiografia(u.getBiografia());
+        utente.setSitoweb(u.getSitoweb());
+        utente.setPaese(u.getPaese());
+        utente.setTipo(u.getTipo());
+        utente.setAvatar(u.getAvatar());
+        return utente;
+    }
+
+    public void openActivityTipoAsta(Asta asta, TipoUtente tipoUtente, Utente utente) {
         Intent intentR = new Intent(this, TipoAstaActivity.class);
         intentR.putExtra("asta", asta);
         intentR.putExtra("tipoUtente", tipoUtente);
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 

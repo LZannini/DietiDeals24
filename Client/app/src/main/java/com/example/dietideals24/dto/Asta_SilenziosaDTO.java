@@ -1,7 +1,7 @@
 package com.example.dietideals24.dto;
 
 import com.example.dietideals24.enums.Categoria;
-public class Asta_SilenziosaDTO  {
+public class Asta_SilenziosaDTO {
 
     private int idCreatore;
     private String nome;

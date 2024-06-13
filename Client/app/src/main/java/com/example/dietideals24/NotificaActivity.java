@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.dietideals24.adapters.NotificaAdapter;
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.NotificaDTO;
+import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 import java.util.List;
@@ -33,6 +34,7 @@ public class NotificaActivity extends AppCompatActivity {
     private NotificaAdapter adapter;
     private List<NotificaDTO> listaNotifiche;
     private Utente utente;
+    private UtenteDTO utente_home;
     private ImageButton back_button;
     private TextView noResultsText;
     private ApiService apiService;
@@ -48,6 +50,7 @@ public class NotificaActivity extends AppCompatActivity {
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
         noResultsText = findViewById(R.id.no_results_text);
+        utente_home = creaUtenteDTO(utente);
 
         RetrofitService retrofitService = new RetrofitService();
         apiService = retrofitService.getRetrofit().create(ApiService.class);
@@ -105,7 +108,7 @@ public class NotificaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                openActivityHome();
+                openActivityHome(utente_home);
                 return true;
             case R.id.action_delete_all:
                 mostraDialogoEliminaTutte();
@@ -263,8 +266,30 @@ public class NotificaActivity extends AppCompatActivity {
         }
     }
 
-    private void openActivityHome() {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityHome(utente_home);
+        finish();
+    }
+
+    private UtenteDTO creaUtenteDTO(Utente u) {
+        UtenteDTO utente = new UtenteDTO();
+        utente.setId(u.getId());
+        utente.setUsername(u.getUsername());
+        utente.setEmail(u.getEmail());
+        utente.setPassword(u.getPassword());
+        utente.setBiografia(u.getBiografia());
+        utente.setSitoweb(u.getSitoweb());
+        utente.setPaese(u.getPaese());
+        utente.setTipo(u.getTipo());
+        utente.setAvatar(u.getAvatar());
+        return utente;
+    }
+
+    private void openActivityHome(UtenteDTO utente) {
         Intent intentH = new Intent(this, HomeActivity.class);
+        intentH.putExtra("utente", utente);
         startActivity(intentH);
     }
 }

@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.Asta_RibassoDTO;
+import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import retrofit2.Call;
@@ -29,6 +31,8 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
     private EditText prezzoIniziale;
     private ImageButton decrPrezzoIniziale;
     private ImageButton incrPrezzoIniziale;
+    private Utente utente_intent;
+    private Asta asta;
 
     private EditText prezzoMinimo;
     private ImageButton decrPrezzoMinimo;
@@ -55,6 +59,8 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         actionBar.hide();
 
         Asta asta = (Asta) getIntent().getSerializableExtra("asta");
+        UtenteDTO utente = (UtenteDTO) getIntent().getSerializableExtra("utente");
+        utente_intent = creaUtente(utente);
 
         prezzoIniziale = findViewById(R.id.prezzo_iniziale);
         decrPrezzoIniziale = findViewById(R.id.decr_prezzo_iniziale);
@@ -82,6 +88,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openActivityTipoAsta(utente_intent, asta);
                 finish();
             }
         });
@@ -182,7 +189,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                     if (response.isSuccessful()) {
                                         Toast.makeText(CreaAstaRibassoActivity.this, "Asta creata con successo!", Toast.LENGTH_SHORT).show();
-                                        finish();
+                                        openActivityHome(utente);
                                     }
                                 }
 
@@ -209,9 +216,44 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityTipoAsta(utente_intent, asta);
+        finish();
+    }
+
+    private Utente creaUtente(UtenteDTO u) {
+        Utente utente = new Utente();
+        utente.setId(u.getId());
+        utente.setUsername(u.getUsername());
+        utente.setEmail(u.getEmail());
+        utente.setPassword(u.getPassword());
+        utente.setBiografia(u.getBiografia());
+        utente.setSitoweb(u.getSitoweb());
+        utente.setPaese(u.getPaese());
+        utente.setTipo(u.getTipo());
+        utente.setAvatar(u.getAvatar());
+        return utente;
+    }
+
+    private void openActivityTipoAsta(Utente utente, Asta asta) {
+        Intent intent = new Intent(this, TipoAstaActivity.class);
+        intent.putExtra("utente", utente);
+        intent.putExtra("tipoUtente", utente.getTipo());
+        intent.putExtra("asta", asta);
+        startActivity(intent);
+    }
+
     private void aggiornaTimer(TextView textView, int val) {
         int value = Integer.parseInt(textView.getText().toString()) + val;
         textView.setText(String.format("%02d", Math.max(0, value)));
+    }
+
+    private void openActivityHome(UtenteDTO utente) {
+        Intent intentH = new Intent(this, HomeActivity.class);
+        intentH.putExtra("utente", utente);
+        startActivity(intentH);
     }
 
 }

@@ -34,14 +34,16 @@ public class ModificaPasswordActivity extends AppCompatActivity {
     private EditText confermaPassword;
     private Button salvaButton;
     private ImageButton back_button;
+    private Utente utente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifica_password);
 
-        int id_utente = (int) getIntent().getSerializableExtra("id");
-        String pass_utente = (String) getIntent().getSerializableExtra("pass");
+        utente = (Utente) getIntent().getSerializableExtra("utente");
+        int id_utente = utente.getId();
+        String pass_utente = utente.getPassword();
 
         vecchiaPassword = findViewById(R.id.vecchia_password);
         nuovaPassword = findViewById(R.id.nuova_password);
@@ -51,13 +53,13 @@ public class ModificaPasswordActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ModificaPasswordActivity.this);
 
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openActivityProfilo(utente);
                 finish();
             }
         });
@@ -122,9 +124,22 @@ public class ModificaPasswordActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityProfilo(utente);
+        finish();
+    }
+
     public void openActivityHome(UtenteDTO utente) {
         Intent intentR = new Intent(this, HomeActivity.class);
         intentR.putExtra("utente", utente);
         startActivity(intentR);
+    }
+
+    public void openActivityProfilo(Utente utente) {
+        Intent intentP = new Intent(this, ProfiloActivity.class);
+        intentP.putExtra("utente", utente);
+        startActivity(intentP);
     }
 }
