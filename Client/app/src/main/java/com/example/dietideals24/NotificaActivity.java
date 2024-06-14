@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,29 +39,44 @@ public class NotificaActivity extends AppCompatActivity {
     private ImageButton back_button;
     private TextView noResultsText;
     private ApiService apiService;
+    private Button btnSegnaTutte, btnRimuoviLette, btnRimuoviTutte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifica);
 
-        /*Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Notifiche");*/
-
         utente = (Utente) getIntent().getSerializableExtra("utente");
         noResultsText = findViewById(R.id.no_results_text);
         utente_home = creaUtenteDTO(utente);
 
+        btnSegnaTutte = findViewById(R.id.btnSegna);
+        btnRimuoviLette = findViewById(R.id.btnRmvRead);
+        btnRimuoviTutte = findViewById(R.id.btnRmvAll);
+
+        btnSegnaTutte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostraDialogoMarcaTutte();
+            }
+        });
+
+        btnRimuoviLette.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostraDialogoEliminaLette();
+            }
+        });
+
+        btnRimuoviTutte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostraDialogoEliminaTutte();
+            }
+        });
+
         RetrofitService retrofitService = new RetrofitService();
         apiService = retrofitService.getRetrofit().create(ApiService.class);
-
-        /*ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
-            actionBar.setTitle("Notifiche");
-        }*/
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -96,32 +112,6 @@ public class NotificaActivity extends AppCompatActivity {
                 adapter.updateNotifica(notifica);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_notifica, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                openActivityHome(utente_home);
-                return true;
-            case R.id.action_delete_all:
-                mostraDialogoEliminaTutte();
-                return true;
-            case R.id.action_mark_all_read:
-                mostraDialogoMarcaTutte();
-                return true;
-            case R.id.action_delete_read:
-                mostraDialogoEliminaLette();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void mostraDialogoEliminaTutte() {
