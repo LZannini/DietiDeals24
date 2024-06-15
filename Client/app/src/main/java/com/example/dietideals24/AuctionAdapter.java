@@ -1,5 +1,7 @@
 package com.example.dietideals24;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,9 +66,14 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
         }
 
         public void bind(AstaDTO asta) {
+            Bitmap bitmap;
             astaNome.setText(asta.getNome());
-
-             astaTipoImage.setImageResource(R.drawable.silenziosa); //<- foto del tipo
+            byte[] fotoBytes = asta.getFoto();
+            if (fotoBytes != null) {
+                bitmap = BitmapFactory.decodeByteArray(fotoBytes, 0, fotoBytes.length);
+                astaFoto.setImageBitmap(bitmap);
+            }
+            astaTipoImage.setImageResource(R.drawable.silenziosa); //<- foto del tipo
 
             /*if (asta instanceof Asta_RibassoDTO) {
                 Asta_RibassoDTO ribasso = (Asta_RibassoDTO) asta;

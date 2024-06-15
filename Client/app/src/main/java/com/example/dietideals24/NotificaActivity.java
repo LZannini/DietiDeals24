@@ -50,9 +50,18 @@ public class NotificaActivity extends AppCompatActivity {
         noResultsText = findViewById(R.id.no_results_text);
         utente_home = creaUtenteDTO(utente);
 
+        back_button = findViewById(R.id.back_button);
         btnSegnaTutte = findViewById(R.id.btnSegna);
         btnRimuoviLette = findViewById(R.id.btnRmvRead);
         btnRimuoviTutte = findViewById(R.id.btnRmvAll);
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente_home);
+                finish();
+            }
+        });
 
         btnSegnaTutte.setOnClickListener(new View.OnClickListener() {
             @Override

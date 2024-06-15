@@ -1,10 +1,11 @@
 package com.example.dietideals24;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
@@ -16,6 +17,7 @@ import com.example.dietideals24.dto.AstaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Asta;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class RisultatiRicercaActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener{
@@ -23,8 +25,9 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
     private AstaDTO astaSelezionata;
     private UtenteDTO utente_home;
     private String criterioRicerca;
-
     private List<AstaDTO> listaAste;
+    private LinearLayout layout_attributi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -32,6 +35,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
 
         TextView noResultsText = findViewById(R.id.no_results_text);
         ImageButton back_button = findViewById(R.id.back_button);
+        layout_attributi = findViewById(R.id.layout_attributi);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -65,6 +69,11 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         if(listaAste == null || listaAste.isEmpty()) {
             noResultsText.setVisibility(View.VISIBLE);
             risultatiRicerca.setText(" ");
+            int childCount = layout_attributi.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View child = layout_attributi.getChildAt(i);
+                child.setVisibility(View.INVISIBLE);
+            }
         }else
             noResultsText.setVisibility(View.GONE);
 
@@ -79,6 +88,9 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
 
     private void openActivityDettagliAsta() {
         Intent intent = new Intent(this, DettagliAstaActivity.class);
+        intent.putExtra("listaAste", (Serializable) listaAste);
+        intent.putExtra("criterioRicerca", criterioRicerca);
+        intent.putExtra("utente", utente_home);
         intent.putExtra("asta", astaSelezionata);
         startActivity(intent);
     }

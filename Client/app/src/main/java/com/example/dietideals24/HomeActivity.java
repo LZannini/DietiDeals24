@@ -154,12 +154,8 @@ public class HomeActivity extends AppCompatActivity {
                 .setCancelable(true)
                 .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Context ctx = getApplicationContext();
-                        PackageManager pm = ctx.getPackageManager();
-                        Intent intent = pm.getLaunchIntentForPackage(ctx.getPackageName());
-                        Intent mainIntent = Intent.makeRestartActivityTask(intent.getComponent());
-                        ctx.startActivity(mainIntent);
-                        Runtime.getRuntime().exit(0);
+                        openActivityLogin();
+                        finish();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -180,6 +176,11 @@ public class HomeActivity extends AppCompatActivity {
         Intent intentR = new Intent(this, CercaAstaActivity.class);
         intentR.putExtra("utente", utenteDTO);
         startActivity(intentR);
+    }
+
+    private void openActivityLogin() {
+        Intent intentL = new Intent(this, LoginActivity.class);
+        startActivity(intentL);
     }
 
     private void openActivityProfilo(Utente utente) {

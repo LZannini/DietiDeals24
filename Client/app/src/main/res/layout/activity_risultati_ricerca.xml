@@ -20,33 +20,31 @@
             android:background="@null"
             android:src="@drawable/baseline_arrow_back_24" />
 
-        <!-- Messaggio per nessun risultato trovato -->
         <TextView
             android:id="@+id/no_results_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="Nessun risultato per la ricerca effettuata. Prova a cambiare i filtri o il termine da cercare."
-            android:textSize="18sp"
             android:layout_gravity="center"
             android:padding="16dp"
-            android:textColor="@color/black" />
+            android:text="Nessun risultato per la ricerca effettuata. Prova a cambiare i filtri o il termine da cercare."
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
-        <!-- Titolo -->
         <TextView
             android:id="@+id/risultati_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text=""
-            android:textSize="18sp"
-            android:textStyle="bold"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:textColor="@color/black"/>
+            android:gravity="center"
+            android:text="Risultati"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-        <!-- Intestazioni -->
         <LinearLayout
+            android:id="@+id/layout_attributi"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginLeft="15dp"
@@ -55,51 +53,50 @@
             android:padding="8dp">
 
             <TextView
+                android:id="@+id/tv_nome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Foto"
-                android:textSize="16sp"
-                android:textColor="@color/gray"/>
+                android:textColor="@color/gray"
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:gravity="center"
                 android:text="Nome"
-                android:textSize="16sp"
                 android:textColor="@color/gray"
-                android:gravity="center"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Prezzo"
-                android:textSize="16sp"
                 android:textColor="@color/gray"
-                android:gravity="center"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Tipo"
-                android:textSize="16sp"
                 android:textColor="@color/gray"
-                android:gravity="center"/>
+                android:textSize="16sp" />
         </LinearLayout>
 
 
         <!-- RecycleView per i risultati delle aste -->
-       <androidx.recyclerview.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/risultati_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
-
-
 
 
 </RelativeLayout>
