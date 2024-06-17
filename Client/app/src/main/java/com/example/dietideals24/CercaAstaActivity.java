@@ -90,7 +90,6 @@ public class CercaAstaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.hide();
-
     }
 
     @Override
@@ -128,7 +127,12 @@ public class CercaAstaActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<AstaDTO>> call, @NonNull Response<List<AstaDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<AstaDTO> aste = response.body();
+                    List<AstaDTO> asteResponse = response.body();
+                    List<AstaDTO> aste = new ArrayList<>();
+                    for (AstaDTO a : asteResponse) {
+                        if (a.getId_creatore() != utente_home.getId())
+                            aste.add(a);
+                    }
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", (Serializable) aste);
                     intent.putExtra("criterioRicerca", finalSearchCriteria);

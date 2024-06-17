@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
-import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
@@ -29,88 +28,86 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RisultatiRicercaActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
+public class AsteCreateActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
 
-    private AstaDTO astaSelezionata;
-    private String nomeCreatore;
     private UtenteDTO utente_home;
-    private String criterioRicerca;
+    private String nomeCreatore;
+    private Utente utente;
     private List<AstaDTO> listaAste;
+    private TextView noAuctionsText, yourAuctionsText;
+    private RecyclerView recyclerView;
+    private ImageButton back_button;
     private LinearLayout layout_attributi;
+    private AstaDTO astaSelezionata;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_risultati_ricerca);
+        setContentView(R.layout.activity_aste_create);
 
-        TextView noResultsText = findViewById(R.id.no_results_text);
-        ImageButton back_button = findViewById(R.id.back_button);
+        utente = (Utente) getIntent().getSerializableExtra("utente");
+        utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente_home");
+        listaAste = (List<AstaDTO>) getIntent().getSerializableExtra("listaAste");
+
+        noAuctionsText = findViewById(R.id.no_auctions_text);
+        back_button = findViewById(R.id.back_button);
         layout_attributi = findViewById(R.id.layout_attributi);
+        yourAuctionsText = findViewById(R.id.your_auctions_title);
+        recyclerView = findViewById(R.id.risultati_recycler_view);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        AuctionAdapter adapter = new AuctionAdapter(listaAste,this);
+        recyclerView.setAdapter(adapter);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.hide();
 
-        utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente");
-        if (getIntent().getStringExtra("criterioRicerca") != null)
-            criterioRicerca = getIntent().getStringExtra("criterioRicerca");
-        TextView risultatiRicerca = findViewById(R.id.risultati_title);
-
-        if (criterioRicerca == null)
-            risultatiRicerca.setText("Risultati");
-        else
-            risultatiRicerca.setText("Risultati per "+ criterioRicerca);
-
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityCercaAsta();
+                openActivityProfilo();
                 finish();
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.risultati_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        listaAste = (List<AstaDTO>) getIntent().getSerializableExtra("listaAste");
-        AuctionAdapter adapter = new AuctionAdapter(listaAste,this);
-        recyclerView.setAdapter(adapter);
-
         if(listaAste == null || listaAste.isEmpty()) {
-            noResultsText.setVisibility(View.VISIBLE);
-            risultatiRicerca.setText(" ");
+            noAuctionsText.setVisibility(View.VISIBLE);
+            yourAuctionsText.setText(" ");
             int childCount = layout_attributi.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View child = layout_attributi.getChildAt(i);
                 child.setVisibility(View.INVISIBLE);
             }
         }else
-            noResultsText.setVisibility(View.GONE);
+            noAuctionsText.setVisibility(View.GONE);
+
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityCercaAsta();
+        openActivityProfilo();
         finish();
+    }
+
+    private void openActivityProfilo() {
+        Intent intentP = new Intent(this, ProfiloActivity.class);
+        intentP.putExtra("utente", utente);
+        startActivity(intentP);
     }
 
     private void openActivityDettagliAsta() {
         Intent intent = new Intent(this, DettagliAstaActivity.class);
         intent.putExtra("listaAste", (Serializable) listaAste);
-        intent.putExtra("criterioRicerca", criterioRicerca);
         intent.putExtra("utente", utente_home);
+        intent.putExtra("utenteProfilo", utente);
         intent.putExtra("asta", astaSelezionata);
-        intent.putExtra("fromAsteCreate", false);
+        intent.putExtra("fromAsteCreate", true);
         intent.putExtra("username", nomeCreatore);
         startActivity(intent);
     }
 
-    private void openActivityCercaAsta() {
-        Intent intent = new Intent(this, CercaAstaActivity.class);
-        intent.putExtra("utente", utente_home);
-        startActivity(intent);
-    }
     @Override
     public void onAstaClick(int position) {
         astaSelezionata = listaAste.get(position);
@@ -131,15 +128,16 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
                     openActivityDettagliAsta();
                     finish();
                 } else {
-                    Toast.makeText(RisultatiRicercaActivity.this, "Utente non trovato", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AsteCreateActivity.this, "Utente non trovato", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<UtenteDTO> call, Throwable t) {
-                Toast.makeText(RisultatiRicercaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
-                Logger.getLogger(RisultatiRicercaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
+                Toast.makeText(AsteCreateActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(AsteCreateActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });
     }
 }
+

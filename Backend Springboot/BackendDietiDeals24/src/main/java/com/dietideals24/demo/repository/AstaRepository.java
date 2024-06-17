@@ -25,15 +25,15 @@ public interface AstaRepository extends CrudRepository<Asta, Integer>{
 	@Query("SELECT a FROM Asta a ORDER BY a.nome")
 	List<Asta> cercaTutte();
 	
-	@Query("SELECT a FROM Asta a WHERE a.id_creatore = :id_creatore")
+	@Query("SELECT a FROM Asta a WHERE a.id_creatore = :id_creatore ORDER BY a.nome")
 	List<Asta> filtraPerUtente(@Param("id_creatore") int id_creatore);
 	
-	@Query("SELECT a FROM Asta a WHERE LOWER(a.nome) LIKE LOWER(CONCAT('%', :chiave, '%')) OR LOWER(a.descrizione) LIKE LOWER(CONCAT('%', :chiave, '%'))")
+	@Query("SELECT a FROM Asta a WHERE LOWER(a.nome) LIKE LOWER(CONCAT('%', :chiave, '%')) OR LOWER(a.descrizione) LIKE LOWER(CONCAT('%', :chiave, '%')) ORDER BY a.nome")
 	List<Asta> filtraPerParolaChiave(@Param("chiave") String chiave);
 	
 	@Query("SELECT a FROM Asta a WHERE a.categoria = :categoria")
 	List<Asta> filtraPerCategoria(@Param("categoria") Categoria categoria);
 	
-	@Query("SELECT a FROM Asta a WHERE a.categoria = :categoria AND (LOWER(a.descrizione) LIKE LOWER(CONCAT('%', :chiave, '%')) OR LOWER(a.nome) LIKE LOWER(CONCAT('%', :chiave, '%')))")
+	@Query("SELECT a FROM Asta a WHERE a.categoria = :categoria AND (LOWER(a.descrizione) LIKE LOWER(CONCAT('%', :chiave, '%')) OR LOWER(a.nome) LIKE LOWER(CONCAT('%', :chiave, '%'))) ORDER BY a.nome")
 	List<Asta> filtraPerCategoriaAndParoleChiave(@Param("chiave") String chiave, @Param("categoria") Categoria categoria);
 }

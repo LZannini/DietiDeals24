@@ -1,5 +1,6 @@
 package com.example.dietideals24;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
+import com.example.dietideals24.dto.AstaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
@@ -28,6 +30,11 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,7 +51,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private EditText webSiteEditText;
     private EditText countryEditText;
     private LinearLayout pulsantiAste;
-    private Button buttonSalva;
+    private Button buttonSalva, buttonAsteCreate;
     private Utente utenteOriginale;
     private UtenteDTO utenteModificato;
     private Boolean info_mod = false;
@@ -69,6 +76,7 @@ public class ProfiloActivity extends AppCompatActivity {
         pulsantiAste = findViewById(R.id.pulsanti_aste);
         buttonSalva = findViewById(R.id.salva_button);
         back_button = findViewById(R.id.back_button);
+        buttonAsteCreate = findViewById(R.id.asteCreate_button);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -82,6 +90,15 @@ public class ProfiloActivity extends AppCompatActivity {
         bioEditText.setText(utenteOriginale.getBiografia());
         webSiteEditText.setText(utenteOriginale.getSitoweb());
         countryEditText.setText(utenteOriginale.getPaese());
+
+        buttonAsteCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RetrofitService retrofitService = new RetrofitService();
+                ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                trovaAsteCreate(apiService);
+            }
+        });
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,5 +305,38 @@ public class ProfiloActivity extends AppCompatActivity {
     private void openActivitySceltaAccount() {
         Intent intentR = new Intent(this, SceltaAccountActivity.class);
         startActivity(intentR);
+    }
+
+    private void trovaAsteCreate(ApiService apiService) {
+        Call<List<AstaDTO>> call;
+
+        call = apiService.cercaPerUtente(utenteOriginale.getId());
+        call.enqueue(new Callback<List<AstaDTO>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<AstaDTO>> call, @NonNull Response<List<AstaDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<AstaDTO> aste = response.body();
+                    Intent intent = new Intent(ProfiloActivity.this, AsteCreateActivity.class);
+                    intent.putExtra("listaAste", (Serializable) aste);
+                    intent.putExtra("utente_home", utenteModificato);
+                    intent.putExtra("utente", utenteOriginale);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(ProfiloActivity.this, AsteCreateActivity.class);
+                    intent.putExtra("listaAste", new ArrayList<AstaDTO>());
+                    intent.putExtra("utente_home", utenteModificato);
+                    intent.putExtra("utente", utenteOriginale);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<AstaDTO>> call, @NonNull Throwable t) {
+                Toast.makeText(ProfiloActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(ProfiloActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
+            }
+        });
     }
 }

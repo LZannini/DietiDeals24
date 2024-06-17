@@ -18,6 +18,9 @@ public interface ApiService {
     @POST("/utente/login")
     Call<UtenteDTO> loginUtente(@Body UtenteDTO utenteDTO);
 
+    @GET("/utente/recupera")
+    Call<UtenteDTO> recuperaUtente(@Query("id") int id);
+
     @POST("/utente/aggiorna")
     Call<UtenteDTO> aggiornaUtente(@Body UtenteDTO utenteDTO);
 
@@ -26,6 +29,9 @@ public interface ApiService {
 
     @GET("/asta/cercaTutte")
     Call<List<AstaDTO>> cercaTutte();
+
+    @GET("/asta/cercaPerUtente")
+    Call<List<AstaDTO>> cercaPerUtente(@Query("id_creatore") int id_creatore);
 
     @GET("/asta/cercaPerChiave")
     Call<List<AstaDTO>> cercaPerParolaChiave(@Query("chiave") String chiave);

@@ -41,7 +41,14 @@ public class UtenteController {
 		}
 	}
 
-	
+	@GetMapping("/utente/recupera")
+	public ResponseEntity<UtenteDTO> recupera(@RequestParam Integer id) {
+		if (id == null)
+			throw new IllegalArgumentException("Errore Recupero Utente: Parametri non validi!");
+		
+		UtenteDTO utenteDTO = utenteService.recuperaUtenteById(id);
+        return ResponseEntity.ok(utenteDTO);
+	}
 	
 	@GetMapping("/utente/cerca")
 	public ResponseEntity<UtenteDTO> cerca(@RequestParam Integer id, @RequestParam String email) {
