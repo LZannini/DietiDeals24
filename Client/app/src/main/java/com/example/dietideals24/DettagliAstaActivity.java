@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Asta_Ribasso;
 import com.example.dietideals24.models.Utente;
 
 import java.io.Serializable;
@@ -39,8 +41,8 @@ public class DettagliAstaActivity extends AppCompatActivity {
     private ImageView ivFoto;
     private ImageButton btnBack;
     private Bitmap bitmap;
-    private AstaDTO asta;
-    private List<AstaDTO> listaAste;
+    private Asta asta;
+    private List<Asta> listaAste;
     private String criterioRicerca;
     private UtenteDTO utente_home;
     private boolean fromAsteCreate;
@@ -56,8 +58,8 @@ public class DettagliAstaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        asta = (AstaDTO) getIntent().getSerializableExtra("asta");
-        listaAste = (List<AstaDTO>) getIntent().getSerializableExtra("listaAste");
+        asta = (Asta) getIntent().getSerializableExtra("asta");
+        listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
         if (getIntent().getStringExtra("criterioRicerca") != null)
             criterioRicerca = getIntent().getStringExtra("criterioRicerca");
         utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente");

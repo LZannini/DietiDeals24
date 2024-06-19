@@ -20,6 +20,11 @@ import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.Categoria;
+import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Asta_Inversa;
+import com.example.dietideals24.models.Asta_Ribasso;
+import com.example.dietideals24.models.Asta_Silenziosa;
+import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
@@ -27,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -128,8 +134,9 @@ public class CercaAstaActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<AstaDTO>> call, @NonNull Response<List<AstaDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<AstaDTO> asteResponse = response.body();
-                    List<AstaDTO> aste = new ArrayList<>();
-                    for (AstaDTO a : asteResponse) {
+                    List<Asta> asteList = creaListaModelloAsta(asteResponse);
+                    List<Asta> aste = new ArrayList<>();
+                    for (Asta a : asteList) {
                         if (a.getId_creatore() != utente_home.getId())
                             aste.add(a);
                     }
@@ -153,6 +160,56 @@ public class CercaAstaActivity extends AppCompatActivity {
                 Logger.getLogger(CercaAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });
+    }
+
+    public Asta_Ribasso creaModelloAstaR(AstaDTO dto) {
+        Asta_Ribasso asta = new Asta_Ribasso();
+        asta.setId(dto.getID());
+        asta.setId_creatore(dto.getId_creatore());
+        asta.setCategoria(dto.getCategoria());
+        asta.setFoto(dto.getFoto());
+        asta.setNome(dto.getNome());
+        asta.setDescrizione(dto.getDescrizione());
+
+        return asta;
+    }
+
+    public Asta_Silenziosa creaModelloAstaS(AstaDTO dto) {
+        Asta_Silenziosa asta = new Asta_Silenziosa();
+        asta.setId(dto.getID());
+        asta.setId_creatore(dto.getId_creatore());
+        asta.setCategoria(dto.getCategoria());
+        asta.setFoto(dto.getFoto());
+        asta.setNome(dto.getNome());
+        asta.setDescrizione(dto.getDescrizione());
+
+        return asta;
+    }
+
+    public Asta_Inversa creaModelloAstaI(AstaDTO dto) {
+        Asta_Inversa asta = new Asta_Inversa();
+        asta.setId(dto.getID());
+        asta.setId_creatore(dto.getId_creatore());
+        asta.setCategoria(dto.getCategoria());
+        asta.setFoto(dto.getFoto());
+        asta.setNome(dto.getNome());
+        asta.setDescrizione(dto.getDescrizione());
+
+        return asta;
+    }
+
+    public List<Asta> creaListaModelloAsta(List<AstaDTO> listaDto) {
+        List<Asta> asteList = new ArrayList<>();
+        for (AstaDTO dto : listaDto) {
+            if (dto.getTipo().equals("RIBASSO")) {
+                asteList.add(creaModelloAstaR(dto));
+            } else if (dto.getTipo().equals("SILENZIOSA")) {
+                asteList.add(creaModelloAstaS(dto));
+            } else if (dto.getTipo().equals("INVERSA")) {
+                asteList.add(creaModelloAstaI(dto));
+            }
+        }
+        return asteList;
     }
 
 }

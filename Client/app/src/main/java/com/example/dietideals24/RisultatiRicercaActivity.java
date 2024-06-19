@@ -31,11 +31,11 @@ import retrofit2.Response;
 
 public class RisultatiRicercaActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
 
-    private AstaDTO astaSelezionata;
+    private Asta astaSelezionata;
     private String nomeCreatore;
     private UtenteDTO utente_home;
     private String criterioRicerca;
-    private List<AstaDTO> listaAste;
+    private List<Asta> listaAste;
     private LinearLayout layout_attributi;
 
     @Override
@@ -72,7 +72,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         RecyclerView recyclerView = findViewById(R.id.risultati_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        listaAste = (List<AstaDTO>) getIntent().getSerializableExtra("listaAste");
+        listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
         AuctionAdapter adapter = new AuctionAdapter(listaAste,this);
         recyclerView.setAdapter(adapter);
 

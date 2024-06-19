@@ -105,6 +105,13 @@ public class AstaServiceImplements implements AstaService {
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
+				if(a instanceof Asta_Ribasso) {
+					astaDTO.setTipo("RIBASSO");
+				} else if (a instanceof Asta_Silenziosa) {
+					astaDTO.setTipo("SILENZIOSA");
+				} else if (a instanceof Asta_Inversa) {
+					astaDTO.setTipo("INVERSA");
+				}
 				aste_trovate.add(astaDTO);
 			}
 		}
@@ -118,6 +125,13 @@ public class AstaServiceImplements implements AstaService {
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
+				if(a instanceof Asta_Ribasso) {
+					astaDTO.setTipo("RIBASSO");
+				} else if (a instanceof Asta_Silenziosa) {
+					astaDTO.setTipo("SILENZIOSA");
+				} else if (a instanceof Asta_Inversa) {
+					astaDTO.setTipo("INVERSA");
+				}
 				aste_trovate.add(astaDTO);
 			}
 		}
@@ -131,6 +145,13 @@ public class AstaServiceImplements implements AstaService {
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
+				if(a instanceof Asta_Ribasso) {
+					astaDTO.setTipo("RIBASSO");
+				} else if (a instanceof Asta_Silenziosa) {
+					astaDTO.setTipo("SILENZIOSA");
+				} else if (a instanceof Asta_Inversa) {
+					astaDTO.setTipo("INVERSA");
+				}
 				aste_trovate.add(astaDTO);
 			}
 		}
@@ -144,6 +165,13 @@ public class AstaServiceImplements implements AstaService {
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
+				if(a instanceof Asta_Ribasso) {
+					astaDTO.setTipo("RIBASSO");
+				} else if (a instanceof Asta_Silenziosa) {
+					astaDTO.setTipo("SILENZIOSA");
+				} else if (a instanceof Asta_Inversa) {
+					astaDTO.setTipo("INVERSA");
+				}
 				aste_trovate.add(astaDTO);
 			}
 		}
@@ -157,6 +185,13 @@ public class AstaServiceImplements implements AstaService {
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
+				if(a instanceof Asta_Ribasso) {
+					astaDTO.setTipo("RIBASSO");
+				} else if (a instanceof Asta_Silenziosa) {
+					astaDTO.setTipo("SILENZIOSA");
+				} else if (a instanceof Asta_Inversa) {
+					astaDTO.setTipo("INVERSA");
+				}
 				aste_trovate.add(astaDTO);
 			}
 		}

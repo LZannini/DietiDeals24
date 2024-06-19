@@ -150,7 +150,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
                                             Toast.makeText(RegistrazioneActivity.this, "Registrazione effettuata con successo!", Toast.LENGTH_SHORT).show();
                                             openActivityLogin();
                                         } else if(response.code() == 409) {
-                                            Toast.makeText(RegistrazioneActivity.this, "Questa email risulta già registrata, prova ad effettuare il login!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegistrazioneActivity.this, "Email o username già registrati, prova ad effettuare il login!", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 

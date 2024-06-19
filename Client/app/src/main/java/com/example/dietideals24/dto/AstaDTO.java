@@ -10,7 +10,8 @@ public class AstaDTO implements Serializable {
     private int id_creatore;
     private String nome;
     private String descrizione;
-    private String categoria;
+    private String tipo;
+    private Categoria categoria;
     private byte[] foto;
 
     public int getID(){
@@ -41,11 +42,11 @@ public class AstaDTO implements Serializable {
         this.descrizione = descrizione;
     }
 
-    public String getCategoria(){
+    public Categoria getCategoria(){
         return categoria;
     }
 
-    public void setCategoria(String categoria){
+    public void setCategoria(Categoria categoria){
         this.categoria = categoria;
     }
 
@@ -55,6 +56,13 @@ public class AstaDTO implements Serializable {
 
     public void setFoto(byte[] foto){
         this.foto = foto;
+    }
+    public String getTipo(){
+        return tipo;
+    }
+
+    public void setTipo(String tipo){
+        this.tipo = tipo;
     }
 
 }

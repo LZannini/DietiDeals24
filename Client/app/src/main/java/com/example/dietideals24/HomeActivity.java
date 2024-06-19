@@ -172,9 +172,9 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
-    private void openActivityCercaAsta(UtenteDTO utenteDTO) {
+    private void openActivityCercaAsta(UtenteDTO utente) {
         Intent intentR = new Intent(this, CercaAstaActivity.class);
-        intentR.putExtra("utente", utenteDTO);
+        intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 

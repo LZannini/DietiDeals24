@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
@@ -33,12 +34,12 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
     private UtenteDTO utente_home;
     private String nomeCreatore;
     private Utente utente;
-    private List<AstaDTO> listaAste;
+    private List<Asta> listaAste;
     private TextView noAuctionsText, yourAuctionsText;
     private RecyclerView recyclerView;
     private ImageButton back_button;
     private LinearLayout layout_attributi;
-    private AstaDTO astaSelezionata;
+    private Asta astaSelezionata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
         utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente_home");
-        listaAste = (List<AstaDTO>) getIntent().getSerializableExtra("listaAste");
+        listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
 
         noAuctionsText = findViewById(R.id.no_auctions_text);
         back_button = findViewById(R.id.back_button);
