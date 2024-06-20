@@ -20,4 +20,7 @@ public interface AstaService {
 	List<AstaDTO> trovaAstePerParolaChiave(String chiave);
 	List<AstaDTO> trovaAstePerCategoria(Categoria categoria);
 	List<AstaDTO> trovaAstePerParolaChiaveAndCategoria(String chiave, Categoria categoria);
+	Asta_InversaDTO trovaAstaInversa(Integer id);
+	Asta_RibassoDTO trovaAstaRibasso(Integer id);
+	Asta_SilenziosaDTO trovaAstaSilenziosa(Integer id);
 }

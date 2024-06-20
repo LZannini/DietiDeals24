@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,10 +20,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
+import com.example.dietideals24.dto.Asta_InversaDTO;
+import com.example.dietideals24.dto.Asta_RibassoDTO;
+import com.example.dietideals24.dto.Asta_SilenziosaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Asta_Inversa;
 import com.example.dietideals24.models.Asta_Ribasso;
+import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
+import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
 import java.util.List;
@@ -36,7 +43,8 @@ import retrofit2.Response;
 public class DettagliAstaActivity extends AppCompatActivity {
 
     private EditText etTitle, etDescription, etOffer;
-    private TextView tvPrice, tvCategoryValue, tvTypeValue, tvCreatorValue, tvPriceValue, tvDecrementValue, tvTimerValue;
+    private TextView tvPrice, tvCategoryValue, tvCreatorValue, tvPriceValue, tvDecrementValue, tvTimerValue;
+    private ImageView ivTypeValue;
     private Button btnSubmitOffer;
     private ImageView ivFoto;
     private ImageButton btnBack;
@@ -71,7 +79,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
         etTitle = findViewById(R.id.etTitle);
         etDescription = findViewById(R.id.etDescription);
         tvCategoryValue = findViewById(R.id.tvCategoryValue);
-        tvTypeValue = findViewById(R.id.tvTypeValue);
+        ivTypeValue = findViewById(R.id.ivTypeValue);
         tvCreatorValue = findViewById(R.id.tvCreatorValue);
         tvPriceValue = findViewById(R.id.tvPriceValue);
         tvPrice = findViewById(R.id.tvPrice);
@@ -89,6 +97,9 @@ public class DettagliAstaActivity extends AppCompatActivity {
             tvPrice.setVisibility(View.INVISIBLE);
         }
 
+        RetrofitService retrofitService = new RetrofitService();
+        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+
         byte[] fotoBytes = asta.getFoto();
         if (fotoBytes != null) {
             bitmap = BitmapFactory.decodeByteArray(fotoBytes, 0, fotoBytes.length);
@@ -98,11 +109,60 @@ public class DettagliAstaActivity extends AppCompatActivity {
         etTitle.setText(asta.getNome());
         etDescription.setText(asta.getDescrizione());
         tvCategoryValue.setText(asta.getCategoria().toString());
-        tvTypeValue.setText("");
         tvCreatorValue.setText(nomeCreatore);
-        tvPriceValue.setText("");
-        tvDecrementValue.setText("");
-        tvTimerValue.setText("");
+
+        if (asta instanceof Asta_Ribasso) {
+            ivTypeValue.setImageResource(R.drawable.ribasso);
+            apiService.recuperaDettagliAstaRibasso(asta.getId())
+                    .enqueue(new Callback<Asta_RibassoDTO>() {
+                        @Override
+                        public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
+                            Asta_RibassoDTO astaRicevuta = response.body();
+
+                            tvPriceValue.setText(String.valueOf(astaRicevuta.getPrezzo()));
+                            tvDecrementValue.setText(String.valueOf(astaRicevuta.getDecremento()));
+                            tvTimerValue.setText(astaRicevuta.getTimer());
+                        }
+
+                        @Override
+                        public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
+
+                        }
+                    });
+        } else if (asta instanceof Asta_Silenziosa) {
+            ivTypeValue.setImageResource(R.drawable.silenziosa);
+            apiService.recuperaDettagliAstaSilenziosa(asta.getId())
+                    .enqueue(new Callback<Asta_SilenziosaDTO>() {
+                        @Override
+                        public void onResponse(Call<Asta_SilenziosaDTO> call, Response<Asta_SilenziosaDTO> response) {
+                            Asta_SilenziosaDTO astaRicevuta = response.body();
+
+                            tvTimerValue.setText(astaRicevuta.getScadenza());
+                        }
+
+                        @Override
+                        public void onFailure(Call<Asta_SilenziosaDTO> call, Throwable t) {
+
+                        }
+                    });
+        } else if (asta instanceof Asta_Inversa) {
+            ivTypeValue.setImageResource(R.drawable.inversa);
+            apiService.recuperaDettagliAstaInversa(asta.getId())
+                    .enqueue(new Callback<Asta_InversaDTO>() {
+                        @Override
+                        public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
+                            Asta_InversaDTO astaRicevuta = response.body();
+
+                            tvPrice.setText(String.valueOf(astaRicevuta.getPrezzo()));
+                            tvTimerValue.setText(astaRicevuta.getScadenza());
+                        }
+
+                        @Override
+                        public void onFailure(Call<Asta_InversaDTO> call, Throwable t) {
+
+                        }
+                    });
+        }
 
         adjustEditTextWidth(etTitle);
 

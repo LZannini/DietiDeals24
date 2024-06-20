@@ -208,4 +208,68 @@ public class AstaServiceImplements implements AstaService {
 		astaDTO.setFoto(asta.getFoto());
 		return astaDTO;
 	}
+	
+	public Asta_InversaDTO trovaAstaInversa(Integer id) {
+        Asta_Inversa astaInversa = astaInversaRepository.getAstaInversa(id);
+        if (astaInversa == null) {
+            return null;
+        }
+        return creaAstaInversaDTO(astaInversa);
+    }
+
+    public Asta_RibassoDTO trovaAstaRibasso(Integer id) {
+        Asta_Ribasso astaRibasso = astaAlRibassoRepository.getAstaAlRibasso(id);
+        if (astaRibasso == null) {
+            return null;
+        }
+        return creaAstaAlRibassoDTO(astaRibasso);
+    }
+
+    public Asta_SilenziosaDTO trovaAstaSilenziosa(Integer id) {
+        Asta_Silenziosa astaSilenziosa = astaSilenziosaRepository.getAstaSilenziosa(id);
+        if (astaSilenziosa == null) {
+            return null;
+        }
+        return creaAstaSilenziosaDTO(astaSilenziosa);
+    }
+    
+    private Asta_InversaDTO creaAstaInversaDTO(Asta_Inversa asta) {
+		Asta_InversaDTO astaDTO = new Asta_InversaDTO();
+		/*astaDTO.setNome(asta.getNome());
+		astaDTO.setId_asta(asta.getId());
+		astaDTO.setIdCreatore(asta.getId_creatore());
+		astaDTO.setCategoria(asta.getCategoria());
+		astaDTO.setDescrizione(asta.getDescrizione());
+		astaDTO.setFoto(asta.getFoto());*/
+		astaDTO.setPrezzo(asta.getPrezzo());
+		astaDTO.setScadenza(asta.getScadenza());
+		return astaDTO;
+	}
+    
+    private Asta_RibassoDTO creaAstaAlRibassoDTO(Asta_Ribasso asta) {
+		Asta_RibassoDTO astaDTO = new Asta_RibassoDTO();
+		/*astaDTO.setNome(asta.getNome());
+		astaDTO.setId_asta(asta.getId());
+		astaDTO.setIdCreatore(asta.getId_creatore());
+		astaDTO.setCategoria(asta.getCategoria());
+		astaDTO.setDescrizione(asta.getDescrizione());
+		astaDTO.setFoto(asta.getFoto());*/
+		astaDTO.setPrezzo(asta.getPrezzo());
+		astaDTO.setMinimo(asta.getMinimo());
+		astaDTO.setDecremento(asta.getDecremento());
+		astaDTO.setTimer(asta.getTimer());
+		return astaDTO;
+	}
+    
+    private Asta_SilenziosaDTO creaAstaSilenziosaDTO(Asta_Silenziosa asta) {
+		Asta_SilenziosaDTO astaDTO = new Asta_SilenziosaDTO();
+		/*astaDTO.setNome(asta.getNome());
+		astaDTO.setId_asta(asta.getId());
+		astaDTO.setIdCreatore(asta.getId_creatore());
+		astaDTO.setCategoria(asta.getCategoria());
+		astaDTO.setDescrizione(asta.getDescrizione());
+		astaDTO.setFoto(asta.getFoto());*/
+		astaDTO.setScadenza(asta.getScadenza());
+		return astaDTO;
+	}
 }
