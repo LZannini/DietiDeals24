@@ -186,6 +186,7 @@ public class HomeActivity extends AppCompatActivity {
     private void openActivityProfilo(Utente utente) {
         Intent intentR = new Intent(this, ProfiloActivity.class);
         intentR.putExtra("utente", utente);
+        intentR.putExtra("fromDettagli", false);
         startActivity(intentR);
     }
 

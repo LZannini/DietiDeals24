@@ -32,7 +32,7 @@ import retrofit2.Response;
 public class AsteCreateActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
 
     private UtenteDTO utente_home;
-    private String nomeCreatore;
+    private Utente utenteCreatore;
     private Utente utente;
     private List<Asta> listaAste;
     private TextView noAuctionsText, yourAuctionsText;
@@ -40,12 +40,17 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
     private ImageButton back_button;
     private LinearLayout layout_attributi;
     private Asta astaSelezionata;
+    private Boolean fromDettagli;
+    private Boolean modificaAvvenuta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aste_create);
 
+        modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", false);
+        fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
+        utenteCreatore = (Utente) getIntent().getSerializableExtra("utenteCreatore");
         utente = (Utente) getIntent().getSerializableExtra("utente");
         utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente_home");
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
@@ -94,7 +99,10 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
 
     private void openActivityProfilo() {
         Intent intentP = new Intent(this, ProfiloActivity.class);
+        intentP.putExtra("utente_home", utente_home);
         intentP.putExtra("utente", utente);
+        intentP.putExtra("fromDettagli", fromDettagli);
+        intentP.putExtra("modificaAvvenuta", modificaAvvenuta);
         startActivity(intentP);
     }
 
@@ -105,40 +113,16 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         intent.putExtra("utenteProfilo", utente);
         intent.putExtra("asta", astaSelezionata);
         intent.putExtra("fromAsteCreate", true);
-        intent.putExtra("username", nomeCreatore);
+        intent.putExtra("fromDettagli", fromDettagli);
+        intent.putExtra("utenteCreatore", utenteCreatore);
+        intent.putExtra("modificaAvvenuta", modificaAvvenuta);
         startActivity(intent);
     }
 
     @Override
     public void onAstaClick(int position) {
         astaSelezionata = listaAste.get(position);
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
-        recuperaUtenteById(apiService);
-    }
-
-    private void recuperaUtenteById(ApiService apiService) {
-        Call<UtenteDTO> call;
-        call = apiService.recuperaUtente(astaSelezionata.getId_creatore());
-        call.enqueue(new Callback<UtenteDTO>() {
-            @Override
-            public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
-                UtenteDTO user = response.body();
-                if (user != null) {
-                    nomeCreatore = user.getUsername();
-                    openActivityDettagliAsta();
-                    finish();
-                } else {
-                    Toast.makeText(AsteCreateActivity.this, "Utente non trovato", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UtenteDTO> call, Throwable t) {
-                Toast.makeText(AsteCreateActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
-                Logger.getLogger(AsteCreateActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
-            }
-        });
+        openActivityDettagliAsta();
     }
 }
 

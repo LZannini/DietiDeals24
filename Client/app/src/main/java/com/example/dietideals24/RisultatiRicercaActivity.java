@@ -18,6 +18,7 @@ import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
@@ -32,7 +33,7 @@ import retrofit2.Response;
 public class RisultatiRicercaActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
 
     private Asta astaSelezionata;
-    private String nomeCreatore;
+    private Utente utenteCreatore;
     private UtenteDTO utente_home;
     private String criterioRicerca;
     private List<Asta> listaAste;
@@ -102,7 +103,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         intent.putExtra("utente", utente_home);
         intent.putExtra("asta", astaSelezionata);
         intent.putExtra("fromAsteCreate", false);
-        intent.putExtra("username", nomeCreatore);
+        intent.putExtra("utenteCreatore", utenteCreatore);
         startActivity(intent);
     }
 
@@ -127,7 +128,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
             public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                 UtenteDTO user = response.body();
                 if (user != null) {
-                    nomeCreatore = user.getUsername();
+                    utenteCreatore = creaCreatoreAsta(user);
                     openActivityDettagliAsta();
                     finish();
                 } else {
@@ -141,5 +142,19 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
                 Logger.getLogger(RisultatiRicercaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });
+    }
+
+    public Utente creaCreatoreAsta(UtenteDTO utenteDTO) {
+        Utente u = new Utente();
+        u.setId(utenteDTO.getId());
+        u.setUsername(utenteDTO.getUsername());
+        u.setEmail(utenteDTO.getEmail());
+        u.setPassword(utenteDTO.getPassword());
+        u.setTipo(utenteDTO.getTipo());
+        if (utenteDTO.getAvatar() != null) u.setAvatar(utenteDTO.getAvatar());
+        if (utenteDTO.getBiografia() != null) u.setBiografia(utenteDTO.getBiografia());
+        if (utenteDTO.getPaese() != null) u.setPaese(utenteDTO.getPaese());
+        if (utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
+        return u;
     }
 }

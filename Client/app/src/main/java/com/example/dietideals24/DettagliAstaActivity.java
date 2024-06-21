@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -54,8 +55,10 @@ public class DettagliAstaActivity extends AppCompatActivity {
     private String criterioRicerca;
     private UtenteDTO utente_home;
     private boolean fromAsteCreate;
+    private boolean fromDettagli;
+    private boolean modificaAvvenuta;
     private Utente utenteProfilo;
-    private String nomeCreatore;
+    private Utente utenteCreatore;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -66,6 +69,8 @@ public class DettagliAstaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", false);
+        fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
         asta = (Asta) getIntent().getSerializableExtra("asta");
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
         if (getIntent().getStringExtra("criterioRicerca") != null)
@@ -73,7 +78,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
         utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente");
         utenteProfilo = (Utente) getIntent().getSerializableExtra("utenteProfilo");
         fromAsteCreate = getIntent().getBooleanExtra("fromAsteCreate", false);
-        nomeCreatore = getIntent().getStringExtra("username");
+        utenteCreatore = (Utente) getIntent().getSerializableExtra("utenteCreatore");
 
         ivFoto = findViewById(R.id.imageView_Foto);
         etTitle = findViewById(R.id.etTitle);
@@ -109,7 +114,10 @@ public class DettagliAstaActivity extends AppCompatActivity {
         etTitle.setText(asta.getNome());
         etDescription.setText(asta.getDescrizione());
         tvCategoryValue.setText(asta.getCategoria().toString());
-        tvCreatorValue.setText(nomeCreatore);
+        if(fromAsteCreate)
+            tvCreatorValue.setText(utenteProfilo.getUsername());
+        else
+            tvCreatorValue.setText(utenteCreatore.getUsername());
 
         if (asta instanceof Asta_Ribasso) {
             ivTypeValue.setImageResource(R.drawable.ribasso);
@@ -153,7 +161,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
                         public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
                             Asta_InversaDTO astaRicevuta = response.body();
 
-                            tvPrice.setText(String.valueOf(astaRicevuta.getPrezzo()));
+                            tvPriceValue.setText(String.valueOf(astaRicevuta.getPrezzo()));
                             tvTimerValue.setText(astaRicevuta.getScadenza());
                         }
 
@@ -176,6 +184,16 @@ public class DettagliAstaActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        if(asta.getId_creatore() != utente_home.getId()) {
+            tvCreatorValue.setTypeface(tvCreatorValue.getTypeface(), Typeface.BOLD);
+            tvCreatorValue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openActivityProfilo();
+                }
+            });
+        }
 
         btnSubmitOffer.setOnClickListener(v -> {
             String offer = etOffer.getText().toString();
@@ -204,7 +222,18 @@ public class DettagliAstaActivity extends AppCompatActivity {
         intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("utente_home", utente_home);
         intent.putExtra("utente", utenteProfilo);
+        intent.putExtra("utenteCreatore", utenteCreatore);
+        intent.putExtra("fromDettagli", fromDettagli);
+        intent.putExtra("modificaAvvenuta", modificaAvvenuta);
         startActivity(intent);
+    }
+
+    private void openActivityProfilo() {
+        Intent intentR = new Intent(this, ProfiloActivity.class);
+        intentR.putExtra("utente_home", utente_home);
+        intentR.putExtra("utente", utenteCreatore);
+        intentR.putExtra("fromDettagli", true);
+        startActivity(intentR);
     }
 
     private void adjustEditTextWidth(EditText editText) {
