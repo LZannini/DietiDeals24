@@ -32,6 +32,7 @@ import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,11 +51,11 @@ public class ProfiloActivity extends AppCompatActivity {
 
     private ImageView menuButton;
     private ImageView avatarSelector;
-    private EditText usernameEditText;
     private EditText emailEditText;
     private EditText bioEditText;
     private EditText webSiteEditText;
     private EditText countryEditText;
+    private MaterialTextView textUsername;
     private LinearLayout pulsantiAste;
     private Button buttonSalva, buttonAsteCreate;
     private Utente utenteOriginale;
@@ -76,7 +77,6 @@ public class ProfiloActivity extends AppCompatActivity {
 
         menuButton = findViewById(R.id.icona_menu);
         avatarSelector = findViewById(R.id.foto_profilo);
-        usernameEditText = findViewById(R.id.username);
         emailEditText = findViewById(R.id.email);
         bioEditText = findViewById(R.id.shortBio);
         webSiteEditText = findViewById(R.id.sito);
@@ -85,6 +85,7 @@ public class ProfiloActivity extends AppCompatActivity {
         buttonSalva = findViewById(R.id.salva_button);
         back_button = findViewById(R.id.back_button);
         buttonAsteCreate = findViewById(R.id.asteCreate_button);
+        textUsername = findViewById((R.id.text_nomeProfilo));
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -109,7 +110,8 @@ public class ProfiloActivity extends AppCompatActivity {
             Bitmap avatarBitmap = BitmapFactory.decodeByteArray(utenteOriginale.getAvatar(), 0, utenteOriginale.getAvatar().length);
             avatarSelector.setImageBitmap(avatarBitmap);
         }
-        usernameEditText.setText(utenteOriginale.getUsername());
+
+        textUsername.setText(utenteOriginale.getUsername());
         emailEditText.setText(utenteOriginale.getEmail());
         bioEditText.setText(utenteOriginale.getBiografia());
         webSiteEditText.setText(utenteOriginale.getSitoweb());
@@ -158,8 +160,8 @@ public class ProfiloActivity extends AppCompatActivity {
                     } else if(utenteOriginale.getAvatar() != null){
                         utenteModificato.setAvatar(utenteOriginale.getAvatar());
                     }
-                    if (!usernameEditText.getText().toString().equals(utenteOriginale.getUsername())) {
-                        utenteModificato.setUsername(usernameEditText.getText().toString());
+                    if (!textUsername.getText().toString().equals(utenteOriginale.getUsername())) {
+                        utenteModificato.setUsername(textUsername.getText().toString());
                         info_mod = true;
                     } else {
                         utenteModificato.setUsername(utenteOriginale.getUsername());
@@ -200,13 +202,13 @@ public class ProfiloActivity extends AppCompatActivity {
                                             avatarSelector.setImageBitmap(avatarBitmap);
                                         }
 
-                                        usernameEditText.setText(utenteModificato.getUsername());
+                                        textUsername.setText(utenteModificato.getUsername());
                                         emailEditText.setText(utenteModificato.getEmail());
                                         bioEditText.setText(utenteModificato.getBiografia());
                                         webSiteEditText.setText(utenteModificato.getSitoweb());
                                         countryEditText.setText(utenteModificato.getPaese());
 
-                                        usernameEditText.setEnabled(false);
+                                        textUsername.setEnabled(false);
                                         emailEditText.setEnabled(false);
                                         bioEditText.setEnabled(false);
                                         webSiteEditText.setEnabled(false);
@@ -238,7 +240,7 @@ public class ProfiloActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_edit_profile:
-                        usernameEditText.setEnabled(true);
+                        textUsername.setEnabled(true);
                         emailEditText.setEnabled(true);
                         bioEditText.setEnabled(true);
                         webSiteEditText.setEnabled(true);

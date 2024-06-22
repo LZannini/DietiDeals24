@@ -85,8 +85,13 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
                 View child = layout_attributi.getChildAt(i);
                 child.setVisibility(View.INVISIBLE);
             }
-        }else
+        }else {
             noAuctionsText.setVisibility(View.GONE);
+            if (!fromDettagli)
+                yourAuctionsText.setText("Le tue aste");
+            else
+                yourAuctionsText.setText("Aste di " + utente.getUsername());
+        }
 
     }
 

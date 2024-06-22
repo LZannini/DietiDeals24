@@ -156,7 +156,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         decrMinuti.setOnClickListener(v -> aggiornaTimer(minutiTextView, -1));
         incrSecondi.setOnClickListener(v -> aggiornaTimer(secondiTextView, 1));
         decrSecondi.setOnClickListener(v -> aggiornaTimer(secondiTextView, -1));
-
+        Toast.makeText(this, "" +asta.getNome(), Toast.LENGTH_LONG);
         creaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,7 +213,6 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
