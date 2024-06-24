@@ -22,6 +22,9 @@ import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +52,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
 
     private ImageButton back_button;
     private Button creaButton;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +89,10 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         back_button = findViewById(R.id.back_button);
         creaButton = findViewById(R.id.crea_button);
 
+        valoreInizialeFormattato(prezzoIniziale, 1.00f);
+        valoreInizialeFormattato(prezzoMinimo, 1.00f);
+        valoreInizialeFormattato(decrementoPrezzo, 1.00f);
+
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,57 +104,57 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         decrPrezzoIniziale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Float.parseFloat(prezzoIniziale.getText().toString()) > 0) {
-                    float prezzoStandardIniziale = Float.parseFloat(prezzoIniziale.getText().toString());
+                float prezzoStandardIniziale = getValueFromEditText(prezzoIniziale);
+                if (prezzoStandardIniziale > 1.00f) {
                     prezzoStandardIniziale -= 1.00f;
-                    prezzoIniziale.setText(String.valueOf(prezzoStandardIniziale));
+                    valoreInizialeFormattato(prezzoIniziale, prezzoStandardIniziale);
                 }
             }
         });
         incrPrezzoIniziale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float prezzoStandardIniziale = Float.parseFloat(prezzoIniziale.getText().toString());
+                float prezzoStandardIniziale = getValueFromEditText(prezzoIniziale);
                 prezzoStandardIniziale += 1.00f;
-                prezzoIniziale.setText(String.valueOf(prezzoStandardIniziale));
+                valoreInizialeFormattato(prezzoIniziale, prezzoStandardIniziale);
             }
         });
 
         decrPrezzoMinimo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Float.parseFloat(prezzoMinimo.getText().toString()) > 0) {
-                    float prezzoStandardMinimo = Float.parseFloat(prezzoMinimo.getText().toString());
+                float prezzoStandardMinimo = getValueFromEditText(prezzoMinimo);
+                if (prezzoStandardMinimo > 1.00f) {
                     prezzoStandardMinimo -= 1.00f;
-                    prezzoMinimo.setText(String.valueOf(prezzoStandardMinimo));
+                    valoreInizialeFormattato(prezzoMinimo, prezzoStandardMinimo);
                 }
             }
         });
         incrPrezzoMinimo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float prezzoStandardMinimo = Float.parseFloat(prezzoMinimo.getText().toString());
+                float prezzoStandardMinimo = getValueFromEditText(prezzoMinimo);
                 prezzoStandardMinimo += 1.00f;
-                prezzoMinimo.setText(String.valueOf(prezzoStandardMinimo));
+                valoreInizialeFormattato(prezzoMinimo, prezzoStandardMinimo);
             }
         });
 
         decrDecremento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Float.parseFloat(decrementoPrezzo.getText().toString()) > 0) {
-                    float decrementoStandard = Float.parseFloat(decrementoPrezzo.getText().toString());
+                float decrementoStandard = getValueFromEditText(decrementoPrezzo);
+                if (decrementoStandard > 1.00f) {
                     decrementoStandard -= 1.00f;
-                    decrementoPrezzo.setText(String.valueOf(decrementoStandard));
+                    valoreInizialeFormattato(decrementoPrezzo, decrementoStandard);
                 }
-                }
+            }
         });
         incrDecremento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float decrementoStandard = Float.parseFloat(decrementoPrezzo.getText().toString());
+                float decrementoStandard = getValueFromEditText(decrementoPrezzo);
                 decrementoStandard += 1.00f;
-                decrementoPrezzo.setText(String.valueOf(decrementoStandard));
+                valoreInizialeFormattato(decrementoPrezzo, decrementoStandard);
             }
         });
 
@@ -156,7 +164,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         decrMinuti.setOnClickListener(v -> aggiornaTimer(minutiTextView, -1));
         incrSecondi.setOnClickListener(v -> aggiornaTimer(secondiTextView, 1));
         decrSecondi.setOnClickListener(v -> aggiornaTimer(secondiTextView, -1));
-        Toast.makeText(this, "" +asta.getNome(), Toast.LENGTH_LONG);
+
         creaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,9 +172,9 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
                         Integer.parseInt(oreTextView.getText().toString()),
                         Integer.parseInt(minutiTextView.getText().toString()),
                         Integer.parseInt(secondiTextView.getText().toString()));
-                Float valIniziale = Float.parseFloat(prezzoIniziale.getText().toString());
-                Float valMinimo = Float.parseFloat(prezzoMinimo.getText().toString());
-                Float valDecremento = Float.parseFloat(decrementoPrezzo.getText().toString());
+                float valIniziale = getValueFromEditText(prezzoIniziale);
+                float valMinimo = getValueFromEditText(prezzoMinimo);
+                float valDecremento = getValueFromEditText(decrementoPrezzo);
 
                 if(valDecremento < valIniziale && valMinimo < valIniziale) {
                     Asta_RibassoDTO astaR = new Asta_RibassoDTO();
@@ -209,10 +217,25 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
                             });
                     AlertDialog alert = builder.create();
                     alert.show();
-                    return;
                 }
             }
         });
+    }
+
+    private float getValueFromEditText(EditText editText) {
+        String cleanString = editText.getText().toString().replaceAll("[€,.\\s]", "").trim();
+        float value;
+        try {
+            value = Float.parseFloat(cleanString);
+        } catch (NumberFormatException e) {
+            value = 0.00f;
+        }
+        return value / 100;
+    }
+
+    private void valoreInizialeFormattato(EditText editText, float val) {
+        String valFormattato = NumberFormat.getCurrencyInstance(Locale.ITALY).format(val);
+        editText.setText(valFormattato);
     }
 
     @Override
@@ -254,5 +277,4 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         intentH.putExtra("utente", utente);
         startActivity(intentH);
     }
-
 }

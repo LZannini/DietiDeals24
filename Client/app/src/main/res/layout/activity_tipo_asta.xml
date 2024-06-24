@@ -8,8 +8,8 @@
     android:padding="16dp">
 
     <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="794dp"
+        android:layout_width="wrap_content"
+        android:layout_height="519dp"
         android:layout_marginTop="0dp"
         android:gravity="center"
         android:orientation="vertical">
@@ -22,14 +22,6 @@
             android:background="@null"
             android:src="@drawable/baseline_arrow_back_24" />
 
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="333dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/logo_text" />
 
         <TextView
             android:id="@+id/text_creazione"
@@ -46,7 +38,7 @@
             android:layout_width="349dp"
             android:layout_height="214dp"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/button_silenziosa"
@@ -110,7 +102,7 @@
             android:layout_width="349dp"
             android:layout_height="214dp"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/button_inversa"

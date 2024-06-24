@@ -25,7 +25,9 @@ import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
+import java.text.NumberFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +55,10 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
         EditText prezzoEditText = findViewById(R.id.prezzoEditText);
         Button createButton = findViewById(R.id.crea_button);
         ImageButton back_button = findViewById(R.id.back_button);
+
+        String valFormattato = NumberFormat.getCurrencyInstance(Locale.ITALY).format(1.0);
+        prezzoEditText.setText(valFormattato);
+
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

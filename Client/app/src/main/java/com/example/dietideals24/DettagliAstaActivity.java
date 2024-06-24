@@ -31,9 +31,12 @@ import com.example.dietideals24.models.Asta_Ribasso;
 import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.example.dietideals24.utils.CurrencyTextWatcher;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -127,9 +130,10 @@ public class DettagliAstaActivity extends AppCompatActivity {
                         public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
                             Asta_RibassoDTO astaRicevuta = response.body();
 
-                            tvPriceValue.setText(String.valueOf(astaRicevuta.getPrezzo()));
-                            tvDecrementValue.setText(String.valueOf(astaRicevuta.getDecremento()));
+                            tvPriceValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(astaRicevuta.getPrezzo()));
+                            tvDecrementValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(astaRicevuta.getDecremento()));
                             tvTimerValue.setText(astaRicevuta.getTimer());
+
                         }
 
                         @Override
@@ -161,7 +165,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
                         public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
                             Asta_InversaDTO astaRicevuta = response.body();
 
-                            tvPriceValue.setText(String.valueOf(astaRicevuta.getPrezzo()));
+                            tvPriceValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(astaRicevuta.getPrezzo()));
                             tvTimerValue.setText(astaRicevuta.getScadenza());
                         }
 
@@ -185,7 +189,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
             }
         });
 
-        if(asta.getId_creatore() != utente_home.getId()) {
+        if(asta.getId_creatore() != utente_home.getId() && !fromAsteCreate) {
             tvCreatorValue.setTypeface(tvCreatorValue.getTypeface(), Typeface.BOLD);
             tvCreatorValue.setOnClickListener(new View.OnClickListener() {
                 @Override
