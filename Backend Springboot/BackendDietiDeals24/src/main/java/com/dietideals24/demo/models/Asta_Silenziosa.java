@@ -3,9 +3,11 @@ package com.dietideals24.demo.models;
 import com.dietideals24.demo.enums.Categoria;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "id_asta")
+@Table(name = "asta_silenziosa")
+@PrimaryKeyJoinColumn(name = "id")
 public class Asta_Silenziosa extends Asta {
 	
 	private String scadenza;

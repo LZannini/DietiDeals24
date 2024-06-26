@@ -1,6 +1,8 @@
 package com.example.dietideals24.dto;
 
 import com.example.dietideals24.enums.Categoria;
+import com.example.dietideals24.enums.StatoAsta;
+
 public class Asta_SilenziosaDTO {
 
     private int idCreatore;
@@ -10,6 +12,7 @@ public class Asta_SilenziosaDTO {
     private byte[] foto;
     private int id_asta;
     private String scadenza;
+    private StatoAsta stato;
 
     public int getIdCreatore() {
         return idCreatore;
@@ -65,5 +68,13 @@ public class Asta_SilenziosaDTO {
 
     public void setScadenza(String scadenza) {
         this.scadenza = scadenza;
+    }
+
+    public StatoAsta getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoAsta stato) {
+        this.stato = stato;
     }
 }

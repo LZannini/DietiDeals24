@@ -1,12 +1,16 @@
 package com.dietideals24.demo.serviceimplements;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.dietideals24.demo.enums.Categoria;
+import com.dietideals24.demo.enums.StatoAsta;
 import com.dietideals24.demo.models.Asta;
 import com.dietideals24.demo.models.Asta_Inversa;
 import com.dietideals24.demo.models.Asta_Ribasso;
@@ -101,7 +105,7 @@ public class AstaServiceImplements implements AstaService {
 	@Override
 	public List<AstaDTO> trovaTutte() {
 		List<AstaDTO> aste_trovate = new ArrayList<>();
-		List<Asta> check_aste = astaRepository.cercaTutte();
+		List<Asta> check_aste = astaRepository.cercaTutte(StatoAsta.ATTIVA);
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
@@ -121,7 +125,7 @@ public class AstaServiceImplements implements AstaService {
 	@Override
 	public List<AstaDTO> trovaAsteUtente(int id_creatore) {
 		List<AstaDTO> aste_trovate = new ArrayList<>();
-		List<Asta> check_aste = astaRepository.filtraPerUtente(id_creatore);
+		List<Asta> check_aste = astaRepository.filtraPerUtente(id_creatore, StatoAsta.ATTIVA);
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
@@ -141,7 +145,7 @@ public class AstaServiceImplements implements AstaService {
 	@Override
 	public List<AstaDTO> trovaAstePerParolaChiave(String chiave) {
 		List<AstaDTO> aste_trovate = new ArrayList<>();
-		List<Asta> check_aste = astaRepository.filtraPerParolaChiave(chiave);
+		List<Asta> check_aste = astaRepository.filtraPerParolaChiave(chiave, StatoAsta.ATTIVA);
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
@@ -161,7 +165,7 @@ public class AstaServiceImplements implements AstaService {
 	@Override
 	public List<AstaDTO> trovaAstePerCategoria(Categoria categoria) {
 		List<AstaDTO> aste_trovate = new ArrayList<>();
-		List<Asta> check_aste = astaRepository.filtraPerCategoria(categoria);
+		List<Asta> check_aste = astaRepository.filtraPerCategoria(categoria, StatoAsta.ATTIVA);
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
@@ -181,7 +185,7 @@ public class AstaServiceImplements implements AstaService {
 	@Override
 	public List<AstaDTO> trovaAstePerParolaChiaveAndCategoria(String chiave, Categoria categoria) {
 		List<AstaDTO> aste_trovate = new ArrayList<>();
-		List<Asta> check_aste = astaRepository.filtraPerCategoriaAndParoleChiave(chiave, categoria);
+		List<Asta> check_aste = astaRepository.filtraPerCategoriaAndParoleChiave(chiave, categoria, StatoAsta.ATTIVA);
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
@@ -206,6 +210,7 @@ public class AstaServiceImplements implements AstaService {
 		astaDTO.setCategoria(asta.getCategoria());
 		astaDTO.setDescrizione(asta.getDescrizione());
 		astaDTO.setFoto(asta.getFoto());
+		astaDTO.setStato(asta.getStato());
 		return astaDTO;
 	}
 	
@@ -272,4 +277,35 @@ public class AstaServiceImplements implements AstaService {
 		astaDTO.setScadenza(asta.getScadenza());
 		return astaDTO;
 	}
+    
+    @Scheduled(fixedRate = 1000)
+    @Transactional
+    public void timerAsteRibasso() {
+    	List<Asta_Ribasso> asteAttive = astaAlRibassoRepository.cercaAsteRibasso(StatoAsta.ATTIVA);
+    	    	
+    	for(Asta_Ribasso asta : asteAttive) {    		
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            LocalTime timer = LocalTime.parse(asta.getTimer(), formatter);
+            
+            timer = timer.minusSeconds(1);
+            
+            if(timer.equals(LocalTime.MIDNIGHT)) {
+            	decrementaPrezzo(asta);
+            	timer = LocalTime.parse(asta.getTimerIniziale(), formatter);
+            }
+            
+            asta.setTimer(timer.format(formatter));
+            astaAlRibassoRepository.save(asta);
+    	}
+    }
+    
+    private void decrementaPrezzo(Asta_Ribasso asta) {
+        float nuovoPrezzo = asta.getPrezzo() - asta.getDecremento();
+        if (nuovoPrezzo >= asta.getMinimo()) {
+            asta.setPrezzo(nuovoPrezzo);
+        } else {
+            asta.setStato(StatoAsta.FALLITA);
+        }    
+        astaAlRibassoRepository.save(asta);
+    }
 }

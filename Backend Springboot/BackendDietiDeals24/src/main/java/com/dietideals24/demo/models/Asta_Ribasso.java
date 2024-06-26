@@ -1,16 +1,25 @@
 package com.dietideals24.demo.models;
 
+import org.springframework.data.annotation.Id;
+
 import com.dietideals24.demo.enums.Categoria;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 
 
 @Entity
-@PrimaryKeyJoinColumn(name = "id_asta")
+@Table(name = "asta_ribasso")
+@PrimaryKeyJoinColumn(name = "id")
 public class Asta_Ribasso extends Asta {
 	
 	private float prezzo;
 	private String timer;
+	private String timer_iniziale;
 	private float decremento;
 	private float minimo;
 	
@@ -38,6 +47,14 @@ public class Asta_Ribasso extends Asta {
 
 	public void setTimer(String timer) {
 		this.timer = timer;
+	}
+	
+	public String getTimerIniziale() {
+		return timer_iniziale;
+	}
+
+	public void setTimerIniziale(String timer_iniziale) {
+		this.timer_iniziale = timer_iniziale;
 	}
 
 	public float getDecremento() {

@@ -1,6 +1,7 @@
 package com.example.dietideals24.dto;
 
 import com.example.dietideals24.enums.Categoria;
+import com.example.dietideals24.enums.StatoAsta;
 
 public class Asta_InversaDTO {
 
@@ -12,6 +13,7 @@ public class Asta_InversaDTO {
     private byte[] foto;
     private float prezzo;
     private String scadenza;
+    private StatoAsta stato;
 
     public int getId_asta() {
         return id_asta;
@@ -75,5 +77,13 @@ public class Asta_InversaDTO {
 
     public void setScadenza(String scadenza) {
         this.scadenza = scadenza;
+    }
+
+    public StatoAsta getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoAsta stato) {
+        this.stato = stato;
     }
 }

@@ -14,7 +14,7 @@ public interface Asta_Silenziosa_Repository extends CrudRepository<Asta_Silenzio
 
 	@Transactional
     @Modifying
-    @Query(value = "INSERT INTO asta_silenziosa (id_asta, scadenza) VALUES (:id_asta, :scadenza)", nativeQuery = true)
+    @Query(value = "INSERT INTO asta_silenziosa (id, scadenza) VALUES (:id_asta, :scadenza)", nativeQuery = true)
     void insertAstaSilenziosa(@Param("id_asta") int id_asta, @Param("scadenza") String scadenza);
 	
 	@Transactional

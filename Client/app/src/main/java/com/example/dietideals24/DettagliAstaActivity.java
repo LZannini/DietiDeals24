@@ -7,20 +7,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dietideals24.api.ApiService;
-import com.example.dietideals24.dto.AstaDTO;
 import com.example.dietideals24.dto.Asta_InversaDTO;
 import com.example.dietideals24.dto.Asta_RibassoDTO;
 import com.example.dietideals24.dto.Asta_SilenziosaDTO;
@@ -31,14 +30,11 @@ import com.example.dietideals24.models.Asta_Ribasso;
 import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
-import com.example.dietideals24.utils.CurrencyTextWatcher;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,6 +58,13 @@ public class DettagliAstaActivity extends AppCompatActivity {
     private boolean modificaAvvenuta;
     private Utente utenteProfilo;
     private Utente utenteCreatore;
+
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final int POLLING_INTERVAL = 1000;
+    private final int TIMER_INTERVAL = 1000;
+    private Runnable pollingRunnable;
+    private Runnable timerRunnable;
+    private long timerValue;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -134,6 +137,9 @@ public class DettagliAstaActivity extends AppCompatActivity {
                             tvDecrementValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(astaRicevuta.getDecremento()));
                             tvTimerValue.setText(astaRicevuta.getTimer());
 
+                            setupPolling();
+                            handler.post(pollingRunnable);
+                            handler.post(timerRunnable);
                         }
 
                         @Override
@@ -177,6 +183,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
         }
 
         adjustEditTextWidth(etTitle);
+
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,5 +255,81 @@ public class DettagliAstaActivity extends AppCompatActivity {
         int padding = editText.getPaddingLeft() + editText.getPaddingRight();
         editText.setWidth((int) (textWidth + padding));
     }
+
+    private void setupPolling() {
+        pollingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                aggiornaDettagliAsta();
+                handler.postDelayed(this, POLLING_INTERVAL);
+            }
+        };
+
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updateTimer();
+                handler.postDelayed(this, TIMER_INTERVAL);
+            }
+        };
+    }
+
+    private void aggiornaDettagliAsta() {
+        RetrofitService retrofitService = new RetrofitService();
+        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+
+        apiService.recuperaDettagliAstaRibasso(asta.getId())
+                .enqueue(new Callback<Asta_RibassoDTO>() {
+                    @Override
+                    public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
+                        Asta_RibassoDTO asta = response.body();
+                        updateUI(asta);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
+                    }
+                });
+    }
+
+    private void updateUI(Asta_RibassoDTO asta) {
+        if (asta != null) {
+            tvPriceValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(asta.getPrezzo()));
+            tvDecrementValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(asta.getDecremento()));
+            timerValue = convertToMilliseconds(asta.getTimer());
+        }
+    }
+
+    private long convertToMilliseconds(String timer) {
+        String[] parts = timer.split(":");
+        long hours = Long.parseLong(parts[0]);
+        long minutes = Long.parseLong(parts[1]);
+        long seconds = Long.parseLong(parts[2]);
+        return (hours * 3600 + minutes * 60 + seconds) * 1000;
+    }
+
+    private void updateTimer() {
+        if (timerValue > 0) {
+            timerValue -= 1000;
+            tvTimerValue.setText(formatMilliseconds(timerValue));
+        } else {
+            aggiornaDettagliAsta();
+        }
+    }
+
+    private String formatMilliseconds(long milliseconds) {
+        long seconds = (milliseconds / 1000) % 60;
+        long minutes = (milliseconds / (1000 * 60)) % 60;
+        long hours = (milliseconds / (1000 * 60 * 60)) % 24;
+        return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(pollingRunnable);
+        handler.removeCallbacks(timerRunnable);
+    }
+
 }
 

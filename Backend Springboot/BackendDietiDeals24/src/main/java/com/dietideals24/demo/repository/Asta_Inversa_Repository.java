@@ -14,7 +14,7 @@ public interface Asta_Inversa_Repository extends CrudRepository<Asta_Inversa, In
 	
 	@Transactional
     @Modifying
-    @Query(value = "INSERT INTO asta_inversa (id_asta, prezzo, scadenza) VALUES (:id_asta, :prezzo, :scadenza)", nativeQuery = true)
+    @Query(value = "INSERT INTO asta_inversa (id, prezzo, scadenza) VALUES (:id_asta, :prezzo, :scadenza)", nativeQuery = true)
     void insertAstaInversa(@Param("id_asta") int id_asta, @Param("prezzo") float prezzo, @Param("scadenza") String scadenza);
 
 	@Transactional

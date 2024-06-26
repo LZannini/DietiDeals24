@@ -1,6 +1,7 @@
 package com.example.dietideals24.dto;
 
 import com.example.dietideals24.enums.Categoria;
+import com.example.dietideals24.enums.StatoAsta;
 
 public class Asta_RibassoDTO {
 
@@ -14,6 +15,7 @@ public class Asta_RibassoDTO {
     private String timer;
     private float decremento;
     private float minimo;
+    private StatoAsta stato;
 
     public int getId_asta() {
         return id_asta;
@@ -87,6 +89,14 @@ public class Asta_RibassoDTO {
 
     public void setMinimo(float minimo) {
         this.minimo = minimo;
+    }
+
+    public StatoAsta getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoAsta stato) {
+        this.stato = stato;
     }
 
 }
