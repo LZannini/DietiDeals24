@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 public class Asta_Inversa extends Asta {
 
         private float prezzo;
-        private LocalDateTime scadenza;
+        private String scadenza;
 
-        public Asta_Inversa(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, LocalDateTime scadenza) {
+        public Asta_Inversa(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, String scadenza) {
             super(id_creatore, nome, descrizione, categoria, foto);
             this.prezzo = prezzo;
             this.scadenza = scadenza;
@@ -27,11 +27,11 @@ public class Asta_Inversa extends Asta {
             this.prezzo = prezzo;
         }
 
-        public LocalDateTime getScadenza() {
+        public String getScadenza() {
             return scadenza;
         }
 
-        public void setScadenza(LocalDateTime scadenza) {
+        public void setScadenza(String scadenza) {
             this.scadenza = scadenza;
         }
 }

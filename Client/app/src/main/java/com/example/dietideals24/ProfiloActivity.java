@@ -263,7 +263,7 @@ public class ProfiloActivity extends AppCompatActivity {
                         openActivityModificaPassword(utente);
                         return true;
                     case R.id.action_switch_account:
-                        openActivitySceltaAccount();
+                        openActivitySceltaAccount(utente);
                         return true;
                     default:
                         return false;
@@ -345,8 +345,10 @@ public class ProfiloActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
-    private void openActivitySceltaAccount() {
+    private void openActivitySceltaAccount(Utente utente) {
         Intent intentR = new Intent(this, SceltaAccountActivity.class);
+        intentR.putExtra("utente", utente);
+        intentR.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentR);
     }
 
