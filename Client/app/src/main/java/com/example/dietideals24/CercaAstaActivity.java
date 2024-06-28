@@ -18,7 +18,13 @@ import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
+import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.Categoria;
+import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Asta_Inversa;
+import com.example.dietideals24.models.Asta_Ribasso;
+import com.example.dietideals24.models.Asta_Silenziosa;
+import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
@@ -26,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +43,7 @@ public class CercaAstaActivity extends AppCompatActivity {
     private EditText cercaAstaInput;
     private final Categoria[] items = Categoria.values();
     private AutoCompleteTextView autoCompleteTxt;
+    private UtenteDTO utente_home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +60,14 @@ public class CercaAstaActivity extends AppCompatActivity {
 
         autoCompleteTxt.setAdapter(adapterItems);
 
+        utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente");
+
         ImageButton back_button = findViewById(R.id.back_button);
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openActivityHome(utente_home);
                 finish();
             }
         });
@@ -78,49 +89,67 @@ public class CercaAstaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String filtro = autoCompleteTxt.getText().toString();
                 String query = cercaAstaInput.getText().toString();
-
-                if(query.isEmpty() && filtro.isEmpty())
-                    Toast.makeText(CercaAstaActivity.this,"Inserisci un termine di ricerca o Seleziona una Categoria",Toast.LENGTH_SHORT).show();
-                else
-                    cercaAsta(apiService,filtro,query);
+                cercaAsta(apiService,filtro,query);
             }
         });
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.hide();
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityHome(utente_home);
+        finish();
+    }
+
+    private void openActivityHome(UtenteDTO utente) {
+        Intent intentH = new Intent(this, HomeActivity.class);
+        intentH.putExtra("utente", utente);
+        startActivity(intentH);
     }
 
     private void cercaAsta(ApiService apiService, String filtro, String query) {
         Call<List<AstaDTO>> call;
-        String searchCriteria ;
+        String searchCriteria = null;
 
         if (!query.isEmpty() && !filtro.isEmpty()) {
             call = apiService.cercaPerParolaChiaveAndCategoria(query, filtro.toUpperCase());
             searchCriteria = query + " in " + filtro;
-        } else if (!query.isEmpty()) {
+        } else if (!query.isEmpty() && filtro.isEmpty()) {
             call = apiService.cercaPerParolaChiave(query);
             searchCriteria = query;
-        } else {
+        } else if (query.isEmpty() && !filtro.isEmpty()) {
             call = apiService.cercaPerCategoria(filtro.toUpperCase());
             searchCriteria = filtro;
         }
+        else
+            call = apiService.cercaTutte();
 
         String finalSearchCriteria = searchCriteria;
         call.enqueue(new Callback<List<AstaDTO>>() {
             @Override
             public void onResponse(@NonNull Call<List<AstaDTO>> call, @NonNull Response<List<AstaDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<AstaDTO> aste = response.body();
+                    List<AstaDTO> asteResponse = response.body();
+                    List<Asta> asteList = creaListaModelloAsta(asteResponse);
+                    List<Asta> aste = new ArrayList<>();
+                    for (Asta a : asteList) {
+                        if (a.getId_creatore() != utente_home.getId())
+                            aste.add(a);
+                    }
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", (Serializable) aste);
                     intent.putExtra("criterioRicerca", finalSearchCriteria);
+                    intent.putExtra("utente", utente_home);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", new ArrayList<AstaDTO>());
                     intent.putExtra("criterioRicerca", finalSearchCriteria);
+                    intent.putExtra("utente", utente_home);
                     startActivity(intent);
                 }
             }
@@ -131,6 +160,59 @@ public class CercaAstaActivity extends AppCompatActivity {
                 Logger.getLogger(CercaAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });
+    }
+
+    public Asta_Ribasso creaModelloAstaR(AstaDTO dto) {
+        Asta_Ribasso asta = new Asta_Ribasso();
+        asta.setId(dto.getID());
+        asta.setId_creatore(dto.getId_creatore());
+        asta.setCategoria(dto.getCategoria());
+        asta.setFoto(dto.getFoto());
+        asta.setNome(dto.getNome());
+        asta.setDescrizione(dto.getDescrizione());
+        asta.setStato(dto.getStato());
+
+        return asta;
+    }
+
+    public Asta_Silenziosa creaModelloAstaS(AstaDTO dto) {
+        Asta_Silenziosa asta = new Asta_Silenziosa();
+        asta.setId(dto.getID());
+        asta.setId_creatore(dto.getId_creatore());
+        asta.setCategoria(dto.getCategoria());
+        asta.setFoto(dto.getFoto());
+        asta.setNome(dto.getNome());
+        asta.setDescrizione(dto.getDescrizione());
+        asta.setStato(dto.getStato());
+
+        return asta;
+    }
+
+    public Asta_Inversa creaModelloAstaI(AstaDTO dto) {
+        Asta_Inversa asta = new Asta_Inversa();
+        asta.setId(dto.getID());
+        asta.setId_creatore(dto.getId_creatore());
+        asta.setCategoria(dto.getCategoria());
+        asta.setFoto(dto.getFoto());
+        asta.setNome(dto.getNome());
+        asta.setDescrizione(dto.getDescrizione());
+        asta.setStato(dto.getStato());
+
+        return asta;
+    }
+
+    public List<Asta> creaListaModelloAsta(List<AstaDTO> listaDto) {
+        List<Asta> asteList = new ArrayList<>();
+        for (AstaDTO dto : listaDto) {
+            if (dto.getTipo().equals("RIBASSO")) {
+                asteList.add(creaModelloAstaR(dto));
+            } else if (dto.getTipo().equals("SILENZIOSA")) {
+                asteList.add(creaModelloAstaS(dto));
+            } else if (dto.getTipo().equals("INVERSA")) {
+                asteList.add(creaModelloAstaI(dto));
+            }
+        }
+        return asteList;
     }
 
 }

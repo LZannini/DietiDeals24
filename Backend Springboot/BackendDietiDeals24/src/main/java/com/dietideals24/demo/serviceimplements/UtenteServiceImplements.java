@@ -98,6 +98,30 @@ public class UtenteServiceImplements implements UtenteService {
 		return utenteDTO;
 	}
 	
+	@Override
+	public UtenteDTO recuperaUtenteById(int id) {
+		java.util.Optional<Utente> check_utente = utenteRepository.findById(id);
+		Utente utente = null;
+		UtenteDTO utenteDTO = null;
+		
+		if (check_utente.isPresent())
+			utente = check_utente.get();
+		
+		if (utente != null) {
+			utenteDTO = new UtenteDTO();
+			utenteDTO.setId(utente.getId());
+			utenteDTO.setUsername(utente.getUsername());
+			utenteDTO.setEmail(utente.getEmail());
+			utenteDTO.setPassword(utente.getPassword());
+			utenteDTO.setBiografia(utente.getBiografia());
+			utenteDTO.setPaese(utente.getPaese());
+			utenteDTO.setSitoweb(utente.getSitoweb());
+			utenteDTO.setTipo(utente.getTipo());
+			utenteDTO.setAvatar(utente.getAvatar());
+		}
+		return utenteDTO;
+	}
+	
 	private static Utente creaUtente(UtenteDTO utenteDTO) {
         Utente utente = new Utente();
         utente.setUsername(utenteDTO.getUsername());

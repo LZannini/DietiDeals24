@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.dietideals24.adapters.NotificaAdapter;
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.NotificaDTO;
+import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 import java.util.List;
@@ -33,31 +35,60 @@ public class NotificaActivity extends AppCompatActivity {
     private NotificaAdapter adapter;
     private List<NotificaDTO> listaNotifiche;
     private Utente utente;
+    private UtenteDTO utente_home;
     private ImageButton back_button;
     private TextView noResultsText;
     private ApiService apiService;
+    private Button btnSegnaTutte, btnRimuoviLette, btnRimuoviTutte;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifica);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle("Notifiche");
-
         utente = (Utente) getIntent().getSerializableExtra("utente");
         noResultsText = findViewById(R.id.no_results_text);
+        utente_home = creaUtenteDTO(utente);
+
+        back_button = findViewById(R.id.back_button);
+        btnSegnaTutte = findViewById(R.id.btnSegna);
+        btnRimuoviLette = findViewById(R.id.btnRmvRead);
+        btnRimuoviTutte = findViewById(R.id.btnRmvAll);
+
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente_home);
+                finish();
+            }
+        });
+
+        btnSegnaTutte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostraDialogoMarcaTutte();
+            }
+        });
+
+        btnRimuoviLette.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostraDialogoEliminaLette();
+            }
+        });
+
+        btnRimuoviTutte.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostraDialogoEliminaTutte();
+            }
+        });
 
         RetrofitService retrofitService = new RetrofitService();
         apiService = retrofitService.getRetrofit().create(ApiService.class);
 
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24);
-            actionBar.setTitle("Notifiche");
-        }
+        actionBar.hide();
 
         listView = findViewById(R.id.notifiche_list_view);
 
@@ -90,32 +121,6 @@ public class NotificaActivity extends AppCompatActivity {
                 adapter.updateNotifica(notifica);
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_notifica, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                openActivityHome();
-                return true;
-            case R.id.action_delete_all:
-                mostraDialogoEliminaTutte();
-                return true;
-            case R.id.action_mark_all_read:
-                mostraDialogoMarcaTutte();
-                return true;
-            case R.id.action_delete_read:
-                mostraDialogoEliminaLette();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void mostraDialogoEliminaTutte() {
@@ -260,8 +265,30 @@ public class NotificaActivity extends AppCompatActivity {
         }
     }
 
-    private void openActivityHome() {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityHome(utente_home);
+        finish();
+    }
+
+    private UtenteDTO creaUtenteDTO(Utente u) {
+        UtenteDTO utente = new UtenteDTO();
+        utente.setId(u.getId());
+        utente.setUsername(u.getUsername());
+        utente.setEmail(u.getEmail());
+        utente.setPassword(u.getPassword());
+        utente.setBiografia(u.getBiografia());
+        utente.setSitoweb(u.getSitoweb());
+        utente.setPaese(u.getPaese());
+        utente.setTipo(u.getTipo());
+        utente.setAvatar(u.getAvatar());
+        return utente;
+    }
+
+    private void openActivityHome(UtenteDTO utente) {
         Intent intentH = new Intent(this, HomeActivity.class);
+        intentH.putExtra("utente", utente);
         startActivity(intentH);
     }
 }

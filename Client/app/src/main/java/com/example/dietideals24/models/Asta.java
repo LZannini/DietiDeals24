@@ -1,8 +1,11 @@
 package com.example.dietideals24.models;
 
 import com.example.dietideals24.enums.Categoria;
+import com.example.dietideals24.enums.StatoAsta;
 
-public class Asta {
+import java.io.Serializable;
+
+public class Asta implements Serializable {
 
     private int id;
     private int id_creatore;
@@ -10,6 +13,7 @@ public class Asta {
     private String descrizione;
     private Categoria categoria;
     private byte[] foto;
+    private StatoAsta stato;
 
     public Asta(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto) {
         this.id_creatore = id_creatore;
@@ -71,6 +75,12 @@ public class Asta {
         this.foto = foto;
     }
 
+    public StatoAsta getStato() {
+        return stato;
+    }
 
+    public void setStato(StatoAsta stato) {
+        this.stato = stato;
+    }
 
 }

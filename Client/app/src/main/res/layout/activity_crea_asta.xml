@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/page_background"
     android:padding="16dp">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <LinearLayout
-        android:layout_width="395dp"
-        android:layout_height="794dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center"
-        android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/back_button"
@@ -22,125 +20,79 @@
             android:background="@null"
             android:src="@drawable/baseline_arrow_back_24" />
 
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="333dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/logo_text" />
-
         <TextView
-            android:id="@+id/text_creazione"
+            android:id="@+id/text_dettagliProdotto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:hint="Crea una nuova asta"
+            android:text="Dettagli prodotto"
             android:textColor="@color/black"
-            android:textColorHint="@color/black"
             android:textSize="25sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="349dp"
-            android:layout_height="214dp"
+
+        <ImageView
+            android:id="@+id/aggiungi_immagine"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/baseline_photo_camera_24" />
+
+        <EditText
+            android:id="@+id/nome_prodotto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/text_container"
+            android:hint="Nome prodotto"
+            android:padding="18dp"
+            android:textSize="20sp"
+            android:singleLine="true"
+            android:fontFamily="sans-serif-medium"></EditText>
+
+        <EditText
+            android:id="@+id/descrizione"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/text_container"
+            android:fontFamily="sans-serif-medium"
+            android:hint="Descrizione"
+            android:padding="18dp"
+            android:textSize="20sp"
+            android:gravity="top|start"
+            android:textAlignment="viewStart"></EditText>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
+
+
+            <AutoCompleteTextView
+                android:id="@+id/auto_complete_txt"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/Categoria"
+                android:inputType="none" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/avanti_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/text_container"
+            android:backgroundTint="#B6EFF6"
             android:gravity="center"
-            android:orientation="horizontal" >
-
-            <LinearLayout
-                android:id="@+id/button_silenziosa"
-                android:layout_width="143dp"
-                android:layout_height="173dp"
-                android:layout_margin="8dp"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="125dp"
-                    android:layout_height="125dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="40dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/silenziosa" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:text="Silenziosa"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/button_ribasso"
-                android:layout_width="143dp"
-                android:layout_height="173dp"
-                android:layout_margin="8dp"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="125dp"
-                    android:layout_height="125dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="40dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ribasso" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="Al ribasso"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="349dp"
-            android:layout_height="214dp"
-            android:gravity="center"
-            android:orientation="horizontal" >
-
-            <LinearLayout
-                android:id="@+id/button_inversa"
-                android:layout_width="143dp"
-                android:layout_height="173dp"
-                android:layout_margin="8dp"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <ImageView
-                    android:layout_width="125dp"
-                    android:layout_height="125dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="40dp"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/inversa" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="26dp"
-                    android:text="Inversa"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-        </LinearLayout>
-
+            android:padding="18dp"
+            android:text="Avanti"
+            android:textColor="@color/black"
+            android:textSize="30sp"
+            android:textStyle="bold" />
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>

@@ -1,5 +1,8 @@
 package com.example.dietideals24.dto;
 
+import com.example.dietideals24.enums.Categoria;
+import com.example.dietideals24.enums.StatoAsta;
+
 import java.io.Serializable;
 
 public class AstaDTO implements Serializable {
@@ -8,8 +11,10 @@ public class AstaDTO implements Serializable {
     private int id_creatore;
     private String nome;
     private String descrizione;
-    private String categoria;
+    private String tipo;
+    private Categoria categoria;
     private byte[] foto;
+    private StatoAsta stato;
 
     public int getID(){
         return id;
@@ -39,11 +44,11 @@ public class AstaDTO implements Serializable {
         this.descrizione = descrizione;
     }
 
-    public String getCategoria(){
+    public Categoria getCategoria(){
         return categoria;
     }
 
-    public void setCategoria(String categoria){
+    public void setCategoria(Categoria categoria){
         this.categoria = categoria;
     }
 
@@ -53,6 +58,21 @@ public class AstaDTO implements Serializable {
 
     public void setFoto(byte[] foto){
         this.foto = foto;
+    }
+    public String getTipo(){
+        return tipo;
+    }
+
+    public void setTipo(String tipo){
+        this.tipo = tipo;
+    }
+
+    public StatoAsta getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoAsta stato) {
+        this.stato = stato;
     }
 
 }

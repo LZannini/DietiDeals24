@@ -1,7 +1,5 @@
 package com.dietideals24.demo.repository;
 
-import java.time.LocalDateTime;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -16,8 +14,8 @@ public interface Asta_Inversa_Repository extends CrudRepository<Asta_Inversa, In
 	
 	@Transactional
     @Modifying
-    @Query(value = "INSERT INTO asta_inversa (id_asta, prezzo, scadenza) VALUES (:id_asta, :prezzo, :scadenza)", nativeQuery = true)
-    void insertAstaInversa(@Param("id_asta") int id_asta, @Param("prezzo") float prezzo, @Param("scadenza") LocalDateTime scadenza);
+    @Query(value = "INSERT INTO asta_inversa (id, prezzo, scadenza) VALUES (:id_asta, :prezzo, :scadenza)", nativeQuery = true)
+    void insertAstaInversa(@Param("id_asta") int id_asta, @Param("prezzo") float prezzo, @Param("scadenza") String scadenza);
 
 	@Transactional
 	@Modifying

@@ -1,6 +1,8 @@
 package com.dietideals24.demo.models;
 
 import com.dietideals24.demo.enums.Categoria;
+import com.dietideals24.demo.enums.StatoAsta;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +18,7 @@ public class Asta {
 	private String descrizione;
 	private Categoria categoria;
 	private byte[] foto;
+	private StatoAsta stato;
 	
 	public Asta(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto) {
 		this.id_creatore = id_creatore;
@@ -75,6 +78,14 @@ public class Asta {
 
 	public void setFoto(byte[] foto) {
 		this.foto = foto;
+	}
+	
+	public StatoAsta getStato() {
+		return stato;
+	}
+	
+	public void setStato(StatoAsta stato) {
+		this.stato = stato;
 	}
 
 }

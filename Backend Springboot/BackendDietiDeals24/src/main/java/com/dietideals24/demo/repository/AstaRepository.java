@@ -7,8 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.dietideals24.demo.enums.Categoria;
+import com.dietideals24.demo.enums.StatoAsta;
 import com.dietideals24.demo.models.Asta;
-
 import jakarta.transaction.Transactional;
 
 @Repository
@@ -22,15 +22,19 @@ public interface AstaRepository extends CrudRepository<Asta, Integer>{
 	@Query("SELECT a FROM Asta a WHERE a.id = :id")
 	Asta getAsta(@Param("id") int id);
 	
-	@Query("SELECT a FROM Asta a WHERE a.id_creatore = :id_creatore")
-	List<Asta> filtraPerUtente(@Param("id_creatore") int id_creatore);
+	@Query("SELECT a FROM Asta a WHERE stato = :statoAsta ORDER BY a.nome")
+	List<Asta> cercaTutte(@Param("statoAsta") StatoAsta statoAsta);
 	
-	@Query("SELECT a FROM Asta a WHERE LOWER(a.nome) LIKE LOWER(CONCAT('%', :chiave, '%')) OR LOWER(a.descrizione) LIKE LOWER(CONCAT('%', :chiave, '%'))")
-	List<Asta> filtraPerParolaChiave(@Param("chiave") String chiave);
+	@Query("SELECT a FROM Asta a WHERE a.id_creatore = :id_creatore AND stato = :statoAsta ORDER BY a.nome")
+	List<Asta> filtraPerUtente(@Param("id_creatore") int id_creatore, @Param("statoAsta") StatoAsta statoAsta);
 	
-	@Query("SELECT a FROM Asta a WHERE a.categoria = :categoria")
-	List<Asta> filtraPerCategoria(@Param("categoria") Categoria categoria);
+	@Query("SELECT a FROM Asta a WHERE stato = :statoAsta AND (LOWER(a.nome) LIKE LOWER(CONCAT('%', :chiave, '%')) OR LOWER(a.descrizione) LIKE LOWER(CONCAT('%', :chiave, '%'))) ORDER BY a.nome")
+	List<Asta> filtraPerParolaChiave(@Param("chiave") String chiave, @Param("statoAsta") StatoAsta statoAsta);
 	
-	@Query("SELECT a FROM Asta a WHERE a.categoria = :categoria AND (LOWER(a.descrizione) LIKE LOWER(CONCAT('%', :chiave, '%')) OR LOWER(a.nome) LIKE LOWER(CONCAT('%', :chiave, '%')))")
-	List<Asta> filtraPerCategoriaAndParoleChiave(@Param("chiave") String chiave, @Param("categoria") Categoria categoria);
+	@Query("SELECT a FROM Asta a WHERE a.categoria = :categoria AND stato = :statoAsta")
+	List<Asta> filtraPerCategoria(@Param("categoria") Categoria categoria, @Param("statoAsta") StatoAsta statoAsta);
+	
+	@Query("SELECT a FROM Asta a WHERE stato = :statoAsta AND a.categoria = :categoria AND (LOWER(a.descrizione) LIKE LOWER(CONCAT('%', :chiave, '%')) OR LOWER(a.nome) LIKE LOWER(CONCAT('%', :chiave, '%'))) ORDER BY a.nome")
+	List<Asta> filtraPerCategoriaAndParoleChiave(@Param("chiave") String chiave, @Param("categoria") Categoria categoria, @Param("statoAsta") StatoAsta statoAsta);
+
 }

@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dietideals24">
+    package="com.example.dietideals24" >
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:theme="@style/Theme.DietiDeals24"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true" >
+        <activity
+            android:name=".CreaAstaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreaAstaInversaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreaAstaRibassoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreaAstaSilenziosaActivity"
+            android:exported="false" />
         <activity
             android:name=".ModificaPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".NotificaActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:exported="false" />
         <activity
             android:name=".ProfiloActivity"
             android:exported="false" />
@@ -24,14 +43,16 @@
             android:name=".CercaAstaActivity"
             android:exported="false" />
         <activity
-            android:name=".CreaAstaActivity"
+            android:name=".TipoAstaActivity"
             android:exported="false" />
         <activity
             android:name=".RisultatiRicercaActivity"
             android:exported="false" />
-
         <activity
             android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AsteCreateActivity"
             android:exported="false" />
 
         <meta-data
@@ -45,8 +66,14 @@
             android:name=".RegistrazioneActivity"
             android:exported="false" />
         <activity
+            android:name=".DettagliAstaActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

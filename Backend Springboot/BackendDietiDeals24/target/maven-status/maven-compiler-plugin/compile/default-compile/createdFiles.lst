@@ -32,6 +32,7 @@ com\dietideals24\demo\configurations\SecurityConfig.class
 com\dietideals24\demo\models\Asta.class
 com\dietideals24\demo\controllers\OffertaController.class
 com\dietideals24\demo\repository\AstaRepository.class
+com\dietideals24\demo\enums\StatoAsta.class
 com\dietideals24\demo\controllers\AuthController.class
 com\dietideals24\demo\controllers\AstaController.class
 com\dietideals24\demo\models\Asta_Ribasso.class

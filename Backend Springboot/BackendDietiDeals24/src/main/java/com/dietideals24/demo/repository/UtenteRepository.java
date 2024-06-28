@@ -20,6 +20,9 @@ public interface UtenteRepository extends CrudRepository<Utente, Integer>{
 	@Query("SELECT u FROM Utente u WHERE u.email = :email AND u.id = :id")
     Optional<Utente> findByEmailAndId(@Param("email") String email, @Param("id") int id);
 	
+	@Query("SELECT u FROM Utente u WHERE u.id = :id")
+	Optional<Utente> findById(@Param("id") int id);
+	
 	@Modifying
 	@Transactional
 	@Query("UPDATE Utente u SET u.password = :password WHERE u.id = :id")

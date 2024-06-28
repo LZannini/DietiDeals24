@@ -18,11 +18,21 @@ public interface ApiService {
     @POST("/utente/login")
     Call<UtenteDTO> loginUtente(@Body UtenteDTO utenteDTO);
 
+    @GET("/utente/recupera")
+    Call<UtenteDTO> recuperaUtente(@Query("id") int id);
+
     @POST("/utente/aggiorna")
     Call<UtenteDTO> aggiornaUtente(@Body UtenteDTO utenteDTO);
 
     @POST("/utente/modPassword")
     Call<UtenteDTO> modificaPassword(@Body UtenteDTO utenteDTO);
+
+
+    @GET("/asta/cercaTutte")
+    Call<List<AstaDTO>> cercaTutte();
+
+    @GET("/asta/cercaPerUtente")
+    Call<List<AstaDTO>> cercaPerUtente(@Query("id_creatore") int id_creatore);
 
     @GET("/asta/cercaPerChiave")
     Call<List<AstaDTO>> cercaPerParolaChiave(@Query("chiave") String chiave);
@@ -32,6 +42,25 @@ public interface ApiService {
 
     @GET("/asta/cercaPerChiaveAndCategoria")
     Call<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@Query("chiave") String chiave, @Query("categoria") String categoria);
+
+    @POST("/asta/creaAstaInversa")
+    Call<Void> creaAstaInversa(@Body Asta_InversaDTO astaDTO);
+
+    @POST("/asta/creaAstaAlRibasso")
+    Call<Void> creaAstaAlRibasso(@Body Asta_RibassoDTO astaDTO);
+
+    @POST("/asta/creaAstaSilenziosa")
+    Call<Void> creaAstaSilenziosa(@Body Asta_SilenziosaDTO astaDTO);
+
+    @GET("/asta/dettagliAstaInversa")
+    Call<Asta_InversaDTO> recuperaDettagliAstaInversa(@Query("id") int id);
+
+    @GET("/asta/dettagliAstaRibasso")
+    Call<Asta_RibassoDTO> recuperaDettagliAstaRibasso(@Query("id") int id);
+
+    @GET("/asta/dettagliAstaSilenziosa")
+    Call<Asta_SilenziosaDTO> recuperaDettagliAstaSilenziosa(@Query("id") int id);
+
 
     @GET("/notifica/mostraTutte")
     Call<List<NotificaDTO>> mostraNotifiche(@Query("id_utente") Integer id_utente);

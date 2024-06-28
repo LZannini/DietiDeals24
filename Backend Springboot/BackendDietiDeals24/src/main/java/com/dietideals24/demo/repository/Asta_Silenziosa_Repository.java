@@ -1,7 +1,5 @@
 package com.dietideals24.demo.repository;
 
-import java.time.LocalDateTime;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -16,8 +14,8 @@ public interface Asta_Silenziosa_Repository extends CrudRepository<Asta_Silenzio
 
 	@Transactional
     @Modifying
-    @Query(value = "INSERT INTO asta_silenziosa (id_asta, scadenza) VALUES (:id_asta, :scadenza)", nativeQuery = true)
-    void insertAstaSilenziosa(@Param("id_asta") int id_asta, @Param("scadenza") LocalDateTime scadenza);
+    @Query(value = "INSERT INTO asta_silenziosa (id, scadenza) VALUES (:id_asta, :scadenza)", nativeQuery = true)
+    void insertAstaSilenziosa(@Param("id_asta") int id_asta, @Param("scadenza") String scadenza);
 	
 	@Transactional
 	@Modifying

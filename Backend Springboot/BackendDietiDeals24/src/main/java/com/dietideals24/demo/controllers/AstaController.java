@@ -71,6 +71,15 @@ public class AstaController {
 		return ResponseEntity.ok(astaDTO);
 	}
 	
+	@GetMapping("/asta/cercaTutte")
+	public ResponseEntity<List<AstaDTO>> findAllAuctions() {
+		List<AstaDTO> lista_asteDTO = astaService.trovaTutte();
+		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(lista_asteDTO);
+	}
+	
 	@GetMapping("/asta/cercaPerUtente")
 	public ResponseEntity<List<AstaDTO>> cercaPerUtente(@RequestParam Integer id_creatore) {
 		if (id_creatore == null)
@@ -114,4 +123,40 @@ public class AstaController {
 		
 		return ResponseEntity.ok(lista_asteDTO);
 	}
+	
+	@GetMapping("/asta/dettagliAstaInversa")
+    public ResponseEntity<Asta_InversaDTO> dettagliAstaInversa(@RequestParam Integer id) {
+        if (id == null)
+            throw new IllegalArgumentException("Errore Ricerca Asta Inversa: Campo 'id' nullo!\n");
+        
+        Asta_InversaDTO astaInversaDTO = astaService.trovaAstaInversa(id);
+        if (astaInversaDTO == null)
+            return ResponseEntity.notFound().build();
+        
+        return ResponseEntity.ok(astaInversaDTO);
+    }
+
+    @GetMapping("/asta/dettagliAstaRibasso")
+    public ResponseEntity<Asta_RibassoDTO> dettagliAstaRibasso(@RequestParam Integer id) {
+        if (id == null)
+            throw new IllegalArgumentException("Errore Ricerca Asta Al Ribasso: Campo 'id' nullo!\n");
+        
+        Asta_RibassoDTO astaRibassoDTO = astaService.trovaAstaRibasso(id);
+        if (astaRibassoDTO == null)
+            return ResponseEntity.notFound().build();
+        
+        return ResponseEntity.ok(astaRibassoDTO);
+    }
+
+    @GetMapping("/asta/dettagliAstaSilenziosa")
+    public ResponseEntity<Asta_SilenziosaDTO> dettagliAstaSilenziosa(@RequestParam Integer id) {
+        if (id == null)
+            throw new IllegalArgumentException("Errore Ricerca Asta Silenziosa: Campo 'id' nullo!\n");
+        
+        Asta_SilenziosaDTO astaSilenziosaDTO = astaService.trovaAstaSilenziosa(id);
+        if (astaSilenziosaDTO == null)
+            return ResponseEntity.notFound().build();
+        
+        return ResponseEntity.ok(astaSilenziosaDTO);
+    }
  }

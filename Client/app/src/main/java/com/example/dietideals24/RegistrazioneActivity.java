@@ -59,6 +59,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                openActivityLogin();
                 finish();
             }
         });
@@ -84,8 +85,6 @@ public class RegistrazioneActivity extends AppCompatActivity {
                 }
             }
         });
-
-
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -149,8 +148,9 @@ public class RegistrazioneActivity extends AppCompatActivity {
                                     public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                                         if(response.isSuccessful()) {
                                             Toast.makeText(RegistrazioneActivity.this, "Registrazione effettuata con successo!", Toast.LENGTH_SHORT).show();
+                                            openActivityLogin();
                                         } else if(response.code() == 409) {
-                                            Toast.makeText(RegistrazioneActivity.this, "Questa email risulta già registrata, prova ad effettuare il login!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegistrazioneActivity.this, "Email o username già registrati, prova ad effettuare il login!", Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
@@ -182,6 +182,13 @@ public class RegistrazioneActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        openActivityLogin();
+        finish();
     }
 
     public void openActivityLogin(){

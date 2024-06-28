@@ -1,55 +1,92 @@
 package com.dietideals24.demo.models.dto;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.dietideals24.demo.enums.Categoria;
 
-@SuppressWarnings("serial")
-public class Asta_RibassoDTO extends AstaDTO implements Serializable {
-	
-	private int id_asta;
-	private float prezzo;
-	private LocalDateTime timer;
-	private float decremento;
-	private float minimo;
+public class Asta_RibassoDTO {
 
-	public int getId_asta() {
-		return id_asta;
-	}
+    private int idCreatore;
+    private String nome;
+    private String descrizione;
+    private Categoria categoria;
+    private byte[] foto;
+    private int id_asta;
+    private float prezzo;
+    private String timer;
+    private float decremento;
+    private float minimo;
 
-	public void setId_asta(int id_asta) {
-		this.id_asta = id_asta;
-	}
+    public int getId_asta() {
+        return id_asta;
+    }
 
-	public float getPrezzo() {
-		return prezzo;
-	}
+    public void setId_asta(int id_asta) {
+        this.id_asta = id_asta;
+    }
 
-	public void setPrezzo(float prezzo) {
-		this.prezzo = prezzo;
-	}
+    public int getIdCreatore() {
+        return idCreatore;
+    }
 
-	public LocalDateTime getTimer() {
-		return timer;
-	}
+    public void setIdCreatore(int idCreatore) {
+        this.idCreatore = idCreatore;
+    }
 
-	public void setTimer(LocalDateTime timer) {
-		this.timer = timer;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public float getDecremento() {
-		return decremento;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public void setDecremento(float decremento) {
-		this.decremento = decremento;
-	}
+    public String getDescrizione() {
+        return descrizione;
+    }
 
-	public float getMinimo() {
-		return minimo;
-	}
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+    public Categoria getCategoria() {return categoria;}
+    public void setCategoria(Categoria categoria) {this.categoria = categoria;}
 
-	public void setMinimo(float minimo) {
-		this.minimo = minimo;
-	}
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+
+    public float getPrezzo() {
+        return prezzo;
+    }
+
+    public void setPrezzo(float prezzo) {
+        this.prezzo = prezzo;
+    }
+
+    public String getTimer() {
+        return timer;
+    }
+
+    public void setTimer(String timer) {
+        this.timer = timer;
+    }
+
+    public float getDecremento() {
+        return decremento;
+    }
+
+    public void setDecremento(float decremento) {
+        this.decremento = decremento;
+    }
+
+    public float getMinimo() {
+        return minimo;
+    }
+
+    public void setMinimo(float minimo) {
+        this.minimo = minimo;
+    }
 
 }

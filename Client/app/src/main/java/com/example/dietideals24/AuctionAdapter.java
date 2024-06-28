@@ -1,5 +1,7 @@
 package com.example.dietideals24;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,18 +11,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dietideals24.dto.AstaDTO;
-import com.example.dietideals24.dto.Asta_RibassoDTO;
-import com.example.dietideals24.dto.Asta_InversaDTO;
-import com.example.dietideals24.dto.Asta_SilenziosaDTO;
+import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Asta_Inversa;
+import com.example.dietideals24.models.Asta_Ribasso;
+import com.example.dietideals24.models.Asta_Silenziosa;
+
 import java.util.List;
 
 public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionViewHolder> {
 
-    private final List<AstaDTO> auctionList;
+    private final List<Asta> auctionList;
     private final OnAstaListener onAstaListener;
 
-    public AuctionAdapter(List<AstaDTO> auctionList, OnAstaListener onAstaListener) {
+    public AuctionAdapter(List<Asta> auctionList, OnAstaListener onAstaListener) {
         this.auctionList = auctionList;
         this.onAstaListener = onAstaListener;
     }
@@ -35,7 +38,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
 
     @Override
     public void onBindViewHolder(@NonNull AuctionViewHolder holder, int position) {
-        AstaDTO asta = auctionList.get(position);
+        Asta asta = auctionList.get(position);
         holder.bind(asta);
     }
 
@@ -63,22 +66,27 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
             itemView.setOnClickListener(this); // This refers to AuctionViewHolder which implements OnClickListener
         }
 
-        public void bind(AstaDTO asta) {
+        public void bind(Asta asta) {
+            Bitmap bitmap;
             astaNome.setText(asta.getNome());
+            byte[] fotoBytes = asta.getFoto();
+            if (fotoBytes != null) {
+                bitmap = BitmapFactory.decodeByteArray(fotoBytes, 0, fotoBytes.length);
+                astaFoto.setImageBitmap(bitmap);
+            }
+            //astaTipoImage.setImageResource(R.drawable.silenziosa); //<- foto del tipo
 
-             astaTipoImage.setImageResource(R.drawable.silenziosa); //<- foto del tipo
-
-            if (asta instanceof Asta_RibassoDTO) {
-                Asta_RibassoDTO ribasso = (Asta_RibassoDTO) asta;
+            if (asta instanceof Asta_Ribasso) {
+                Asta_Ribasso ribasso = (Asta_Ribasso) asta;
                 astaPrezzo.setText(String.valueOf(ribasso.getPrezzo()));
                 astaTipoImage.setImageResource(R.drawable.ribasso);
                 Log.d("AuctionAdapter", "Asta di tipo Ribasso: " + ribasso.getNome());
-            } else if (asta instanceof Asta_SilenziosaDTO) {
-                Asta_SilenziosaDTO silenziosa = (Asta_SilenziosaDTO) asta;
+            } else if (asta instanceof Asta_Silenziosa) {
+                Asta_Silenziosa silenziosa = (Asta_Silenziosa) asta;
                 astaTipoImage.setImageResource(R.drawable.silenziosa);
                 Log.d("AuctionAdapter", "Asta di tipo Silenziosa: " + silenziosa.getNome());
-            } else if (asta instanceof Asta_InversaDTO) {
-                Asta_InversaDTO inversa = (Asta_InversaDTO) asta;
+            } else if (asta instanceof Asta_Inversa) {
+                Asta_Inversa inversa = (Asta_Inversa) asta;
                 astaPrezzo.setText(String.valueOf(inversa.getPrezzo()));
                 astaTipoImage.setImageResource(R.drawable.inversa);
                 Log.d("AuctionAdapter", "Asta di tipo Inversa: " + inversa.getNome());

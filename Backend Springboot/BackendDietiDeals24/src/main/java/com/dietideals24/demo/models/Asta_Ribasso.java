@@ -1,21 +1,29 @@
 package com.dietideals24.demo.models;
 
-import java.time.LocalDateTime;
+import org.springframework.data.annotation.Id;
+
 import com.dietideals24.demo.enums.Categoria;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 
 
 @Entity
-@PrimaryKeyJoinColumn(name = "id_asta")
+@Table(name = "asta_ribasso")
+@PrimaryKeyJoinColumn(name = "id")
 public class Asta_Ribasso extends Asta {
 	
 	private float prezzo;
-	private LocalDateTime timer;
+	private String timer;
+	private String timer_iniziale;
 	private float decremento;
 	private float minimo;
 	
-	public Asta_Ribasso(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, LocalDateTime timer, float decremento, float minimo) {
+	public Asta_Ribasso(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, String timer, float decremento, float minimo) {
 		super(id_creatore, nome, descrizione, categoria, foto);
 		this.prezzo = prezzo;
 		this.timer = timer;
@@ -33,12 +41,20 @@ public class Asta_Ribasso extends Asta {
 		this.prezzo = prezzo;
 	}
 
-	public LocalDateTime getTimer() {
+	public String getTimer() {
 		return timer;
 	}
 
-	public void setTimer(LocalDateTime timer) {
+	public void setTimer(String timer) {
 		this.timer = timer;
+	}
+	
+	public String getTimerIniziale() {
+		return timer_iniziale;
+	}
+
+	public void setTimerIniziale(String timer_iniziale) {
+		this.timer_iniziale = timer_iniziale;
 	}
 
 	public float getDecremento() {
