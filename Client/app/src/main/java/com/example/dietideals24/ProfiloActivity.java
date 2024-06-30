@@ -59,7 +59,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private LinearLayout pulsantiAste;
     private Button buttonSalva, buttonAsteCreate;
     private Utente utenteOriginale;
-    private UtenteDTO utenteModificato;
+    private Utente utenteModificato;
     private Boolean info_mod = false;
     private byte[] imageBytes;
     private boolean fromDettagli;
@@ -67,7 +67,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private ImageButton back_button;
     private Utente utenteCreatore;
 
-    @SuppressLint("SuspiciousIndentation")
+    @SuppressLint({"SuspiciousIndentation", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,18 +91,18 @@ public class ProfiloActivity extends AppCompatActivity {
         actionBar.hide();
 
         if(fromDettagli) {
-            utenteModificato = (UtenteDTO) getIntent().getSerializableExtra("utente_home");
+            utenteModificato = (Utente) getIntent().getSerializableExtra("utente");
             //utenteOriginale = creaUtente(utenteModificato);
             utenteOriginale = (Utente) getIntent().getSerializableExtra("utente");
             menuButton.setVisibility(View.INVISIBLE);
         } else {
             modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", modificaAvvenuta);
             if (modificaAvvenuta) {
-                utenteModificato = (UtenteDTO) getIntent().getSerializableExtra("utente_home");
-                utenteOriginale = creaUtente(utenteModificato);
+                utenteModificato = (Utente) getIntent().getSerializableExtra("utente");
+                utenteOriginale = utenteModificato;
             } else {
                 utenteOriginale = (Utente) getIntent().getSerializableExtra("utente");
-                utenteModificato = creaUtenteDTO(utenteOriginale);
+                utenteModificato = utenteOriginale;
             }
         }
 
@@ -149,7 +149,7 @@ public class ProfiloActivity extends AppCompatActivity {
                     RetrofitService retrofitService = new RetrofitService();
                     ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 
-                    utenteModificato = new UtenteDTO();
+                    utenteModificato = new Utente();
 
                     utenteModificato.setId(utenteOriginale.getId());
                     utenteModificato.setPassword(utenteOriginale.getPassword());
@@ -190,8 +190,8 @@ public class ProfiloActivity extends AppCompatActivity {
                     } else if(utenteOriginale.getPaese() != null) {
                         utenteModificato.setPaese(utenteOriginale.getPaese());
                     }
-
-                    apiService.aggiornaUtente(utenteModificato)
+                    UtenteDTO utenteModificatoDTO = creaUtenteDTO(utenteModificato);
+                    apiService.aggiornaUtente(utenteModificatoDTO)
                             .enqueue(new Callback<UtenteDTO>() {
                                 @Override
                                 public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
@@ -215,7 +215,7 @@ public class ProfiloActivity extends AppCompatActivity {
                                         countryEditText.setEnabled(false);
                                         buttonSalva.setVisibility(View.INVISIBLE);
                                         pulsantiAste.setVisibility(View.VISIBLE);
-
+                                        utenteOriginale = utenteModificato;
                                         Toast.makeText(ProfiloActivity.this, "Modifica effettuata con successo!", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(ProfiloActivity.this, "Errore durante la modifica dei dati, riprova.", Toast.LENGTH_SHORT).show();
@@ -284,20 +284,6 @@ public class ProfiloActivity extends AppCompatActivity {
 
     private UtenteDTO creaUtenteDTO(Utente u) {
         UtenteDTO utente = new UtenteDTO();
-        utente.setId(u.getId());
-        utente.setUsername(u.getUsername());
-        utente.setEmail(u.getEmail());
-        utente.setPassword(u.getPassword());
-        utente.setBiografia(u.getBiografia());
-        utente.setSitoweb(u.getSitoweb());
-        utente.setPaese(u.getPaese());
-        utente.setTipo(u.getTipo());
-        utente.setAvatar(u.getAvatar());
-        return utente;
-    }
-
-    private Utente creaUtente(UtenteDTO u) {
-        Utente utente = new Utente();
         utente.setId(u.getId());
         utente.setUsername(u.getUsername());
         utente.setEmail(u.getEmail());

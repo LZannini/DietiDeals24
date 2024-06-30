@@ -35,7 +35,6 @@ public class NotificaActivity extends AppCompatActivity {
     private NotificaAdapter adapter;
     private List<NotificaDTO> listaNotifiche;
     private Utente utente;
-    private UtenteDTO utente_home;
     private ImageButton back_button;
     private TextView noResultsText;
     private ApiService apiService;
@@ -48,17 +47,15 @@ public class NotificaActivity extends AppCompatActivity {
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
         noResultsText = findViewById(R.id.no_results_text);
-        utente_home = creaUtenteDTO(utente);
 
         back_button = findViewById(R.id.back_button);
         btnSegnaTutte = findViewById(R.id.btnSegna);
         btnRimuoviLette = findViewById(R.id.btnRmvRead);
         btnRimuoviTutte = findViewById(R.id.btnRmvAll);
-
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityHome(utente_home);
+                openActivityHome(utente);
                 finish();
             }
         });
@@ -93,8 +90,12 @@ public class NotificaActivity extends AppCompatActivity {
         listView = findViewById(R.id.notifiche_list_view);
 
         listaNotifiche = (List<NotificaDTO>) getIntent().getSerializableExtra("listaNotifiche");
-        if (listaNotifiche == null || listaNotifiche.isEmpty())
+        if (listaNotifiche == null || listaNotifiche.isEmpty()) {
             noResultsText.setVisibility(View.VISIBLE);
+            btnSegnaTutte.setEnabled(false);
+            btnRimuoviTutte.setEnabled(false);
+            btnRimuoviLette.setEnabled(false);
+        }
 
         adapter = new NotificaAdapter(this, listaNotifiche);
         listView.setAdapter(adapter);
@@ -268,25 +269,11 @@ public class NotificaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityHome(utente_home);
+        openActivityHome(utente);
         finish();
     }
 
-    private UtenteDTO creaUtenteDTO(Utente u) {
-        UtenteDTO utente = new UtenteDTO();
-        utente.setId(u.getId());
-        utente.setUsername(u.getUsername());
-        utente.setEmail(u.getEmail());
-        utente.setPassword(u.getPassword());
-        utente.setBiografia(u.getBiografia());
-        utente.setSitoweb(u.getSitoweb());
-        utente.setPaese(u.getPaese());
-        utente.setTipo(u.getTipo());
-        utente.setAvatar(u.getAvatar());
-        return utente;
-    }
-
-    private void openActivityHome(UtenteDTO utente) {
+    private void openActivityHome(Utente utente) {
         Intent intentH = new Intent(this, HomeActivity.class);
         intentH.putExtra("utente", utente);
         startActivity(intentH);

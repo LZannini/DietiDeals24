@@ -31,7 +31,6 @@ import retrofit2.Response;
 
 public class AsteCreateActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
 
-    private UtenteDTO utente_home;
     private Utente utenteCreatore;
     private Utente utente;
     private List<Asta> listaAste;
@@ -52,7 +51,6 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
         utenteCreatore = (Utente) getIntent().getSerializableExtra("utenteCreatore");
         utente = (Utente) getIntent().getSerializableExtra("utente");
-        utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente_home");
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
 
         noAuctionsText = findViewById(R.id.no_auctions_text);
@@ -104,7 +102,6 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
 
     private void openActivityProfilo() {
         Intent intentP = new Intent(this, ProfiloActivity.class);
-        intentP.putExtra("utente_home", utente_home);
         intentP.putExtra("utente", utente);
         intentP.putExtra("fromDettagli", fromDettagli);
         intentP.putExtra("modificaAvvenuta", modificaAvvenuta);
@@ -114,7 +111,7 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
     private void openActivityDettagliAsta() {
         Intent intent = new Intent(this, DettagliAstaActivity.class);
         intent.putExtra("listaAste", (Serializable) listaAste);
-        intent.putExtra("utente", utente_home);
+        intent.putExtra("utente", utente);
         intent.putExtra("utenteProfilo", utente);
         intent.putExtra("asta", astaSelezionata);
         intent.putExtra("fromAsteCreate", true);

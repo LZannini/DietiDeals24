@@ -2,6 +2,7 @@ package com.example.dietideals24.models;
 
 import com.example.dietideals24.enums.Categoria;
 
+import java.time.LocalDateTime;
 
 public class Asta_Inversa extends Asta {
 
@@ -26,11 +27,11 @@ public class Asta_Inversa extends Asta {
             this.prezzo = prezzo;
         }
 
-        public String  getScadenza() {
+        public String getScadenza() {
             return scadenza;
         }
 
-        public void setScadenza(String  scadenza) {
+        public void setScadenza(String scadenza) {
             this.scadenza = scadenza;
         }
 }

@@ -52,7 +52,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
     private Asta asta;
     private List<Asta> listaAste;
     private String criterioRicerca;
-    private UtenteDTO utente_home;
+    private Utente utente;
     private boolean fromAsteCreate;
     private boolean fromDettagli;
     private boolean modificaAvvenuta;
@@ -81,7 +81,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
         if (getIntent().getStringExtra("criterioRicerca") != null)
             criterioRicerca = getIntent().getStringExtra("criterioRicerca");
-        utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente");
+        utente = (Utente) getIntent().getSerializableExtra("utente");
         utenteProfilo = (Utente) getIntent().getSerializableExtra("utenteProfilo");
         fromAsteCreate = getIntent().getBooleanExtra("fromAsteCreate", false);
         utenteCreatore = (Utente) getIntent().getSerializableExtra("utenteCreatore");
@@ -196,7 +196,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
             }
         });
 
-        if(asta.getId_creatore() != utente_home.getId() && !fromAsteCreate) {
+        if(asta.getId_creatore() != utente.getId() && !fromAsteCreate) {
             tvCreatorValue.setTypeface(tvCreatorValue.getTypeface(), Typeface.BOLD);
             tvCreatorValue.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -224,14 +224,14 @@ public class DettagliAstaActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RisultatiRicercaActivity.class);
         intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("criterioRicerca", criterioRicerca);
-        intent.putExtra("utente", utente_home);
+        intent.putExtra("utente", utente);
         startActivity(intent);
     }
 
     private void openActivityAsteCreate() {
         Intent intent = new Intent(this, AsteCreateActivity.class);
         intent.putExtra("listaAste", (Serializable) listaAste);
-        intent.putExtra("utente_home", utente_home);
+        intent.putExtra("utente_home", utente);
         intent.putExtra("utente", utenteProfilo);
         intent.putExtra("utenteCreatore", utenteCreatore);
         intent.putExtra("fromDettagli", fromDettagli);
@@ -241,7 +241,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
 
     private void openActivityProfilo() {
         Intent intentR = new Intent(this, ProfiloActivity.class);
-        intentR.putExtra("utente_home", utente_home);
+        intentR.putExtra("utente_home", utente);
         intentR.putExtra("utente", utenteCreatore);
         intentR.putExtra("fromDettagli", true);
         startActivity(intentR);

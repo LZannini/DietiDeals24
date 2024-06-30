@@ -82,8 +82,9 @@ public class ModificaPasswordActivity extends AppCompatActivity {
                                     public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                                         if(response.isSuccessful()) {
                                             UtenteDTO utenteAggiornato = response.body();
+                                            Utente utente_intent = creaUtente(utenteAggiornato);
                                             Toast.makeText(ModificaPasswordActivity.this, "Password modificata con successo!", Toast.LENGTH_SHORT).show();
-                                            openActivityHome(utenteAggiornato);
+                                            openActivityHome(utente_intent);
                                         }
                                     }
 
@@ -124,6 +125,20 @@ public class ModificaPasswordActivity extends AppCompatActivity {
         });
     }
 
+    private Utente creaUtente(UtenteDTO utenteDTO) {
+        Utente utente = new Utente();
+        utente.setId(utenteDTO.getId());
+        utente.setUsername(utenteDTO.getUsername());
+        utente.setEmail(utenteDTO.getEmail());
+        utente.setPassword(utenteDTO.getPassword());
+        utente.setBiografia(utenteDTO.getBiografia());
+        utente.setSitoweb(utenteDTO.getSitoweb());
+        utente.setPaese(utenteDTO.getPaese());
+        utente.setTipo(utenteDTO.getTipo());
+        utente.setAvatar(utenteDTO.getAvatar());
+        return utente;
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -131,7 +146,7 @@ public class ModificaPasswordActivity extends AppCompatActivity {
         finish();
     }
 
-    public void openActivityHome(UtenteDTO utente) {
+    public void openActivityHome(Utente utente) {
         Intent intentR = new Intent(this, HomeActivity.class);
         intentR.putExtra("utente", utente);
         startActivity(intentR);

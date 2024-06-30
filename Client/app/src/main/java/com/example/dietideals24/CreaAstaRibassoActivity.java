@@ -34,7 +34,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
     private EditText prezzoIniziale;
     private ImageButton decrPrezzoIniziale;
     private ImageButton incrPrezzoIniziale;
-    private Utente utente_intent;
+    private Utente utente;
     private Asta asta;
 
     private EditText prezzoMinimo;
@@ -53,7 +53,6 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
     private ImageButton back_button;
     private Button creaButton;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +62,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         actionBar.hide();
 
         Asta asta = (Asta) getIntent().getSerializableExtra("asta");
-        UtenteDTO utente = (UtenteDTO) getIntent().getSerializableExtra("utente");
-        utente_intent = creaUtente(utente);
+        utente = (Utente) getIntent().getSerializableExtra("utente");
 
         prezzoIniziale = findViewById(R.id.prezzo_iniziale);
         decrPrezzoIniziale = findViewById(R.id.decr_prezzo_iniziale);
@@ -96,7 +94,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityTipoAsta(utente_intent, asta);
+                openActivityTipoAsta(utente, asta);
                 finish();
             }
         });
@@ -241,22 +239,8 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityTipoAsta(utente_intent, asta);
+        openActivityTipoAsta(utente, asta);
         finish();
-    }
-
-    private Utente creaUtente(UtenteDTO u) {
-        Utente utente = new Utente();
-        utente.setId(u.getId());
-        utente.setUsername(u.getUsername());
-        utente.setEmail(u.getEmail());
-        utente.setPassword(u.getPassword());
-        utente.setBiografia(u.getBiografia());
-        utente.setSitoweb(u.getSitoweb());
-        utente.setPaese(u.getPaese());
-        utente.setTipo(u.getTipo());
-        utente.setAvatar(u.getAvatar());
-        return utente;
     }
 
     private void openActivityTipoAsta(Utente utente, Asta asta) {
@@ -272,7 +256,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         textView.setText(String.format("%02d", Math.max(0, value)));
     }
 
-    private void openActivityHome(UtenteDTO utente) {
+    private void openActivityHome(Utente utente) {
         Intent intentH = new Intent(this, HomeActivity.class);
         intentH.putExtra("utente", utente);
         startActivity(intentH);
