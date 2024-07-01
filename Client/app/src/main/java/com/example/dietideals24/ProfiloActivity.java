@@ -190,6 +190,7 @@ public class ProfiloActivity extends AppCompatActivity {
                     } else if(utenteOriginale.getPaese() != null) {
                         utenteModificato.setPaese(utenteOriginale.getPaese());
                     }
+
                     UtenteDTO utenteModificatoDTO = creaUtenteDTO(utenteModificato);
                     apiService.aggiornaUtente(utenteModificatoDTO)
                             .enqueue(new Callback<UtenteDTO>() {
@@ -216,6 +217,7 @@ public class ProfiloActivity extends AppCompatActivity {
                                         buttonSalva.setVisibility(View.INVISIBLE);
                                         pulsantiAste.setVisibility(View.VISIBLE);
                                         utenteOriginale = utenteModificato;
+
                                         Toast.makeText(ProfiloActivity.this, "Modifica effettuata con successo!", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(ProfiloActivity.this, "Errore durante la modifica dei dati, riprova.", Toast.LENGTH_SHORT).show();

@@ -64,6 +64,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         Asta asta = (Asta) getIntent().getSerializableExtra("asta");
         utente = (Utente) getIntent().getSerializableExtra("utente");
 
+
         prezzoIniziale = findViewById(R.id.prezzo_iniziale);
         decrPrezzoIniziale = findViewById(R.id.decr_prezzo_iniziale);
         incrPrezzoIniziale = findViewById(R.id.incr_prezzo_iniziale);

@@ -1,11 +1,13 @@
 package com.example.dietideals24;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,15 +17,17 @@ import android.widget.ImageButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.Asta_InversaDTO;
 import com.example.dietideals24.dto.Asta_RibassoDTO;
 import com.example.dietideals24.dto.Asta_SilenziosaDTO;
-import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.dto.OffertaDTO;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Asta_Inversa;
 import com.example.dietideals24.models.Asta_Ribasso;
@@ -33,6 +37,10 @@ import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,7 +108,7 @@ public class DettagliAstaActivity extends AppCompatActivity {
         btnSubmitOffer = findViewById(R.id.btnSubmitOffer);
         btnBack = findViewById(R.id.back_button);
 
-        if (fromAsteCreate) {
+        if (asta.getId_creatore() == utente.getId()) {
             btnSubmitOffer.setEnabled(false);
             btnSubmitOffer.setVisibility(View.INVISIBLE);
             etOffer.setEnabled(false);
@@ -140,6 +148,9 @@ public class DettagliAstaActivity extends AppCompatActivity {
                             setupPolling();
                             handler.post(pollingRunnable);
                             handler.post(timerRunnable);
+
+                            etOffer.setEnabled(false);
+                            etOffer.setText(String.valueOf(astaRicevuta.getPrezzo()));
                         }
 
                         @Override
@@ -155,7 +166,9 @@ public class DettagliAstaActivity extends AppCompatActivity {
                         public void onResponse(Call<Asta_SilenziosaDTO> call, Response<Asta_SilenziosaDTO> response) {
                             Asta_SilenziosaDTO astaRicevuta = response.body();
 
-                            tvTimerValue.setText(astaRicevuta.getScadenza());
+                            LocalDateTime scadenzaAsta = LocalDateTime.parse(astaRicevuta.getScadenza(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+                            tvTimerValue.setText(calcolaTempoRimanente(scadenzaAsta));
                         }
 
                         @Override
@@ -172,7 +185,9 @@ public class DettagliAstaActivity extends AppCompatActivity {
                             Asta_InversaDTO astaRicevuta = response.body();
 
                             tvPriceValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(astaRicevuta.getPrezzo()));
-                            tvTimerValue.setText(astaRicevuta.getScadenza());
+
+                            LocalDateTime scadenzaAsta = LocalDateTime.parse(astaRicevuta.getScadenza(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                            tvTimerValue.setText(calcolaTempoRimanente(scadenzaAsta));
                         }
 
                         @Override
@@ -207,7 +222,48 @@ public class DettagliAstaActivity extends AppCompatActivity {
         }
 
         btnSubmitOffer.setOnClickListener(v -> {
-            String offer = etOffer.getText().toString();
+            AlertDialog.Builder builder = new AlertDialog.Builder(DettagliAstaActivity.this);
+            builder.setMessage("Sei sicuro di voler presentare l'offerta?")
+                    .setCancelable(true)
+                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            OffertaDTO offerta = new OffertaDTO();
+                            offerta.setId_asta(asta.getId());
+                            offerta.setId_utente(utente.getId());
+                            offerta.setValore(Float.parseFloat(etOffer.getText().toString()));
+
+                            LocalDateTime currentDateTime = LocalDateTime.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            String dateTimeString = currentDateTime.format(formatter);
+
+
+                            offerta.setData(dateTimeString);
+
+                            apiService.creaOfferta(offerta)
+                                            .enqueue(new Callback<Void>() {
+                                                @Override
+                                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                                    Toast.makeText(DettagliAstaActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
+                                                    if (fromAsteCreate)
+                                                        openActivityAsteCreate();
+                                                    else
+                                                        openActivityRisultatiRicerca();
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<Void> call, Throwable t) {
+                                                    Toast.makeText(DettagliAstaActivity.this, "Errore durante la creazione dell'offerta!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    })
+                    .show();
         });
     }
 
@@ -329,6 +385,30 @@ public class DettagliAstaActivity extends AppCompatActivity {
         super.onStop();
         handler.removeCallbacks(pollingRunnable);
         handler.removeCallbacks(timerRunnable);
+    }
+
+    private String calcolaTempoRimanente(LocalDateTime endDateTime) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(endDateTime)) {
+            return "Scaduta";
+        }
+
+        Period period = Period.between(now.toLocalDate(), endDateTime.toLocalDate());
+        Duration duration = Duration.between(now.toLocalTime(), endDateTime.toLocalTime());
+
+        if (period.getYears() > 0) {
+            return period.getYears() + " anni, " + period.getMonths() + " mesi";
+        } else if (period.getMonths() > 0) {
+            return period.getMonths() + " mesi, " + period.getDays() + " giorni";
+        } else if (period.getDays() > 0) {
+            return period.getDays() + " giorni";
+        } else if (duration.toHours() > 0) {
+            return duration.toHours() + " ore";
+        } else if (duration.toMinutes() > 0) {
+            return duration.toMinutes() + " minuti";
+        } else {
+            return "meno di un minuto";
+        }
     }
 
 }

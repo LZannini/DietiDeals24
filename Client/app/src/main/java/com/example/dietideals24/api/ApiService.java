@@ -80,4 +80,8 @@ public interface ApiService {
     @PUT("/notifica/segnaTutte")
     Call<Void> segnaTutteLeNotifiche(@Query("id_utente") Integer id_utente);
 
+
+    @POST("/offerta/crea")
+    Call<Void> creaOfferta(@Body OffertaDTO offertaDTO);
+
 }

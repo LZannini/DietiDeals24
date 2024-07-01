@@ -10,7 +10,7 @@ public class OffertaDTO implements Serializable {
 	private int id_utente;
 	private int id_asta;
 	private float valore;
-	private LocalDateTime data;
+	private String data;
 
 	public int getId() {
 		return id;
@@ -44,11 +44,11 @@ public class OffertaDTO implements Serializable {
 		this.valore = valore;
 	}
 
-	public LocalDateTime getData() {
+	public String getData() {
 		return data;
 	}
 
-	public void setData(LocalDateTime data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 }
