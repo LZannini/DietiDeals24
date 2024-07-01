@@ -51,7 +51,6 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
 
         ImageView astaFoto;
         TextView astaNome;
-        TextView astaPrezzo;
         ImageView astaTipoImage;
         OnAstaListener onAstaListener;
 
@@ -59,7 +58,6 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
             super(itemView);
             astaFoto = itemView.findViewById(R.id.foto_asta_image);
             astaNome = itemView.findViewById(R.id.nome_asta);
-            astaPrezzo = itemView.findViewById(R.id.prezzo_asta);
             astaTipoImage = itemView.findViewById(R.id.tipo_asta_image);
             this.onAstaListener = onAstaListener;
 
@@ -78,7 +76,6 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
 
             if (asta instanceof Asta_Ribasso) {
                 Asta_Ribasso ribasso = (Asta_Ribasso) asta;
-                astaPrezzo.setText(String.valueOf(ribasso.getPrezzo()));
                 astaTipoImage.setImageResource(R.drawable.ribasso);
                 Log.d("AuctionAdapter", "Asta di tipo Ribasso: " + ribasso.getNome());
             } else if (asta instanceof Asta_Silenziosa) {
@@ -87,7 +84,6 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
                 Log.d("AuctionAdapter", "Asta di tipo Silenziosa: " + silenziosa.getNome());
             } else if (asta instanceof Asta_Inversa) {
                 Asta_Inversa inversa = (Asta_Inversa) asta;
-                astaPrezzo.setText(String.valueOf(inversa.getPrezzo()));
                 astaTipoImage.setImageResource(R.drawable.inversa);
                 Log.d("AuctionAdapter", "Asta di tipo Inversa: " + inversa.getNome());
             } else

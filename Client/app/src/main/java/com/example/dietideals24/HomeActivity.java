@@ -57,7 +57,6 @@ public class HomeActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-
         buttonCrea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +117,16 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(Call<List<NotificaDTO>> call, Response<List<NotificaDTO>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     List<NotificaDTO> notifiche = response.body();
-                    setVisibilityRedNot(!notifiche.isEmpty());
+
+                    boolean nonLetta = false;
+
+                    for(NotificaDTO notifica: notifiche){
+                        if(!notifica.isLetta()) {
+                            nonLetta = true;
+                            break;
+                        }
+                    }
+                        setVisibilityRedNot(!notifiche.isEmpty() && nonLetta);
                 } else
                     Logger.getLogger(HomeActivity.class.getName()).log(Level.WARNING, "Notifiche vuote");
             }
@@ -130,6 +138,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void recuperaNotifiche(ApiService apiService) {
         Call<List<NotificaDTO>> call;
@@ -166,19 +175,6 @@ public class HomeActivity extends AppCompatActivity {
         //
     }
 
-    public Utente creaUtenteLoggato(UtenteDTO utenteDTO) {
-        Utente u = new Utente();
-        u.setId(utenteDTO.getId());
-        u.setUsername(utenteDTO.getUsername());
-        u.setEmail(utenteDTO.getEmail());
-        u.setPassword(utenteDTO.getPassword());
-        u.setTipo(utenteDTO.getTipo());
-        if (utenteDTO.getAvatar() != null) u.setAvatar(utenteDTO.getAvatar());
-        if (utenteDTO.getBiografia() != null) u.setBiografia(utenteDTO.getBiografia());
-        if (utenteDTO.getPaese() != null) u.setPaese(utenteDTO.getPaese());
-        if (utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
-        return u;
-    }
 
     private void disconnect() {
         builder = new AlertDialog.Builder(HomeActivity.this);

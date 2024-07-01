@@ -52,6 +52,7 @@ public class NotificaActivity extends AppCompatActivity {
         btnSegnaTutte = findViewById(R.id.btnSegna);
         btnRimuoviLette = findViewById(R.id.btnRmvRead);
         btnRimuoviTutte = findViewById(R.id.btnRmvAll);
+
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

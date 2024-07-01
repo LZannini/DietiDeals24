@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                                 if(response.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "Login effettuato con successo!", Toast.LENGTH_SHORT).show();
                                     UtenteDTO utenteDTO = response.body();
+
                                     Utente utente_intent = creaUtente(utenteDTO);
                                     openActivityHome(utente_intent);
                                 } else if(response.code() == 404) {

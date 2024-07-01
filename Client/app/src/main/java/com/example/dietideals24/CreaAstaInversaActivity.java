@@ -35,8 +35,8 @@ import retrofit2.Response;
 
 public class CreaAstaInversaActivity extends AppCompatActivity {
 
-    private Asta asta;
     private Utente utente;
+    private Asta asta;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +48,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
 
         asta = (Asta) getIntent().getSerializableExtra("asta");
         utente = (Utente) getIntent().getSerializableExtra("utente");
+
 
         DatePicker datePicker = findViewById(R.id.datePicker);
         TimePicker timePicker = findViewById(R.id.timePicker);

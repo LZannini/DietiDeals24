@@ -55,7 +55,7 @@ public class CreaAstaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        utente = (Utente) getIntent().getSerializableExtra("utente");
+        Utente utente = (Utente) getIntent().getSerializableExtra("utente");
         asta = (Asta) getIntent().getSerializableExtra("asta");
 
         fotoProdotto = findViewById(R.id.aggiungi_immagine);
@@ -75,7 +75,6 @@ public class CreaAstaActivity extends AppCompatActivity {
             descrizioneProdotto.setText(asta.getDescrizione());
             categoriaProdotto.setText(asta.getCategoria().toString().toUpperCase());
         }
-
         Categoria[] categorieDisponibili = Categoria.values();
         String[] nomiCategorie = new String[categorieDisponibili.length];
         for (int i = 0; i < categorieDisponibili.length; i++) {

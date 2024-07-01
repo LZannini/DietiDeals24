@@ -11,9 +11,9 @@ public class Offerta {
 	private int id_utente;
 	private int id_asta;
 	private float valore;
-	private LocalDateTime data;
+	private String data;
 	
-	public Offerta(int id_utente, int id_asta, float valore, LocalDateTime data) {
+	public Offerta(int id_utente, int id_asta, float valore, String data) {
 		this.id_utente = id_utente;
 		this.id_asta = id_asta;
 		this.valore = valore;
@@ -56,11 +56,11 @@ public class Offerta {
 		this.valore = valore;
 	}
 
-	public LocalDateTime getData() {
+	public String getData() {
 		return data;
 	}
 
-	public void setData(LocalDateTime data) {
+	public void setData(String data) {
 		this.data = data;
 	}
 	

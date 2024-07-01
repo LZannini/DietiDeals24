@@ -204,11 +204,11 @@ public class CercaAstaActivity extends AppCompatActivity {
     public List<Asta> creaListaModelloAsta(List<AstaDTO> listaDto) {
         List<Asta> asteList = new ArrayList<>();
         for (AstaDTO dto : listaDto) {
-            if (dto.getTipo().equals("RIBASSO")) {
+            if (dto.getTipo().equals("RIBASSO") && !utente.getTipo().toString().equals("VENDITORE")) {
                 asteList.add(creaModelloAstaR(dto));
-            } else if (dto.getTipo().equals("SILENZIOSA")) {
+            } else if (dto.getTipo().equals("SILENZIOSA") && !utente.getTipo().toString().equals("VENDITORE")) {
                 asteList.add(creaModelloAstaS(dto));
-            } else if (dto.getTipo().equals("INVERSA")) {
+            } else if (dto.getTipo().equals("INVERSA") && !utente.getTipo().toString().equals("COMPRATORE")) {
                 asteList.add(creaModelloAstaI(dto));
             }
         }
