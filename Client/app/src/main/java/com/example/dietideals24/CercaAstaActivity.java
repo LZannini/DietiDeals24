@@ -43,7 +43,7 @@ public class CercaAstaActivity extends AppCompatActivity {
     private EditText cercaAstaInput;
     private final Categoria[] items = Categoria.values();
     private AutoCompleteTextView autoCompleteTxt;
-    private UtenteDTO utente_home;
+    private Utente utente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +60,14 @@ public class CercaAstaActivity extends AppCompatActivity {
 
         autoCompleteTxt.setAdapter(adapterItems);
 
-        utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente");
+        utente = (Utente) getIntent().getSerializableExtra("utente");
 
         ImageButton back_button = findViewById(R.id.back_button);
 
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityHome(utente_home);
+                openActivityHome(utente);
                 finish();
             }
         });
@@ -101,11 +101,11 @@ public class CercaAstaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityHome(utente_home);
+        openActivityHome(utente);
         finish();
     }
 
-    private void openActivityHome(UtenteDTO utente) {
+    private void openActivityHome(Utente utente) {
         Intent intentH = new Intent(this, HomeActivity.class);
         intentH.putExtra("utente", utente);
         startActivity(intentH);
@@ -137,19 +137,19 @@ public class CercaAstaActivity extends AppCompatActivity {
                     List<Asta> asteList = creaListaModelloAsta(asteResponse);
                     List<Asta> aste = new ArrayList<>();
                     for (Asta a : asteList) {
-                        if (a.getId_creatore() != utente_home.getId())
+                        if (a.getId_creatore() != utente.getId())
                             aste.add(a);
                     }
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", (Serializable) aste);
                     intent.putExtra("criterioRicerca", finalSearchCriteria);
-                    intent.putExtra("utente", utente_home);
+                    intent.putExtra("utente", utente);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
                     intent.putExtra("listaAste", new ArrayList<AstaDTO>());
                     intent.putExtra("criterioRicerca", finalSearchCriteria);
-                    intent.putExtra("utente", utente_home);
+                    intent.putExtra("utente", utente);
                     startActivity(intent);
                 }
             }

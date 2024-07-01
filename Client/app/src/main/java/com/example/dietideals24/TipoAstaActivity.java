@@ -22,7 +22,8 @@ public class TipoAstaActivity extends AppCompatActivity {
     private LinearLayout buttonRibasso;
     private LinearLayout buttonInversa;
     private ImageButton back_button;
-    private Utente utente_intent;
+    private Utente utente;
+    private Asta asta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,9 @@ public class TipoAstaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        utente_intent = (Utente) getIntent().getSerializableExtra("utente");
-        UtenteDTO utente = creaUtenteDTO(utente_intent);
+        utente = (Utente) getIntent().getSerializableExtra("utente");
         TipoUtente tipoUtente = (TipoUtente) getIntent().getSerializableExtra("tipoUtente");
-        Asta asta = (Asta) getIntent().getSerializableExtra("asta");
+        asta = (Asta) getIntent().getSerializableExtra("asta");
 
         if(!tipoUtente.toString().equals("COMPLETO")) {
             configuraBottoni(tipoUtente.toString(), buttonInversa, buttonRibasso, buttonSilenziosa);
@@ -49,7 +49,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityCreaAsta(utente_intent);
+                openActivityCreaAsta(asta, utente);
                 finish();
             }
         });
@@ -92,7 +92,7 @@ public class TipoAstaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityCreaAsta(utente_intent);
+        openActivityCreaAsta(asta, utente);
         finish();
     }
 
@@ -101,44 +101,34 @@ public class TipoAstaActivity extends AppCompatActivity {
         button.setAlpha(0.5f);
     }
 
-    private void openActivityCreaAsta(Utente utente) {
+    private void openActivityCreaAsta(Asta asta, Utente utente) {
         Intent intent = new Intent(this, CreaAstaActivity.class);
+        intent.putExtra("asta", asta);
+        intent.putExtra("tipoUtente", utente.getTipo());
         intent.putExtra("utente", utente);
         startActivity(intent);
     }
 
-    public void openActivityAstaSilenziosa(Asta asta, UtenteDTO utente) {
+    public void openActivityAstaSilenziosa(Asta asta, Utente utente) {
         Intent intentR = new Intent(this, CreaAstaSilenziosaActivity.class);
         intentR.putExtra("asta", asta);
+        intentR.putExtra("tipoUtente", utente.getTipo());
         intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 
-    public void openActivityAstaRibasso(Asta asta, UtenteDTO utente) {
+    public void openActivityAstaRibasso(Asta asta, Utente utente) {
         Intent intentR = new Intent(this, CreaAstaRibassoActivity.class);
         intentR.putExtra("asta", asta);
+        intentR.putExtra("tipoUtente", utente.getTipo());
         intentR.putExtra("utente", utente);
         startActivity(intentR);
     }
 
-    public void openActivityAstaInversa(Asta asta, UtenteDTO utente) {
+    public void openActivityAstaInversa(Asta asta, Utente utente) {
         Intent intentR = new Intent(this, CreaAstaInversaActivity.class);
         intentR.putExtra("asta", asta);
         intentR.putExtra("utente", utente);
         startActivity(intentR);
-    }
-
-    private UtenteDTO creaUtenteDTO(Utente u) {
-        UtenteDTO utente = new UtenteDTO();
-        utente.setId(u.getId());
-        utente.setUsername(u.getUsername());
-        utente.setEmail(u.getEmail());
-        utente.setPassword(u.getPassword());
-        utente.setBiografia(u.getBiografia());
-        utente.setSitoweb(u.getSitoweb());
-        utente.setPaese(u.getPaese());
-        utente.setTipo(u.getTipo());
-        utente.setAvatar(u.getAvatar());
-        return utente;
     }
 }

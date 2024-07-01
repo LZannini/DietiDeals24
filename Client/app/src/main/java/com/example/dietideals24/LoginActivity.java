@@ -90,8 +90,8 @@ public class LoginActivity extends AppCompatActivity {
                                 if(response.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "Login effettuato con successo!", Toast.LENGTH_SHORT).show();
                                     UtenteDTO utenteDTO = response.body();
-
-                                    openActivityHome(utenteDTO);
+                                    Utente utente_intent = creaUtente(utenteDTO);
+                                    openActivityHome(utente_intent);
                                 } else if(response.code() == 404) {
                                     Toast.makeText(LoginActivity.this, "Email e/o password non corretti, riprova!", Toast.LENGTH_SHORT).show();
                                 }
@@ -122,9 +122,23 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
-    public void openActivityHome(UtenteDTO utente) {
+    public void openActivityHome(Utente utente) {
         Intent intentR = new Intent(this, HomeActivity.class);
         intentR.putExtra("utente", utente);
         startActivity(intentR);
+    }
+
+    private Utente creaUtente(UtenteDTO utenteDTO) {
+        Utente utente = new Utente();
+        utente.setId(utenteDTO.getId());
+        utente.setUsername(utenteDTO.getUsername());
+        utente.setEmail(utenteDTO.getEmail());
+        utente.setPassword(utenteDTO.getPassword());
+        utente.setBiografia(utenteDTO.getBiografia());
+        utente.setSitoweb(utenteDTO.getSitoweb());
+        utente.setPaese(utenteDTO.getPaese());
+        utente.setTipo(utenteDTO.getTipo());
+        utente.setAvatar(utenteDTO.getAvatar());
+        return utente;
     }
 }

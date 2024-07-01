@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class SceltaAccountActivity extends AppCompatActivity {
 
     private AlertDialog.Builder builder;
-    private Utente User;
+    private Utente utente;
     private UtenteDTO currentUser;
     private LinearLayout venditoreButt;
     private LinearLayout compratoreButt;
@@ -37,7 +37,7 @@ public class SceltaAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scelta_account);
 
-        User = (Utente) getIntent().getSerializableExtra("utente");
+        utente = (Utente) getIntent().getSerializableExtra("utente");
 
         venditoreButt = findViewById(R.id.button_vendi);
         compratoreButt = findViewById(R.id.button_compra);
@@ -52,7 +52,7 @@ public class SceltaAccountActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityProfilo(User);
+                openActivityProfilo(utente);
                 finish();
             }
         });
@@ -91,7 +91,7 @@ public class SceltaAccountActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityProfilo(User);
+        openActivityProfilo(utente);
         finish();
     }
 
@@ -115,8 +115,8 @@ public class SceltaAccountActivity extends AppCompatActivity {
         compratoreButt.setAlpha(1.0f);
         completoButt.setAlpha(1.0f);
 
-        if(User != null){
-            switch (User.getTipo()){
+        if(utente != null){
+            switch (utente.getTipo()){
                 case VENDITORE:
                     venditoreButt.setEnabled(false);
                     venditoreButt.setAlpha(0.5f);
@@ -138,10 +138,10 @@ public class SceltaAccountActivity extends AppCompatActivity {
                 .setCancelable(true)
                 .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        User.setTipo(nuovoTipo);
-                        currentUser = ConverteDTO(User);
+                        utente.setTipo(nuovoTipo);
+                        currentUser = ConverteDTO(utente);
                         aggiornaTipoAccount(currentUser);
-                        User = creaUtente(currentUser);
+                        utente = creaUtente(currentUser);
                         AggiornaButton();
                     }
                 })

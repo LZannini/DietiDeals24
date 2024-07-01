@@ -40,15 +40,13 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout buttonDisconnetti;
     private AlertDialog.Builder builder;
     private Utente utente;
-    private UtenteDTO utenteDTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        utenteDTO = (UtenteDTO) getIntent().getSerializableExtra("utente");
-        utente = creaUtenteLoggato(utenteDTO);
+        utente = (Utente) getIntent().getSerializableExtra("utente");
 
         buttonCrea = findViewById(R.id.button_crea);
         buttonCerca = findViewById(R.id.button_cerca);
@@ -58,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
+
 
         buttonCrea.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         buttonCerca.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityCercaAsta(utenteDTO);
+                openActivityCercaAsta(utente);
             }
         });
 
@@ -84,6 +83,9 @@ public class HomeActivity extends AppCompatActivity {
         RetrofitService retrofitService = new RetrofitService();
 
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+
+        checkNotifiche(apiService);
+
         buttonNotifica.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,6 +97,36 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 disconnect();
+            }
+        });
+    }
+
+    private void setVisibilityRedNot(boolean pallino){
+        View red_not = findViewById(R.id.pallino_notifiche);
+
+        if(pallino) red_not.setVisibility(View.VISIBLE);
+        else red_not.setVisibility(View.GONE);
+    }
+
+    private void checkNotifiche(ApiService apiService) {
+        Call<List<NotificaDTO>> call;
+
+        call = apiService.mostraNotifiche(utente.getId());
+
+        call.enqueue(new Callback<List<NotificaDTO>>() {
+            @Override
+            public void onResponse(Call<List<NotificaDTO>> call, Response<List<NotificaDTO>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    List<NotificaDTO> notifiche = response.body();
+                    setVisibilityRedNot(!notifiche.isEmpty());
+                } else
+                    Logger.getLogger(HomeActivity.class.getName()).log(Level.WARNING, "Notifiche vuote");
+            }
+
+            @Override
+            public void onFailure(Call<List<NotificaDTO>> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Errore durante il caricamento delle notifiche, riprova!", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(HomeActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
         });
     }
@@ -172,7 +204,7 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
-    private void openActivityCercaAsta(UtenteDTO utente) {
+    private void openActivityCercaAsta(Utente utente) {
         Intent intentR = new Intent(this, CercaAstaActivity.class);
         intentR.putExtra("utente", utente);
         startActivity(intentR);

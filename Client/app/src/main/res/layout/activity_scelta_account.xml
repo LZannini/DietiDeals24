@@ -55,14 +55,14 @@
             android:clickable="true"
             android:focusable="true">
 
-            <!-- <ImageView
+
+             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="46dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="40dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/icon_vendi" />
--->
+                android:src="@drawable/vendi"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -85,14 +85,15 @@
             android:clickable="true"
             android:focusable="true">
 
-            <!--
+
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="46dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="40dp"
-                android:background="@android:color/transparent"/>
--->
+                android:background="@android:color/transparent"
+                android:src="@drawable/compra"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,15 +115,16 @@
             android:orientation="horizontal"
             android:clickable="true"
             android:focusable="true">
-            <!--
+
+
                         <ImageView
                             android:layout_width="100dp"
                             android:layout_height="46dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="5dp"
+                            android:background="@android:color/transparent"
+                            android:src="@drawable/vendi_e_compra"/>
 
-                            android:background="@android:color/transparent"/>
-            -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

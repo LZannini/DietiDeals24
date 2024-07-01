@@ -34,7 +34,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
 
     private Asta astaSelezionata;
     private Utente utenteCreatore;
-    private UtenteDTO utente_home;
+    private Utente utente;
     private String criterioRicerca;
     private List<Asta> listaAste;
     private LinearLayout layout_attributi;
@@ -52,7 +52,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         assert actionBar != null;
         actionBar.hide();
 
-        utente_home = (UtenteDTO) getIntent().getSerializableExtra("utente");
+        utente = (Utente) getIntent().getSerializableExtra("utente");
         if (getIntent().getStringExtra("criterioRicerca") != null)
             criterioRicerca = getIntent().getStringExtra("criterioRicerca");
         TextView risultatiRicerca = findViewById(R.id.risultati_title);
@@ -100,7 +100,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         Intent intent = new Intent(this, DettagliAstaActivity.class);
         intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("criterioRicerca", criterioRicerca);
-        intent.putExtra("utente", utente_home);
+        intent.putExtra("utente", utente);
         intent.putExtra("asta", astaSelezionata);
         intent.putExtra("fromAsteCreate", false);
         intent.putExtra("utenteCreatore", utenteCreatore);
@@ -109,7 +109,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
 
     private void openActivityCercaAsta() {
         Intent intent = new Intent(this, CercaAstaActivity.class);
-        intent.putExtra("utente", utente_home);
+        intent.putExtra("utente", utente);
         startActivity(intent);
     }
     @Override

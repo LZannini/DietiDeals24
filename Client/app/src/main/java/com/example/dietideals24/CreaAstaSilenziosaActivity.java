@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 public class CreaAstaSilenziosaActivity extends AppCompatActivity {
 
-    private Utente utente_intent;
+    private Utente utente;
     private Asta asta;
 
     @Override
@@ -43,8 +43,7 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
         actionBar.hide();
 
         Asta asta = (Asta) getIntent().getSerializableExtra("asta");
-        UtenteDTO utente = (UtenteDTO) getIntent().getSerializableExtra("utente");
-        utente_intent = creaUtente(utente);
+        utente = (Utente) getIntent().getSerializableExtra("utente");
 
         DatePicker datePicker = findViewById(R.id.datePicker);
         TimePicker timePicker = findViewById(R.id.timePicker);
@@ -53,7 +52,7 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityTipoAsta(utente_intent, asta);
+                openActivityTipoAsta(utente, asta);
                 finish();
             }
         });
@@ -118,22 +117,8 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityTipoAsta(utente_intent, asta);
+        openActivityTipoAsta(utente, asta);
         finish();
-    }
-
-    private Utente creaUtente(UtenteDTO u) {
-        Utente utente = new Utente();
-        utente.setId(u.getId());
-        utente.setUsername(u.getUsername());
-        utente.setEmail(u.getEmail());
-        utente.setPassword(u.getPassword());
-        utente.setBiografia(u.getBiografia());
-        utente.setSitoweb(u.getSitoweb());
-        utente.setPaese(u.getPaese());
-        utente.setTipo(u.getTipo());
-        utente.setAvatar(u.getAvatar());
-        return utente;
     }
 
     private void openActivityTipoAsta(Utente utente, Asta asta) {
@@ -144,7 +129,7 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void openActivityHome(UtenteDTO utente) {
+    private void openActivityHome(Utente utente) {
         Intent intentH = new Intent(this, HomeActivity.class);
         intentH.putExtra("utente", utente);
         startActivity(intentH);
