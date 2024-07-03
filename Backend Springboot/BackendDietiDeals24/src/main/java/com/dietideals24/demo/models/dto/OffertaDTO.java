@@ -3,6 +3,8 @@ package com.dietideals24.demo.models.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.dietideals24.demo.enums.StatoOfferta;
+
 @SuppressWarnings("serial")
 public class OffertaDTO implements Serializable {
 	
@@ -11,6 +13,8 @@ public class OffertaDTO implements Serializable {
 	private int id_asta;
 	private float valore;
 	private String data;
+	private String offerente;
+	private StatoOfferta stato;
 
 	public int getId() {
 		return id;
@@ -50,5 +54,21 @@ public class OffertaDTO implements Serializable {
 
 	public void setData(String data) {
 		this.data = data;
+	}
+
+	public String getOfferente() {
+		return offerente;
+	}
+
+	public void setOfferente(String offerente) {
+		this.offerente = offerente;
+	}
+
+	public StatoOfferta getStato() {
+		return stato;
+	}
+
+	public void setStato(StatoOfferta stato) {
+		this.stato = stato;
 	}
 }

@@ -258,7 +258,7 @@ public class ProfiloActivity extends AppCompatActivity {
                             }
                         });
 
-                        pulsantiAste.setVisibility(View.INVISIBLE);
+                        pulsantiAste.setVisibility(View.GONE);
                         buttonSalva.setVisibility(View.VISIBLE);
                         return true;
                     case R.id.action_change_password:

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dietideals24.demo.enums.StatoOfferta;
 import com.dietideals24.demo.models.Offerta;
 import com.dietideals24.demo.models.dto.OffertaDTO;
 import com.dietideals24.demo.repository.OffertaRepository;
@@ -24,6 +25,7 @@ public class OffertaServiceImplements implements OffertaService {
 		offerta.setId_asta(offertaDTO.getId_asta());
 		offerta.setValore(offertaDTO.getValore());
 		offerta.setData(offertaDTO.getData());
+		offerta.setStato(offertaDTO.getStato());
 		offertaRepository.save(offerta);
 	}
 	
@@ -67,6 +69,16 @@ public class OffertaServiceImplements implements OffertaService {
         return lista_offerteDTO;
 	}
 	
+	@Override
+	public void setOffertaAccettata(int id_offerta) {
+		offertaRepository.updateStatoOfferta(id_offerta, StatoOfferta.ACCETTATA);
+	}
+	
+	@Override
+	public void setOffertaRifiutata(int id_offerta) {
+		offertaRepository.updateStatoOfferta(id_offerta, StatoOfferta.RIFIUTATA);
+	}
+	
 	private OffertaDTO creaOffertaDTO(Offerta offerta) {
 		OffertaDTO offertaDTO = new OffertaDTO();
 		offertaDTO.setId(offerta.getId());
@@ -74,6 +86,8 @@ public class OffertaServiceImplements implements OffertaService {
         offertaDTO.setId_utente(offerta.getId_utente());
         offertaDTO.setValore(offerta.getValore());
         offertaDTO.setData(offerta.getData());
+        offertaDTO.setOfferente(offerta.getOfferente());
+        offertaDTO.setStato(offerta.getStato());
         return offertaDTO;
 	}
 }

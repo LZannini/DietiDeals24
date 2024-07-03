@@ -6,28 +6,18 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dietideals24.api.ApiService;
-import com.example.dietideals24.dto.AstaDTO;
-import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.adapters.AuctionAdapter;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
-import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AsteCreateActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
 

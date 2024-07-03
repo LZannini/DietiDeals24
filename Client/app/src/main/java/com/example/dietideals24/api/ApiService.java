@@ -84,4 +84,12 @@ public interface ApiService {
     @POST("/offerta/crea")
     Call<Void> creaOfferta(@Body OffertaDTO offertaDTO);
 
+    @GET("/offerta/recuperaOrdinate")
+    Call<List<OffertaDTO>> recuperaOffertePerId(@Query("id_asta") Integer id_asta);
+
+    @PUT("/offerta/accetta")
+    Call<Void> accettaOfferta(@Query("id_offerta") Integer id_offerta);
+
+    @PUT("/offerta/rifiuta")
+    Call<Void> rifiutaOfferta(@Query("id_offerta") Integer id_offerta);
 }

@@ -12,6 +12,7 @@ public class Asta_InversaDTO {
     private Categoria categoria;
     private byte[] foto;
     private float prezzo;
+    private Float offertaMinore;
     private String scadenza;
     private StatoAsta stato;
 
@@ -85,5 +86,13 @@ public class Asta_InversaDTO {
 
     public void setStato(StatoAsta stato) {
         this.stato = stato;
+    }
+
+    public Float getOffertaMinore() {
+        return offertaMinore;
+    }
+
+    public void setOffertaMinore(Float offertaMinore) {
+        this.offertaMinore = offertaMinore;
     }
 }

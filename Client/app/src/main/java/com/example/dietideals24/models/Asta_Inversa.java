@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public class Asta_Inversa extends Asta {
 
         private float prezzo;
+        private Float offertaMinore;
         private String scadenza;
 
         public Asta_Inversa(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, String scadenza) {
@@ -33,5 +34,13 @@ public class Asta_Inversa extends Asta {
 
         public void setScadenza(String scadenza) {
             this.scadenza = scadenza;
+        }
+
+        public Float getOffertaMinore() {
+            return offertaMinore;
+        }
+
+        public void setOffertaMinore(Float offertaMinore) {
+            this.offertaMinore = offertaMinore;
         }
 }

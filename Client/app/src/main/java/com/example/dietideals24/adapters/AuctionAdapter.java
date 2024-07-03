@@ -1,4 +1,4 @@
-package com.example.dietideals24;
+package com.example.dietideals24.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dietideals24.R;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Asta_Inversa;
 import com.example.dietideals24.models.Asta_Ribasso;
@@ -32,7 +33,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
     @Override
     public AuctionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_item_asta, parent, false);
+                .inflate(R.layout.item_asta, parent, false);
         return new AuctionViewHolder(view, onAstaListener);
     }
 
