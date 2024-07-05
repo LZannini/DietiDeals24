@@ -65,7 +65,6 @@ public class ProfiloActivity extends AppCompatActivity {
     private boolean fromDettagli;
     private boolean modificaAvvenuta;
     private ImageButton back_button;
-    private Utente utenteCreatore;
 
     @SuppressLint({"SuspiciousIndentation", "WrongViewCast"})
     @Override
@@ -91,8 +90,7 @@ public class ProfiloActivity extends AppCompatActivity {
         actionBar.hide();
 
         if(fromDettagli) {
-            utenteModificato = (Utente) getIntent().getSerializableExtra("utente");
-            //utenteOriginale = creaUtente(utenteModificato);
+            utenteModificato = (Utente) getIntent().getSerializableExtra("utente_home");
             utenteOriginale = (Utente) getIntent().getSerializableExtra("utente");
             menuButton.setVisibility(View.INVISIBLE);
         } else {
@@ -306,6 +304,13 @@ public class ProfiloActivity extends AppCompatActivity {
         finish();
     }
 
+    private void openActivityDettagliAsta() {
+        Intent intentR = new Intent(this, DettagliAstaActivity.class);
+        intentR.putExtra("utente_home", utenteModificato);
+        intentR.putExtra("utente", utenteOriginale);
+        startActivity(intentR);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -358,7 +363,6 @@ public class ProfiloActivity extends AppCompatActivity {
                     intent.putExtra("listaAste", (Serializable) aste);
                     intent.putExtra("utente_home", utenteModificato);
                     intent.putExtra("utente", utenteOriginale);
-                    intent.putExtra("utenteCreatore", utenteCreatore);
                     intent.putExtra("fromDettagli", fromDettagli);
                     intent.putExtra("modificaAvvenuta", info_mod);
                     startActivity(intent);
@@ -368,7 +372,6 @@ public class ProfiloActivity extends AppCompatActivity {
                     intent.putExtra("listaAste", new ArrayList<Asta>());
                     intent.putExtra("utente_home", utenteModificato);
                     intent.putExtra("utente", utenteOriginale);
-                    intent.putExtra("utenteCreatore", utenteCreatore);
                     intent.putExtra("fromDettagli", fromDettagli);
                     startActivity(intent);
                     finish();

@@ -145,7 +145,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         etTitle.setText(asta.getNome());
         etDescription.setText(asta.getDescrizione());
         tvCategoryValue.setText(asta.getCategoria().toString());
-        if(fromAsteCreate)
+        if(fromAsteCreate && !fromDettagli)
             tvCreatorValue.setText(utenteProfilo.getUsername());
         else
             tvCreatorValue.setText(utenteCreatore.getUsername());
@@ -247,11 +247,11 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                             } else if(response.body() != null) {
                                 userSection.setVisibility(View.GONE);
                             }
+
                         }
 
                         @Override
                         public void onFailure(Call<List<OffertaDTO>> call, Throwable t) {
-
                         }
                     });
         }
@@ -362,10 +362,11 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         Intent intent = new Intent(this, AsteCreateActivity.class);
         intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("utente_home", utente);
-        intent.putExtra("utente", utenteProfilo);
+        intent.putExtra("utente", utenteCreatore);
         intent.putExtra("utenteCreatore", utenteCreatore);
         intent.putExtra("fromDettagli", fromDettagli);
         intent.putExtra("modificaAvvenuta", modificaAvvenuta);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
     }
 
