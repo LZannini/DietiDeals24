@@ -56,6 +56,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
         EditText prezzoEditText = findViewById(R.id.prezzoEditText);
         Button createButton = findViewById(R.id.crea_button);
         ImageButton back_button = findViewById(R.id.back_button);
+        ImageButton home_button = findViewById(R.id.home_button);
 
         String valFormattato = NumberFormat.getCurrencyInstance(Locale.ITALY).format(1.0);
         prezzoEditText.setText(valFormattato);
@@ -64,6 +65,14 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openActivityTipoAsta(utente, asta);
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });

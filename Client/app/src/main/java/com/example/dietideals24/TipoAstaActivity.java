@@ -34,6 +34,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         buttonRibasso = findViewById(R.id.button_ribasso);
         buttonInversa = findViewById(R.id.button_inversa);
         back_button = findViewById(R.id.back_button);
+        ImageButton home_button = findViewById(R.id.home_button);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -50,6 +51,14 @@ public class TipoAstaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openActivityCreaAsta(asta, utente);
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });
@@ -107,6 +116,12 @@ public class TipoAstaActivity extends AppCompatActivity {
         intent.putExtra("tipoUtente", utente.getTipo());
         intent.putExtra("utente", utente);
         startActivity(intent);
+    }
+
+    public void openActivityHome(Utente utente) {
+        Intent intentR = new Intent(this, HomeActivity.class);
+        intentR.putExtra("utente", utente);
+        startActivity(intentR);
     }
 
     public void openActivityAstaSilenziosa(Asta asta, Utente utente) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,9 +13,23 @@
         android:id="@+id/back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/baseline_arrow_back_24"
+        android:layout_gravity="start"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:layout_gravity="start"/>
+        android:src="@drawable/baseline_arrow_back_24"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ImageButton
+        android:id="@+id/home_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="8dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/home"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/titolo_activity"
@@ -56,7 +71,8 @@
                 android:layout_marginStart="10dp"
                 android:background="@null"
                 android:contentDescription="Decrement"
-                android:src="@drawable/minus_icon" />
+                android:src="@drawable/minus_icon"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/prezzo_iniziale"
@@ -66,7 +82,8 @@
                 android:gravity="center"
                 android:inputType="numberDecimal"
                 android:padding="10dp"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageButton
                 android:id="@+id/incr_prezzo_iniziale"
@@ -75,7 +92,8 @@
                 android:layout_marginEnd="10dp"
                 android:background="@null"
                 android:contentDescription="Increment"
-                android:src="@drawable/plus_icon" />
+                android:src="@drawable/plus_icon"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -100,7 +118,8 @@
                 android:layout_marginStart="10dp"
                 android:background="@null"
                 android:contentDescription="Decrement"
-                android:src="@drawable/minus_icon" />
+                android:src="@drawable/minus_icon"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/prezzo_minimo"
@@ -110,7 +129,8 @@
                 android:gravity="center"
                 android:inputType="numberDecimal"
                 android:padding="10dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageButton
                 android:id="@+id/incr_prezzo_minimo"
@@ -119,7 +139,8 @@
                 android:layout_marginEnd="10dp"
                 android:background="@null"
                 android:contentDescription="Increment"
-                android:src="@drawable/plus_icon" />
+                android:src="@drawable/plus_icon"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -144,7 +165,8 @@
                 android:layout_marginStart="10dp"
                 android:background="@null"
                 android:contentDescription="Decrement"
-                android:src="@drawable/minus_icon" />
+                android:src="@drawable/minus_icon"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <EditText
                 android:id="@+id/decremento"
@@ -154,7 +176,8 @@
                 android:gravity="center"
                 android:inputType="numberDecimal"
                 android:padding="10dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <ImageButton
                 android:id="@+id/incr_decremento"
@@ -163,7 +186,8 @@
                 android:layout_marginEnd="10dp"
                 android:background="@null"
                 android:contentDescription="Increment"
-                android:src="@drawable/plus_icon" />
+                android:src="@drawable/plus_icon"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </LinearLayout>
 
@@ -193,7 +217,8 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:contentDescription="Increment Hours"
-                    android:src="@drawable/plus_icon" />
+                    android:src="@drawable/plus_icon"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
                     android:id="@+id/ore_text_view"
@@ -210,7 +235,8 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:contentDescription="Decrement Hours"
-                    android:src="@drawable/minus_icon" />
+                    android:src="@drawable/minus_icon"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
             <TextView
@@ -230,7 +256,8 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:contentDescription="Increment Minutes"
-                    android:src="@drawable/plus_icon" />
+                    android:src="@drawable/plus_icon"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
                     android:id="@+id/minuti_text_view"
@@ -247,7 +274,8 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:contentDescription="Decrement Minutes"
-                    android:src="@drawable/minus_icon" />
+                    android:src="@drawable/minus_icon"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
             <TextView
@@ -267,7 +295,8 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:contentDescription="Increment Seconds"
-                    android:src="@drawable/plus_icon" />
+                    android:src="@drawable/plus_icon"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <TextView
                     android:id="@+id/secondi_text_view"
@@ -284,7 +313,8 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:contentDescription="Decrement Seconds"
-                    android:src="@drawable/minus_icon" />
+                    android:src="@drawable/minus_icon"
+                    tools:ignore="TouchTargetSizeCheck" />
             </LinearLayout>
 
         </LinearLayout>

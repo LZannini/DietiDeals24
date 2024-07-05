@@ -50,10 +50,20 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
         TimePicker timePicker = findViewById(R.id.timePicker);
         Button createButton = findViewById(R.id.crea_button);
         ImageButton back_button = findViewById(R.id.back_button);
+        ImageButton home_button = findViewById(R.id.home_button);
+
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openActivityTipoAsta(utente, asta);
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });

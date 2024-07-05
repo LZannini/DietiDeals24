@@ -48,6 +48,7 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         layout_attributi = findViewById(R.id.layout_attributi);
         yourAuctionsText = findViewById(R.id.your_auctions_title);
         recyclerView = findViewById(R.id.risultati_recycler_view);
+        ImageButton home_button = findViewById(R.id.home_button);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         AuctionAdapter adapter = new AuctionAdapter(listaAste,this);
@@ -61,6 +62,14 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
             @Override
             public void onClick(View v) {
                 openActivityProfilo();
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });
@@ -88,6 +97,12 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         super.onBackPressed();
         openActivityProfilo();
         finish();
+    }
+
+    public void openActivityHome(Utente utente) {
+        Intent intentR = new Intent(this, HomeActivity.class);
+        intentR.putExtra("utente", utente);
+        startActivity(intentR);
     }
 
     private void openActivityProfilo() {

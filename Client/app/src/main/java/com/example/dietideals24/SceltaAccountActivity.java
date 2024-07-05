@@ -43,7 +43,7 @@ public class SceltaAccountActivity extends AppCompatActivity {
         compratoreButt = findViewById(R.id.button_compra);
         completoButt = findViewById(R.id.button_completo);
         ImageButton back_button = findViewById(R.id.back_button);
-
+        ImageButton home_button = findViewById(R.id.home_button);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -53,6 +53,14 @@ public class SceltaAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openActivityProfilo(utente);
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });
@@ -100,6 +108,12 @@ public class SceltaAccountActivity extends AppCompatActivity {
         intentP.putExtra("utente", utente);
         intentP.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentP);
+    }
+
+    public void openActivityHome(Utente utente) {
+        Intent intentR = new Intent(this, HomeActivity.class);
+        intentR.putExtra("utente", utente);
+        startActivity(intentR);
     }
 
     private void AggiornaButton(){

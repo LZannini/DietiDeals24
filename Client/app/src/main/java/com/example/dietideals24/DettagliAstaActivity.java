@@ -123,6 +123,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         etOffer = findViewById(R.id.etOffer);
         btnSubmitOffer = findViewById(R.id.btnSubmitOffer);
         btnBack = findViewById(R.id.back_button);
+        ImageButton home_button = findViewById(R.id.home_button);
 
         if (asta.getId_creatore() == utente.getId()) {
             creatorSection.setVisibility(View.VISIBLE);
@@ -269,6 +270,14 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             }
         });
 
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
+                finish();
+            }
+        });
+
         if(asta.getId_creatore() != utente.getId() && !fromAsteCreate) {
             tvCreatorValue.setTypeface(tvCreatorValue.getTypeface(), Typeface.BOLD);
             tvCreatorValue.setOnClickListener(new View.OnClickListener() {
@@ -341,6 +350,12 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         intent.putExtra("criterioRicerca", criterioRicerca);
         intent.putExtra("utente", utente);
         startActivity(intent);
+    }
+
+    public void openActivityHome(Utente utente) {
+        Intent intentR = new Intent(this, HomeActivity.class);
+        intentR.putExtra("utente", utente);
+        startActivity(intentR);
     }
 
     private void openActivityAsteCreate() {

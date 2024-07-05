@@ -46,6 +46,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         TextView noResultsText = findViewById(R.id.no_results_text);
         ImageButton back_button = findViewById(R.id.back_button);
         layout_attributi = findViewById(R.id.layout_attributi);
+        ImageButton home_button = findViewById(R.id.home_button);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -65,6 +66,14 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
             @Override
             public void onClick(View v) {
                 openActivityCercaAsta();
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });
@@ -104,6 +113,12 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         intent.putExtra("fromAsteCreate", false);
         intent.putExtra("utenteCreatore", utenteCreatore);
         startActivity(intent);
+    }
+
+    public void openActivityHome(Utente utente) {
+        Intent intentR = new Intent(this, HomeActivity.class);
+        intentR.putExtra("utente", utente);
+        startActivity(intentR);
     }
 
     private void openActivityCercaAsta() {

@@ -50,6 +50,7 @@ public class ModificaPasswordActivity extends AppCompatActivity {
         confermaPassword = findViewById(R.id.conferma_password);
         salvaButton = findViewById(R.id.salva_button);
         back_button = findViewById(R.id.back_button);
+        ImageButton home_button = findViewById(R.id.home_button);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ModificaPasswordActivity.this);
 
@@ -60,6 +61,14 @@ public class ModificaPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openActivityProfilo(utente);
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });
