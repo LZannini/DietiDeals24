@@ -23,6 +23,7 @@ import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -49,10 +50,20 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
         TimePicker timePicker = findViewById(R.id.timePicker);
         Button createButton = findViewById(R.id.crea_button);
         ImageButton back_button = findViewById(R.id.back_button);
+        ImageButton home_button = findViewById(R.id.home_button);
+
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openActivityTipoAsta(utente, asta);
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });
@@ -65,7 +76,7 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
             int year = datePicker.getYear();
             int hour = timePicker.getHour();
             int minute = timePicker.getMinute();
-            String scadenza = String.format("%02d-%02d-%d %02d:%02d", day, month, year, hour, minute);
+            String scadenza = String.format("%d-%02d-%02d %02d:%02d:00", year, month, day, hour, minute);
             Calendar currentTime = Calendar.getInstance();
             Calendar scadenzaTime = Calendar.getInstance();
             scadenzaTime.set(year, month, day, hour, minute);

@@ -1,5 +1,7 @@
 package com.example.dietideals24.dto;
 
+import com.example.dietideals24.enums.StatoOfferta;
+
 public class OffertaDTO {
 
     private int id;
@@ -7,6 +9,8 @@ public class OffertaDTO {
     private int id_asta;
     private float valore;
     private String data;
+    private String offerente;
+    private StatoOfferta stato;
 
     public OffertaDTO(int id_utente, int id_asta, float valore, String data) {
         this.id_utente = id_utente;
@@ -57,5 +61,21 @@ public class OffertaDTO {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getOfferente() {
+        return offerente;
+    }
+
+    public void setOfferente(String offerente) {
+        this.offerente = offerente;
+    }
+
+    public StatoOfferta getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoOfferta stato) {
+        this.stato = stato;
     }
 }

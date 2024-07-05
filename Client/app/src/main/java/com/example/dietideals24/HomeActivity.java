@@ -117,7 +117,6 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(Call<List<NotificaDTO>> call, Response<List<NotificaDTO>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     List<NotificaDTO> notifiche = response.body();
-
                     boolean nonLetta = false;
 
                     for(NotificaDTO notifica: notifiche){
@@ -126,7 +125,7 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                        setVisibilityRedNot(!notifiche.isEmpty() && nonLetta);
+                    setVisibilityRedNot(!notifiche.isEmpty() && nonLetta);
                 } else
                     Logger.getLogger(HomeActivity.class.getName()).log(Level.WARNING, "Notifiche vuote");
             }

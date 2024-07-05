@@ -55,7 +55,7 @@ public class CreaAstaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
-        Utente utente = (Utente) getIntent().getSerializableExtra("utente");
+        utente = (Utente) getIntent().getSerializableExtra("utente");
         asta = (Asta) getIntent().getSerializableExtra("asta");
 
         fotoProdotto = findViewById(R.id.aggiungi_immagine);

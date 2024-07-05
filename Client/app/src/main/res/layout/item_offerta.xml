@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/valOfferta"
+            android:layout_width="231dp"
+            android:layout_height="36dp"
+            android:background="@drawable/text_container"
+            android:gravity="center"
+            android:text="Offerta"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnAccept"
+            app:backgroundTint="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/baseline_check_circle_24"/>
+
+        <Button
+            android:id="@+id/btnReject"
+            app:backgroundTint="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/baseline_cancel_24" />
+    </LinearLayout>
+</LinearLayout>

@@ -10,6 +10,7 @@ public class Asta_InversaDTO {
     private byte[] foto;
     private int id_asta;
 	private float prezzo;
+	private Float offertaMinore;
 	private String scadenza;
 	
 	public int getIdCreatore() {
@@ -74,5 +75,13 @@ public class Asta_InversaDTO {
 
 	public void setScadenza(String scadenza) {
 		this.scadenza = scadenza;
+	}
+
+	public Float getOffertaMinore() {
+		return offertaMinore;
+	}
+
+	public void setOffertaMinore(Float offertaMinore) {
+		this.offertaMinore = offertaMinore;
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,5 +56,19 @@ public class OffertaController {
 			return ResponseEntity.notFound().build();
 		
 		return ResponseEntity.ok(lista_offerteDTO);
+	}
+	
+	@PutMapping("/offerta/accetta")
+	public void accettaOfferta(@RequestParam Integer id_offerta) throws IllegalArgumentException {
+		if (id_offerta == null)
+			throw new IllegalArgumentException("Errore Accetta Offerta: Il parametro 'id_offerta' è null!\n");
+		offertaService.setOffertaAccettata(id_offerta);
+	}
+	
+	@PutMapping("/offerta/rifiuta")
+	public void rifiutaOfferta(@RequestParam Integer id_offerta) throws IllegalArgumentException {
+		if (id_offerta == null)
+			throw new IllegalArgumentException("Errore Accetta Offerta: Il parametro 'id_offerta' è null!\n");
+		offertaService.setOffertaRifiutata(id_offerta);
 	}
 }

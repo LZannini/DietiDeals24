@@ -247,6 +247,9 @@ public class AstaServiceImplements implements AstaService {
 		astaDTO.setDescrizione(asta.getDescrizione());
 		astaDTO.setFoto(asta.getFoto());*/
 		astaDTO.setPrezzo(asta.getPrezzo());
+		if(asta.getOffertaMinore() != null) {
+			astaDTO.setOffertaMinore(asta.getOffertaMinore());
+		}
 		astaDTO.setScadenza(asta.getScadenza());
 		return astaDTO;
 	}

@@ -87,6 +87,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
 
         back_button = findViewById(R.id.back_button);
         creaButton = findViewById(R.id.crea_button);
+        ImageButton home_button = findViewById(R.id.home_button);
 
         valoreInizialeFormattato(prezzoIniziale, 1.00f);
         valoreInizialeFormattato(prezzoMinimo, 1.00f);
@@ -96,6 +97,14 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openActivityTipoAsta(utente, asta);
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });

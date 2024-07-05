@@ -6,28 +6,18 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.dietideals24.api.ApiService;
-import com.example.dietideals24.dto.AstaDTO;
-import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.adapters.AuctionAdapter;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
-import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AsteCreateActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
 
@@ -58,6 +48,7 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         layout_attributi = findViewById(R.id.layout_attributi);
         yourAuctionsText = findViewById(R.id.your_auctions_title);
         recyclerView = findViewById(R.id.risultati_recycler_view);
+        ImageButton home_button = findViewById(R.id.home_button);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         AuctionAdapter adapter = new AuctionAdapter(listaAste,this);
@@ -71,6 +62,14 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
             @Override
             public void onClick(View v) {
                 openActivityProfilo();
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivityHome(utente);
                 finish();
             }
         });
@@ -98,6 +97,12 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         super.onBackPressed();
         openActivityProfilo();
         finish();
+    }
+
+    public void openActivityHome(Utente utente) {
+        Intent intentR = new Intent(this, HomeActivity.class);
+        intentR.putExtra("utente", utente);
+        startActivity(intentR);
     }
 
     private void openActivityProfilo() {
