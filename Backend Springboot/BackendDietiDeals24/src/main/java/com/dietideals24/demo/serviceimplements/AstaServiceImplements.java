@@ -125,7 +125,7 @@ public class AstaServiceImplements implements AstaService {
 	@Override
 	public List<AstaDTO> trovaAsteUtente(int id_creatore) {
 		List<AstaDTO> aste_trovate = new ArrayList<>();
-		List<Asta> check_aste = astaRepository.filtraPerUtente(id_creatore, StatoAsta.ATTIVA);
+		List<Asta> check_aste = astaRepository.filtraPerUtente(id_creatore);
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);

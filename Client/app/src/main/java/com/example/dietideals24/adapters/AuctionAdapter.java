@@ -21,12 +21,20 @@ import java.util.List;
 
 public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionViewHolder> {
 
-    private final List<Asta> auctionList;
+    private List<Asta> auctionList;
     private final OnAstaListener onAstaListener;
+    private static boolean isAttive;
 
-    public AuctionAdapter(List<Asta> auctionList, OnAstaListener onAstaListener) {
+    public AuctionAdapter(List<Asta> auctionList, OnAstaListener onAstaListener, boolean isAttive) {
         this.auctionList = auctionList;
         this.onAstaListener = onAstaListener;
+        this.isAttive = isAttive;
+    }
+
+    public void setAste(List<Asta> listaAste, boolean isAttive) {
+        this.auctionList = listaAste;
+        this.isAttive = isAttive;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -41,6 +49,14 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
     public void onBindViewHolder(@NonNull AuctionViewHolder holder, int position) {
         Asta asta = auctionList.get(position);
         holder.bind(asta);
+
+        if(asta.getStato().toString().equals("VENDUTA")) {
+            holder.itemView.setBackgroundResource(R.drawable.border_venduta);
+        } else if(asta.getStato().toString().equals("FALLITA")) {
+            holder.itemView.setBackgroundResource(R.drawable.border_fallita);
+        } else {
+            holder.itemView.setBackgroundResource(0);
+        }
     }
 
     @Override
@@ -54,6 +70,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
         TextView astaNome;
         ImageView astaTipoImage;
         OnAstaListener onAstaListener;
+        boolean isClickable;
 
         public AuctionViewHolder(@NonNull View itemView, OnAstaListener onAstaListener) {
             super(itemView);
@@ -61,6 +78,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
             astaNome = itemView.findViewById(R.id.nome_asta);
             astaTipoImage = itemView.findViewById(R.id.tipo_asta_image);
             this.onAstaListener = onAstaListener;
+            this.isClickable = isAttive;
 
             itemView.setOnClickListener(this); // This refers to AuctionViewHolder which implements OnClickListener
         }
@@ -68,10 +86,14 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
         public void bind(Asta asta) {
             Bitmap bitmap;
             astaNome.setText(asta.getNome());
+
+            astaFoto.setImageBitmap(null);
             byte[] fotoBytes = asta.getFoto();
             if (fotoBytes != null) {
                 bitmap = BitmapFactory.decodeByteArray(fotoBytes, 0, fotoBytes.length);
                 astaFoto.setImageBitmap(bitmap);
+            } else {
+                astaFoto.setImageResource(R.drawable.logo_text);
             }
             //astaTipoImage.setImageResource(R.drawable.silenziosa); //<- foto del tipo
 
@@ -89,15 +111,18 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
                 Log.d("AuctionAdapter", "Asta di tipo Inversa: " + inversa.getNome());
             } else
                 Log.d("AuctionAdapter", "Tipo di asta sconosciuto: " + asta.getNome());
+
+            itemView.setClickable(isClickable);
+            itemView.setEnabled(isClickable);
         }
 
         @Override
         public void onClick(View v) {
-            onAstaListener.onAstaClick(getAdapterPosition());
+            onAstaListener.onAstaClick(getAdapterPosition(), isAttive);
         }
     }
 
     public interface OnAstaListener {
-        void onAstaClick(int position);
+        void onAstaClick(int position, boolean isAttive);
     }
 }

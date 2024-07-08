@@ -273,7 +273,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         home_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityHome(utente);
+                openActivityHome();
                 finish();
             }
         });
@@ -352,7 +352,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         startActivity(intent);
     }
 
-    public void openActivityHome(Utente utente) {
+    public void openActivityHome() {
         Intent intentR = new Intent(this, HomeActivity.class);
         intentR.putExtra("utente", utente);
         startActivity(intentR);

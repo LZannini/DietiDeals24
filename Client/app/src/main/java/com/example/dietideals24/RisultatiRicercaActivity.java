@@ -82,7 +82,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
-        AuctionAdapter adapter = new AuctionAdapter(listaAste,this);
+        AuctionAdapter adapter = new AuctionAdapter(listaAste,this, true);
         recyclerView.setAdapter(adapter);
 
         if(listaAste == null || listaAste.isEmpty()) {
@@ -127,7 +127,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         startActivity(intent);
     }
     @Override
-    public void onAstaClick(int position) {
+    public void onAstaClick(int position, boolean isAttive) {
         astaSelezionata = listaAste.get(position);
         RetrofitService retrofitService = new RetrofitService();
         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);

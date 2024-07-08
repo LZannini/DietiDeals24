@@ -394,6 +394,7 @@ public class ProfiloActivity extends AppCompatActivity {
         asta.setFoto(dto.getFoto());
         asta.setNome(dto.getNome());
         asta.setDescrizione(dto.getDescrizione());
+        asta.setStato(dto.getStato());
 
         return asta;
     }
@@ -406,6 +407,7 @@ public class ProfiloActivity extends AppCompatActivity {
         asta.setFoto(dto.getFoto());
         asta.setNome(dto.getNome());
         asta.setDescrizione(dto.getDescrizione());
+        asta.setStato((dto.getStato()));
 
         return asta;
     }
@@ -418,6 +420,7 @@ public class ProfiloActivity extends AppCompatActivity {
         asta.setFoto(dto.getFoto());
         asta.setNome(dto.getNome());
         asta.setDescrizione(dto.getDescrizione());
+        asta.setStato(dto.getStato());
 
         return asta;
     }
