@@ -43,6 +43,9 @@ public interface ApiService {
     @GET("/asta/cercaPerChiaveAndCategoria")
     Call<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@Query("chiave") String chiave, @Query("categoria") String categoria);
 
+    @GET("/asta/cercaPerOfferteUtente")
+    Call<List<AstaDTO>> cercaPerOfferteUtente(@Query("id_utente") int id_utente);
+
     @POST("/asta/creaAstaInversa")
     Call<Void> creaAstaInversa(@Body Asta_InversaDTO astaDTO);
 
@@ -86,6 +89,9 @@ public interface ApiService {
 
     @GET("/offerta/recuperaOrdinate")
     Call<List<OffertaDTO>> recuperaOffertePerId(@Query("id_asta") Integer id_asta);
+
+    @GET("/offerta/recuperaPerUtente")
+    Call<List<OffertaDTO>> recuperaOffertePerUtente(@Query("id_utente") Integer id_utente);
 
     @PUT("/offerta/accetta")
     Call<Void> accettaOfferta(@Query("id_offerta") Integer id_offerta);

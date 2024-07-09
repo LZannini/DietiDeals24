@@ -37,6 +37,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
     private String criterioRicerca;
     private List<Asta> listaAste;
     private LinearLayout layout_attributi;
+    private boolean fromHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -52,6 +53,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         assert actionBar != null;
         actionBar.hide();
 
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
         utente = (Utente) getIntent().getSerializableExtra("utente");
         if (getIntent().getStringExtra("criterioRicerca") != null)
             criterioRicerca = getIntent().getStringExtra("criterioRicerca");
@@ -82,7 +84,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
-        AuctionAdapter adapter = new AuctionAdapter(listaAste,this, true);
+        AuctionAdapter adapter = new AuctionAdapter(listaAste,this, true, false);
         recyclerView.setAdapter(adapter);
 
         if(listaAste == null || listaAste.isEmpty()) {
@@ -112,6 +114,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         intent.putExtra("asta", astaSelezionata);
         intent.putExtra("fromAsteCreate", false);
         intent.putExtra("utenteCreatore", utenteCreatore);
+        intent.putExtra("fromHome", fromHome);
         startActivity(intent);
     }
 
@@ -124,6 +127,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
     private void openActivityCercaAsta() {
         Intent intent = new Intent(this, CercaAstaActivity.class);
         intent.putExtra("utente", utente);
+        intent.putExtra("fromHome", fromHome);
         startActivity(intent);
     }
     @Override

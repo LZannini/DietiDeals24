@@ -57,22 +57,23 @@ public class ProfiloActivity extends AppCompatActivity {
     private EditText countryEditText;
     private MaterialTextView textUsername;
     private LinearLayout pulsantiAste;
-    private Button buttonSalva, buttonAsteCreate;
+    private Button buttonSalva, buttonAsteCreate, buttonOfferteFatte;
     private Utente utenteOriginale;
     private Utente utenteModificato;
     private Boolean info_mod = false;
     private byte[] imageBytes;
-    private boolean fromDettagli;
+    private boolean fromDettagli, fromHome;
     private boolean modificaAvvenuta;
-    private ImageButton back_button;
+    private ImageButton back_button, home_button;
 
-    @SuppressLint({"SuspiciousIndentation", "WrongViewCast"})
+    @SuppressLint({"SuspiciousIndentation", "WrongViewCast", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilo);
 
         fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
 
         menuButton = findViewById(R.id.icona_menu);
         avatarSelector = findViewById(R.id.foto_profilo);
@@ -83,7 +84,9 @@ public class ProfiloActivity extends AppCompatActivity {
         pulsantiAste = findViewById(R.id.pulsanti_aste);
         buttonSalva = findViewById(R.id.salva_button);
         back_button = findViewById(R.id.back_button);
+        home_button = findViewById(R.id.home_button);
         buttonAsteCreate = findViewById(R.id.asteCreate_button);
+        buttonOfferteFatte = findViewById(R.id.leTueOfferte_button);
         textUsername = findViewById((R.id.text_nomeProfilo));
 
         ActionBar actionBar = getSupportActionBar();
@@ -93,6 +96,8 @@ public class ProfiloActivity extends AppCompatActivity {
             utenteModificato = (Utente) getIntent().getSerializableExtra("utente_home");
             utenteOriginale = (Utente) getIntent().getSerializableExtra("utente");
             menuButton.setVisibility(View.INVISIBLE);
+            buttonOfferteFatte.setVisibility(View.GONE);
+            home_button.setVisibility(View.VISIBLE);
         } else {
             modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", modificaAvvenuta);
             if (modificaAvvenuta) {
@@ -133,11 +138,27 @@ public class ProfiloActivity extends AppCompatActivity {
             }
         });
 
+        home_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivityHome();
+            }
+        });
+
         if(!fromDettagli)
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openMenuProfilo(v, utenteOriginale);
+                }
+            });
+
+            buttonOfferteFatte.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    RetrofitService retrofitService = new RetrofitService();
+                    ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                    trovaOfferteFatte(apiService);
                 }
             });
 
@@ -304,13 +325,6 @@ public class ProfiloActivity extends AppCompatActivity {
         finish();
     }
 
-    private void openActivityDettagliAsta() {
-        Intent intentR = new Intent(this, DettagliAstaActivity.class);
-        intentR.putExtra("utente_home", utenteModificato);
-        intentR.putExtra("utente", utenteOriginale);
-        startActivity(intentR);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -365,6 +379,7 @@ public class ProfiloActivity extends AppCompatActivity {
                     intent.putExtra("utente", utenteOriginale);
                     intent.putExtra("fromDettagli", fromDettagli);
                     intent.putExtra("modificaAvvenuta", info_mod);
+                    intent.putExtra("fromHome", fromHome);
                     startActivity(intent);
                     finish();
                 } else {
@@ -373,6 +388,7 @@ public class ProfiloActivity extends AppCompatActivity {
                     intent.putExtra("utente_home", utenteModificato);
                     intent.putExtra("utente", utenteOriginale);
                     intent.putExtra("fromDettagli", fromDettagli);
+                    intent.putExtra("fromHome", fromHome);
                     startActivity(intent);
                     finish();
                 }
@@ -380,6 +396,42 @@ public class ProfiloActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<List<AstaDTO>> call, @NonNull Throwable t) {
+                Toast.makeText(ProfiloActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
+                Logger.getLogger(ProfiloActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
+            }
+        });
+    }
+
+    public void trovaOfferteFatte(ApiService apiService) {
+        Call<List<AstaDTO>> call;
+        call = apiService.cercaPerOfferteUtente(utenteOriginale.getId());
+
+        call.enqueue(new Callback<List<AstaDTO>>() {
+            @Override
+            public void onResponse(Call<List<AstaDTO>> call, Response<List<AstaDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<AstaDTO> asteResponse = response.body();
+                    List<Asta> asteList = creaListaModelloAsta(asteResponse);
+                    List<Asta> aste = new ArrayList<>();
+                    for (Asta a : asteList) {
+                        aste.add(a);
+                    }
+                    Intent intent = new Intent(ProfiloActivity.this, OfferteFatteActivity.class);
+                    intent.putExtra("listaAste", (Serializable) aste);
+                    intent.putExtra("utente_home", utenteModificato);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(ProfiloActivity.this, OfferteFatteActivity.class);
+                    intent.putExtra("listaAste", new ArrayList<Asta>());
+                    intent.putExtra("utente_home", utenteModificato);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AstaDTO>> call, Throwable t) {
                 Toast.makeText(ProfiloActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(ProfiloActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
@@ -395,6 +447,7 @@ public class ProfiloActivity extends AppCompatActivity {
         asta.setNome(dto.getNome());
         asta.setDescrizione(dto.getDescrizione());
         asta.setStato(dto.getStato());
+        asta.setVincitore(dto.getVincitore());
 
         return asta;
     }
@@ -408,6 +461,7 @@ public class ProfiloActivity extends AppCompatActivity {
         asta.setNome(dto.getNome());
         asta.setDescrizione(dto.getDescrizione());
         asta.setStato((dto.getStato()));
+        asta.setVincitore(dto.getVincitore());
 
         return asta;
     }
@@ -421,6 +475,7 @@ public class ProfiloActivity extends AppCompatActivity {
         asta.setNome(dto.getNome());
         asta.setDescrizione(dto.getDescrizione());
         asta.setStato(dto.getStato());
+        asta.setVincitore(dto.getVincitore());
 
         return asta;
     }

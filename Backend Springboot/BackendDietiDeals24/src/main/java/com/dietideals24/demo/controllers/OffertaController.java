@@ -36,11 +36,11 @@ public class OffertaController {
 		offertaService.rimuoviOfferta(id);
 	}
 	
-	@GetMapping("/offerta/recupera")
-	public ResponseEntity<List<OffertaDTO>> getOfferte(@RequestParam Integer id_asta) throws IllegalArgumentException {
-		if (id_asta == null) 
-			throw new IllegalArgumentException("Errore Recupero Offerte: Il parametro 'id_asta' è null!\n");
-		List<OffertaDTO> lista_offerteDTO = offertaService.getOfferte(id_asta);  
+	@GetMapping("/offerta/recuperaPerUtente")
+	public ResponseEntity<List<OffertaDTO>> getOfferte(@RequestParam Integer id_utente) throws IllegalArgumentException {
+		if (id_utente == null) 
+			throw new IllegalArgumentException("Errore Recupero Offerte: Il parametro 'id_utente' è null!\n");
+		List<OffertaDTO> lista_offerteDTO = offertaService.getOfferteUtente(id_utente);  
 		if (lista_offerteDTO == null || lista_offerteDTO.isEmpty())
 			return ResponseEntity.notFound().build();
 		

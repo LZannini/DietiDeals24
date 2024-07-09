@@ -196,12 +196,14 @@ public class HomeActivity extends AppCompatActivity {
     private void openActivityCreaAsta(Utente u) {
         Intent intentR = new Intent(this, CreaAstaActivity.class);
         intentR.putExtra("utente", u);
+        intentR.putExtra("fromHome", true);
         startActivity(intentR);
     }
 
     private void openActivityCercaAsta(Utente utente) {
         Intent intentR = new Intent(this, CercaAstaActivity.class);
         intentR.putExtra("utente", utente);
+        intentR.putExtra("fromHome", true);
         startActivity(intentR);
     }
 

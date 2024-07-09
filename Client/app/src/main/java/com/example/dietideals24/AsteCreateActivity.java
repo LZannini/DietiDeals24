@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,15 +30,16 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
     private List<Asta> listaAste;
     private List<Asta> aste_attive;
     private List<Asta> aste_concluse;
-    private TextView noAuctionsText, yourAuctionsText;
+    private TextView noAuctionsText;
     private RecyclerView recyclerView;
     private ImageButton back_button;
     private MaterialButton btnAttive, btnConcluse;
+    private Button btnCrea;
     private LinearLayout layout_attributi;
     private Asta astaSelezionata;
     private Boolean fromDettagli;
     private Boolean modificaAvvenuta;
-    private boolean attiva;
+    private boolean attiva, fromHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         setContentView(R.layout.activity_aste_create);
 
         modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", false);
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
         fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
         utente = (Utente) getIntent().getSerializableExtra("utente");
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
@@ -65,13 +68,14 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         back_button = findViewById(R.id.back_button);
         btnAttive = findViewById(R.id.btn_aste_attive);
         btnConcluse = findViewById(R.id.btn_aste_concluse);
+        btnCrea = findViewById(R.id.crea_button);
         layout_attributi = findViewById(R.id.layout_attributi);
         recyclerView = findViewById(R.id.risultati_recycler_view);
         ImageButton home_button = findViewById(R.id.home_button);
 
         attiva = true;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        AuctionAdapter adapter = new AuctionAdapter(aste_attive,this, true);
+        AuctionAdapter adapter = new AuctionAdapter(aste_attive,this, true, true);
         recyclerView.setAdapter(adapter);
 
         btnAttive.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +86,15 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
                 btnConcluse.setBackgroundColor(Color.parseColor("#0E4273"));
                 adapter.setAste(aste_attive, attiva);
                 adapter.notifyDataSetChanged();
+                if(aste_attive == null || aste_attive.isEmpty()) {
+                    noAuctionsText.setVisibility(View.VISIBLE);
+                    btnCrea.setVisibility(View.VISIBLE);
+                    int childCount = layout_attributi.getChildCount();
+                    for (int i = 0; i < childCount; i++) {
+                        View child = layout_attributi.getChildAt(i);
+                        child.setVisibility(View.INVISIBLE);
+                    }
+                }
             }
         });
 
@@ -90,6 +103,12 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
             public void onClick(View view) {
                 attiva = false;
                 noAuctionsText.setVisibility(View.GONE);
+                btnCrea.setVisibility(View.GONE);
+                int childCount = layout_attributi.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    View child = layout_attributi.getChildAt(i);
+                    child.setVisibility(View.VISIBLE);
+                }
                 btnConcluse.setBackgroundColor(Color.parseColor("#FF0000"));
                 btnAttive.setBackgroundColor(Color.parseColor("#0E4273"));
                 adapter.setAste(aste_concluse, attiva);
@@ -117,8 +136,16 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
             }
         });
 
+        btnCrea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivityCreaAsta();
+            }
+        });
+
         if(attiva && (aste_attive == null || aste_attive.isEmpty())) {
             noAuctionsText.setVisibility(View.VISIBLE);
+            btnCrea.setVisibility(View.VISIBLE);
             int childCount = layout_attributi.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View child = layout_attributi.getChildAt(i);
@@ -163,7 +190,17 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         intent.putExtra("fromAsteCreate", true);
         intent.putExtra("fromDettagli", fromDettagli);
         intent.putExtra("modificaAvvenuta", modificaAvvenuta);
+        intent.putExtra("fromHome", fromHome);
         startActivity(intent);
+    }
+
+    private void openActivityCreaAsta() {
+        Intent intentR = new Intent(this, CreaAstaActivity.class);
+        intentR.putExtra("utente", utente_home);
+        intentR.putExtra("fromHome", false);
+        intentR.putExtra("listaAste", (Serializable) listaAste);
+        intentR.putExtra("modificaAvvenuta", modificaAvvenuta);
+        startActivity(intentR);
     }
 
 

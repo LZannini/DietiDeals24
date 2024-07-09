@@ -84,6 +84,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     private Runnable pollingRunnable;
     private Runnable timerRunnable;
     private long timerValue;
+    private boolean fromHome;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -349,6 +350,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("criterioRicerca", criterioRicerca);
         intent.putExtra("utente", utente);
+        intent.putExtra("fromHome", fromHome);
         startActivity(intent);
     }
 
@@ -366,6 +368,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         intent.putExtra("utenteCreatore", utenteCreatore);
         intent.putExtra("fromDettagli", fromDettagli);
         intent.putExtra("modificaAvvenuta", modificaAvvenuta);
+        intent.putExtra("fromHome", fromHome);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
     }
@@ -375,6 +378,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         intentR.putExtra("utente_home", utente);
         intentR.putExtra("utente", utenteCreatore);
         intentR.putExtra("fromDettagli", true);
+        intentR.putExtra("fromHome", fromHome);
         startActivity(intentR);
     }
 

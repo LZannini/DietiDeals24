@@ -44,6 +44,10 @@ public class CercaAstaActivity extends AppCompatActivity {
     private final Categoria[] items = Categoria.values();
     private AutoCompleteTextView autoCompleteTxt;
     private Utente utente;
+    private boolean fromHome;
+    private boolean modificaAvvenuta;
+    private List<Asta> listaAste;
+    private ImageButton back_button, home_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +66,33 @@ public class CercaAstaActivity extends AppCompatActivity {
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
 
-        ImageButton back_button = findViewById(R.id.back_button);
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
+
+        listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
+
+        modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", false);
+
+        back_button = findViewById(R.id.back_button);
+
+        home_button = findViewById(R.id.home_button);
+
+        if(!fromHome) {
+            home_button.setVisibility(View.VISIBLE);
+        }
 
         back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fromHome) {
+                    openActivityHome(utente);
+                } else {
+                    openActivityOfferteFatte();
+                }
+                finish();
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openActivityHome(utente);
@@ -101,7 +129,11 @@ public class CercaAstaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityHome(utente);
+        if(fromHome) {
+            openActivityHome(utente);
+        } else {
+            openActivityOfferteFatte();
+        }
         finish();
     }
 
@@ -109,6 +141,19 @@ public class CercaAstaActivity extends AppCompatActivity {
         Intent intentH = new Intent(this, HomeActivity.class);
         intentH.putExtra("utente", utente);
         startActivity(intentH);
+    }
+
+    private void openActivityOfferteFatte() {
+        Intent intent = new Intent(this, OfferteFatteActivity.class);
+        intent.putExtra("utente", utente);
+        intent.putExtra("utente_home", utente);
+        intent.putExtra("modificaAvvenuta", modificaAvvenuta);
+        if(listaAste != null) {
+            intent.putExtra("listaAste", (Serializable) listaAste);
+        } else {
+            intent.putExtra("listaAste", new ArrayList<>());
+        }
+        startActivity(intent);
     }
 
     private void cercaAsta(ApiService apiService, String filtro, String query) {

@@ -124,6 +124,17 @@ public class AstaController {
 		return ResponseEntity.ok(lista_asteDTO);
 	}
 	
+	@GetMapping("/asta/cercaPerOfferteUtente")
+	public ResponseEntity<List<AstaDTO>> cercaPerOfferteUtente(@RequestParam Integer id_utente){
+		if (id_utente == null)
+			throw new IllegalArgumentException("Errore Ricerca Asta (per utente): Campo 'id_utente' nullo!\n");
+		List<AstaDTO> lista_asteDTO = astaService.trovaAsteOfferteUtente(id_utente);
+		if (lista_asteDTO == null || lista_asteDTO.isEmpty())
+			return ResponseEntity.notFound().build();
+		
+		return ResponseEntity.ok(lista_asteDTO);
+	}
+	
 	@GetMapping("/asta/dettagliAstaInversa")
     public ResponseEntity<Asta_InversaDTO> dettagliAstaInversa(@RequestParam Integer id) {
         if (id == null)

@@ -141,6 +141,25 @@ public class AstaServiceImplements implements AstaService {
 		}
 		return aste_trovate;
 	}
+	
+	public List<AstaDTO> trovaAsteOfferteUtente(int id_utente) {
+		List<AstaDTO> aste_trovate = new ArrayList<>();
+		List<Asta> check_aste = astaRepository.filtraPerOfferteUtente(id_utente);
+		if (!check_aste.isEmpty()) {
+			for (Asta a : check_aste) {
+				AstaDTO astaDTO = creaAstaDTO(a);
+				if(a instanceof Asta_Ribasso) {
+					astaDTO.setTipo("RIBASSO");
+				} else if (a instanceof Asta_Silenziosa) {
+					astaDTO.setTipo("SILENZIOSA");
+				} else if (a instanceof Asta_Inversa) {
+					astaDTO.setTipo("INVERSA");
+				}
+				aste_trovate.add(astaDTO);
+			}
+		}
+		return aste_trovate;
+	}
 
 	@Override
 	public List<AstaDTO> trovaAstePerParolaChiave(String chiave) {
@@ -211,6 +230,7 @@ public class AstaServiceImplements implements AstaService {
 		astaDTO.setDescrizione(asta.getDescrizione());
 		astaDTO.setFoto(asta.getFoto());
 		astaDTO.setStato(asta.getStato());
+		astaDTO.setVincitore(asta.getVincitore());
 		return astaDTO;
 	}
 	

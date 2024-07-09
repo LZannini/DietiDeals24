@@ -24,6 +24,7 @@ public class TipoAstaActivity extends AppCompatActivity {
     private ImageButton back_button;
     private Utente utente;
     private Asta asta;
+    private boolean fromHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
         utente = (Utente) getIntent().getSerializableExtra("utente");
         TipoUtente tipoUtente = (TipoUtente) getIntent().getSerializableExtra("tipoUtente");
         asta = (Asta) getIntent().getSerializableExtra("asta");
@@ -115,6 +117,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         intent.putExtra("asta", asta);
         intent.putExtra("tipoUtente", utente.getTipo());
         intent.putExtra("utente", utente);
+        intent.putExtra("fromHome", fromHome);
         startActivity(intent);
     }
 
@@ -129,6 +132,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         intentR.putExtra("asta", asta);
         intentR.putExtra("tipoUtente", utente.getTipo());
         intentR.putExtra("utente", utente);
+        intentR.putExtra("fromHome", fromHome);
         startActivity(intentR);
     }
 
@@ -137,6 +141,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         intentR.putExtra("asta", asta);
         intentR.putExtra("tipoUtente", utente.getTipo());
         intentR.putExtra("utente", utente);
+        intentR.putExtra("fromHome", fromHome);
         startActivity(intentR);
     }
 
@@ -144,6 +149,7 @@ public class TipoAstaActivity extends AppCompatActivity {
         Intent intentR = new Intent(this, CreaAstaInversaActivity.class);
         intentR.putExtra("asta", asta);
         intentR.putExtra("utente", utente);
+        intentR.putExtra("fromHome", fromHome);
         startActivity(intentR);
     }
 }

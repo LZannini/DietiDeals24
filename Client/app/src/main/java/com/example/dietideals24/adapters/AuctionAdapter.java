@@ -24,11 +24,13 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
     private List<Asta> auctionList;
     private final OnAstaListener onAstaListener;
     private static boolean isAttive;
+    private static boolean fromCreate;
 
-    public AuctionAdapter(List<Asta> auctionList, OnAstaListener onAstaListener, boolean isAttive) {
+    public AuctionAdapter(List<Asta> auctionList, OnAstaListener onAstaListener, boolean isAttive, boolean fromCreate) {
         this.auctionList = auctionList;
         this.onAstaListener = onAstaListener;
         this.isAttive = isAttive;
+        this.fromCreate = fromCreate;
     }
 
     public void setAste(List<Asta> listaAste, boolean isAttive) {
@@ -50,13 +52,14 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
         Asta asta = auctionList.get(position);
         holder.bind(asta);
 
-        if(asta.getStato().toString().equals("VENDUTA")) {
-            holder.itemView.setBackgroundResource(R.drawable.border_venduta);
-        } else if(asta.getStato().toString().equals("FALLITA")) {
-            holder.itemView.setBackgroundResource(R.drawable.border_fallita);
-        } else {
-            holder.itemView.setBackgroundResource(0);
-        }
+        if(fromCreate)
+            if(asta.getStato().toString().equals("VENDUTA")) {
+                holder.itemView.setBackgroundResource(R.drawable.border_venduta);
+            } else if(asta.getStato().toString().equals("FALLITA")) {
+                holder.itemView.setBackgroundResource(R.drawable.border_fallita);
+            } else {
+                holder.itemView.setBackgroundResource(0);
+            }
     }
 
     @Override

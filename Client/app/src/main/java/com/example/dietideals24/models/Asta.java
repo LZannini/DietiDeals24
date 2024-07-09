@@ -4,16 +4,19 @@ import com.example.dietideals24.enums.Categoria;
 import com.example.dietideals24.enums.StatoAsta;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Asta implements Serializable {
 
     private int id;
     private int id_creatore;
+    private Integer vincitore;
     private String nome;
     private String descrizione;
     private Categoria categoria;
     private byte[] foto;
     private StatoAsta stato;
+    private List<Offerta> offerte;
 
     public Asta(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto) {
         this.id_creatore = id_creatore;
@@ -82,5 +85,17 @@ public class Asta implements Serializable {
     public void setStato(StatoAsta stato) {
         this.stato = stato;
     }
+
+    public Integer getVincitore() {
+        return vincitore;
+    }
+
+    public void setVincitore(Integer vincitore) {
+        this.vincitore = vincitore;
+    }
+
+    public List<Offerta> getOfferte() {return offerte;}
+
+    public void setOfferte(List<Offerta> offerte) {this.offerte = offerte;}
 
 }

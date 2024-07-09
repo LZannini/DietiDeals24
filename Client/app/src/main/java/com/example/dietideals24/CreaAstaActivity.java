@@ -34,6 +34,9 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreaAstaActivity extends AppCompatActivity {
 
@@ -44,8 +47,10 @@ public class CreaAstaActivity extends AppCompatActivity {
     private AutoCompleteTextView categoriaProdotto;
     private Button btnAvanti;
     private byte[] imageBytes;
-    private ImageButton back_button;
+    private ImageButton back_button, home_button;
     private Utente utente;
+    private boolean fromHome, modificaAvvenuta;
+    private List<Asta> listaAste;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,9 @@ public class CreaAstaActivity extends AppCompatActivity {
         actionBar.hide();
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
+        modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", false);
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
+        listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
         asta = (Asta) getIntent().getSerializableExtra("asta");
 
         fotoProdotto = findViewById(R.id.aggiungi_immagine);
@@ -64,6 +72,11 @@ public class CreaAstaActivity extends AppCompatActivity {
         categoriaProdotto = findViewById(R.id.auto_complete_txt);
         btnAvanti = findViewById(R.id.avanti_button);
         back_button = findViewById(R.id.back_button);
+        home_button = findViewById(R.id.home_button);
+
+        if(!fromHome) {
+            home_button.setVisibility(View.VISIBLE);
+        }
 
         if (asta != null) {
             byte[] fotoBytes = asta.getFoto();
@@ -85,6 +98,18 @@ public class CreaAstaActivity extends AppCompatActivity {
         categoriaProdotto.setAdapter(adapter);
 
         back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fromHome) {
+                    openActivityHome(utente);
+                    finish();
+                } else {
+                    openActivityAsteCreate();
+                }
+            }
+        });
+
+        home_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openActivityHome(utente);
@@ -169,7 +194,21 @@ public class CreaAstaActivity extends AppCompatActivity {
         intentR.putExtra("asta", asta);
         intentR.putExtra("tipoUtente", tipoUtente);
         intentR.putExtra("utente", utente);
+        intentR.putExtra("fromHome", fromHome);
         startActivity(intentR);
+    }
+
+    private void openActivityAsteCreate() {
+        Intent intent = new Intent(this, AsteCreateActivity.class);
+        intent.putExtra("utente", utente);
+        intent.putExtra("utente_home", utente);
+        intent.putExtra("modificaAvvenuta", modificaAvvenuta);
+        if(listaAste != null) {
+            intent.putExtra("listaAste", (Serializable) listaAste);
+        } else {
+            intent.putExtra("listaAste", new ArrayList<>());
+        }
+        startActivity(intent);
     }
 
     private byte[] convertBitmapToByteArray(Bitmap bitmap) {

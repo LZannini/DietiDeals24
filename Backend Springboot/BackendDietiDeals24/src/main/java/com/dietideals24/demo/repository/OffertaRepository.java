@@ -16,8 +16,8 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface OffertaRepository extends CrudRepository<Offerta, Integer>{
   
-	 @Query("SELECT o FROM Offerta o WHERE o.id_asta = :id_asta")
-	 List<Offerta> trovaOfferte(@Param("id_asta") int id_asta);
+	 @Query("SELECT o FROM Offerta o WHERE o.id_utente = :id_utente")
+	 List<Offerta> trovaOfferteUtente(@Param("id_utente") int id_utente);
 	 
 	 @Query("SELECT o FROM Offerta o WHERE o.id_asta = :id_asta AND o.stato = 0 ORDER BY o.valore DESC")
 	 List<Offerta> trovaOfferteOrdinate(@Param("id_asta") int id_asta);

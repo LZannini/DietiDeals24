@@ -52,6 +52,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
 
     private ImageButton back_button;
     private Button creaButton;
+    private boolean fromHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
         Asta asta = (Asta) getIntent().getSerializableExtra("asta");
         utente = (Utente) getIntent().getSerializableExtra("utente");
 
@@ -258,6 +260,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         intent.putExtra("utente", utente);
         intent.putExtra("tipoUtente", utente.getTipo());
         intent.putExtra("asta", asta);
+        intent.putExtra("fromHome", fromHome);
         startActivity(intent);
     }
 
