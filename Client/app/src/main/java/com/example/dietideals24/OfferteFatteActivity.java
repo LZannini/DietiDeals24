@@ -1,6 +1,7 @@
 package com.example.dietideals24;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.example.dietideals24.adapters.AuctionAdapter;
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.OffertaDTO;
+import com.example.dietideals24.enums.StatoOfferta;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Offerta;
 import com.example.dietideals24.models.Utente;
@@ -26,6 +29,8 @@ import com.example.dietideals24.retrofit.RetrofitService;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +56,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
     private Asta astaSelezionata;
     private Boolean fromDettagli;
     private Boolean modificaAvvenuta;
-    private boolean attiva;
+    private boolean attiva, rifiutata;
     List<Offerta> offerte = new ArrayList<>();
     AuctionAdapter adapter;
 
@@ -72,6 +77,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
         aste_rifiutate = new ArrayList<>();
         aste_perse = new ArrayList<>();
         attiva = true;
+        rifiutata = false;
 
 
         RetrofitService retrofitService = new RetrofitService();
@@ -147,6 +153,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
             @Override
             public void onClick(View view) {
                 attiva = true;
+                rifiutata = false;
                 btnAttive.setBackgroundColor(Color.parseColor("#FF0000"));
                 btnVinte.setBackgroundColor(Color.parseColor("#0E4273"));
                 btnRifiutate.setBackgroundColor(Color.parseColor("#0E5273"));;
@@ -169,6 +176,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
             @Override
             public void onClick(View view) {
                 attiva = false;
+                rifiutata = false;
                 noAuctionsText.setVisibility(View.GONE);
                 btnCrea.setVisibility(View.GONE);
                 int childCount = layout_attributi.getChildCount();
@@ -189,6 +197,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
             @Override
             public void onClick(View view) {
                 attiva = false;
+                rifiutata = true;
                 noAuctionsText.setVisibility(View.GONE);
                 btnCrea.setVisibility(View.GONE);
                 int childCount = layout_attributi.getChildCount();
@@ -200,7 +209,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
                 btnAttive.setBackgroundColor(Color.parseColor("#0E4273"));
                 btnVinte.setBackgroundColor(Color.parseColor("#0E5273"));;
                 btnPerse.setBackgroundColor(Color.parseColor("#0E4273"));
-                adapter.setAste(aste_rifiutate, attiva);
+                adapter.setAste(aste_rifiutate, rifiutata);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -209,6 +218,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
             @Override
             public void onClick(View view) {
                 attiva = false;
+                rifiutata = false;
                 noAuctionsText.setVisibility(View.GONE);
                 btnCrea.setVisibility(View.GONE);
                 int childCount = layout_attributi.getChildCount();
@@ -303,6 +313,84 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
 
     @Override
     public void onAstaClick(int position, boolean isAttive) {
+        if (isAttive) {
+            if(rifiutata) {
+                astaSelezionata = aste_rifiutate.get(position);
+                aste_rifiutate.remove(position);
+            } else {
+                astaSelezionata = aste_attive.get(position);
+            }
+            showNewOfferDialog(astaSelezionata);
+        }
+    }
 
+    private void showNewOfferDialog(Asta asta) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialogTheme);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_nuova_offerta, null);
+        builder.setView(dialogView);
+
+        EditText editTextOfferAmount = dialogView.findViewById(R.id.editTextOfferAmount);
+        Button buttonSubmitOffer = dialogView.findViewById(R.id.buttonSubmitOffer);
+        Button buttonCancelOffer = dialogView.findViewById(R.id.buttonCancelOffer);
+
+        AlertDialog dialog = builder.create();
+
+        buttonSubmitOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String importoStr = editTextOfferAmount.getText().toString();
+                if (!importoStr.isEmpty()) {
+                    float importo = Float.parseFloat(importoStr);
+                    submitNewOffer(asta, importo);
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(OfferteFatteActivity.this, "Inserisci un importo valido", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        buttonCancelOffer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                aste_rifiutate.add(asta);
+            }
+        });
+
+        dialog.show();
+    }
+
+
+    private void submitNewOffer(Asta asta, float importo) {
+        RetrofitService retrofitService = new RetrofitService();
+        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+
+        OffertaDTO offerta = new OffertaDTO();
+        offerta.setId_asta(asta.getId());
+        offerta.setId_utente(utente.getId());
+        offerta.setValore(importo);
+        offerta.setStato(StatoOfferta.ATTESA);
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String dateTimeString = currentDateTime.format(formatter);
+
+        offerta.setData(dateTimeString);
+
+        apiService.creaOfferta(offerta)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        Toast.makeText(OfferteFatteActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
+                        if(rifiutata) {
+                            aste_attive.add(asta);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(OfferteFatteActivity.this, "Errore durante la creazione dell'offerta!", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

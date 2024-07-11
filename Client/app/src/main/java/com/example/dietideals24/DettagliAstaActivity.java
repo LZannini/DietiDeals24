@@ -31,6 +31,7 @@ import com.example.dietideals24.dto.Asta_InversaDTO;
 import com.example.dietideals24.dto.Asta_RibassoDTO;
 import com.example.dietideals24.dto.Asta_SilenziosaDTO;
 import com.example.dietideals24.dto.OffertaDTO;
+import com.example.dietideals24.enums.StatoAsta;
 import com.example.dietideals24.enums.StatoOfferta;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Asta_Inversa;
@@ -85,6 +86,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     private Runnable timerRunnable;
     private long timerValue;
     private boolean fromHome;
+    private OfferAdapter adapter;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -231,7 +233,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setVisibility(View.VISIBLE);
 
-            OfferAdapter adapter = new OfferAdapter(offerte, this);
+            adapter = new OfferAdapter(offerte, this);
             recyclerView.setAdapter(adapter);
             apiService.recuperaOffertePerId(asta.getId())
                     .enqueue(new Callback<List<OffertaDTO>>() {
@@ -264,7 +266,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             @Override
             public void onClick(View v) {
                 if (fromAsteCreate)
-                    openActivityAsteCreate();
+                    openActivityAsteCreate(listaAste, false);
                 else
                     openActivityRisultatiRicerca();
                 finish();
@@ -314,7 +316,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                                     Toast.makeText(DettagliAstaActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
                                                     if (fromAsteCreate)
-                                                        openActivityAsteCreate();
+                                                        openActivityAsteCreate(listaAste, false);
                                                     else
                                                         openActivityRisultatiRicerca();
                                                 }
@@ -339,7 +341,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     @Override
     public void onBackPressed() {
         if (fromAsteCreate)
-            openActivityAsteCreate();
+            openActivityAsteCreate(listaAste, false);
         else
             openActivityRisultatiRicerca();
         finish();
@@ -360,7 +362,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         startActivity(intentR);
     }
 
-    private void openActivityAsteCreate() {
+    private void openActivityAsteCreate(List<Asta> listaAste, boolean offertaAccettata) {
         Intent intent = new Intent(this, AsteCreateActivity.class);
         intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("utente_home", utente);
@@ -369,8 +371,11 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         intent.putExtra("fromDettagli", fromDettagli);
         intent.putExtra("modificaAvvenuta", modificaAvvenuta);
         intent.putExtra("fromHome", fromHome);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        if (offertaAccettata) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        }
         startActivity(intent);
+        finish();
     }
 
     private void openActivityProfilo() {
@@ -520,7 +525,10 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         Toast.makeText(DettagliAstaActivity.this, "Hai accettato l'offerta con successo!", Toast.LENGTH_SHORT).show();
-                                        openActivityAsteCreate();
+                                        for(Asta a : listaAste) {
+                                            if(a.getId() == asta.getId()) a.setStato(StatoAsta.VENDUTA);
+                                        }
+                                        openActivityAsteCreate(listaAste, true);
                                     }
 
                                     @Override
@@ -550,12 +558,14 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         RetrofitService retrofitService = new RetrofitService();
                         ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 
-                        apiService.rifiutaOfferta(offerte.get(position).getId())
+                        Offerta offerta = offerte.get(position);
+                        apiService.rifiutaOfferta(offerta.getId())
                                 .enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
+                                        offerte.remove(offerta);
+                                        adapter.notifyItemRemoved(position);
                                         Toast.makeText(DettagliAstaActivity.this, "Hai rifiutato l'offerta con successo!", Toast.LENGTH_SHORT).show();
-                                        openActivityAsteCreate();
                                     }
 
                                     @Override

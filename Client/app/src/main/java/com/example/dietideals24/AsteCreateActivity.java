@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class AsteCreateActivity extends AppCompatActivity implements AuctionAdapter.OnAstaListener {
 
     private Utente utente;
@@ -40,6 +41,7 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
     private Boolean fromDettagli;
     private Boolean modificaAvvenuta;
     private boolean attiva, fromHome;
+    private AuctionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
 
         attiva = true;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        AuctionAdapter adapter = new AuctionAdapter(aste_attive,this, true, true);
+        adapter = new AuctionAdapter(aste_attive,this, true, true);
         recyclerView.setAdapter(adapter);
 
         btnAttive.setOnClickListener(new View.OnClickListener() {

@@ -1,5 +1,6 @@
 package com.dietideals24.demo.serviceimplements;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -260,12 +261,6 @@ public class AstaServiceImplements implements AstaService {
     
     private Asta_InversaDTO creaAstaInversaDTO(Asta_Inversa asta) {
 		Asta_InversaDTO astaDTO = new Asta_InversaDTO();
-		/*astaDTO.setNome(asta.getNome());
-		astaDTO.setId_asta(asta.getId());
-		astaDTO.setIdCreatore(asta.getId_creatore());
-		astaDTO.setCategoria(asta.getCategoria());
-		astaDTO.setDescrizione(asta.getDescrizione());
-		astaDTO.setFoto(asta.getFoto());*/
 		astaDTO.setPrezzo(asta.getPrezzo());
 		if(asta.getOffertaMinore() != null) {
 			astaDTO.setOffertaMinore(asta.getOffertaMinore());
@@ -276,12 +271,6 @@ public class AstaServiceImplements implements AstaService {
     
     private Asta_RibassoDTO creaAstaAlRibassoDTO(Asta_Ribasso asta) {
 		Asta_RibassoDTO astaDTO = new Asta_RibassoDTO();
-		/*astaDTO.setNome(asta.getNome());
-		astaDTO.setId_asta(asta.getId());
-		astaDTO.setIdCreatore(asta.getId_creatore());
-		astaDTO.setCategoria(asta.getCategoria());
-		astaDTO.setDescrizione(asta.getDescrizione());
-		astaDTO.setFoto(asta.getFoto());*/
 		astaDTO.setPrezzo(asta.getPrezzo());
 		astaDTO.setMinimo(asta.getMinimo());
 		astaDTO.setDecremento(asta.getDecremento());
@@ -291,15 +280,43 @@ public class AstaServiceImplements implements AstaService {
     
     private Asta_SilenziosaDTO creaAstaSilenziosaDTO(Asta_Silenziosa asta) {
 		Asta_SilenziosaDTO astaDTO = new Asta_SilenziosaDTO();
-		/*astaDTO.setNome(asta.getNome());
-		astaDTO.setId_asta(asta.getId());
-		astaDTO.setIdCreatore(asta.getId_creatore());
-		astaDTO.setCategoria(asta.getCategoria());
-		astaDTO.setDescrizione(asta.getDescrizione());
-		astaDTO.setFoto(asta.getFoto());*/
 		astaDTO.setScadenza(asta.getScadenza());
 		return astaDTO;
 	}
+    
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void scadenzaAsteInverse() {
+    	List<Asta_Inversa> asteAttive = astaInversaRepository.cercaAsteInverse(StatoAsta.ATTIVA);
+    	
+    	for(Asta_Inversa asta : asteAttive) {
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    		LocalDateTime scadenzaTime = LocalDateTime.parse(asta.getScadenza(), formatter);
+    		
+    		if(!scadenzaTime.isAfter(LocalDateTime.now())) {
+    			asta.setStato(StatoAsta.FALLITA);
+    			astaInversaRepository.save(asta);
+    		}
+    	}
+    }
+    
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void scadenzaAsteSilenziose() {
+    	List<Asta_Silenziosa> asteAttive = astaSilenziosaRepository.cercaAsteSilenziose(StatoAsta.ATTIVA);
+    	
+    	for(Asta_Silenziosa asta : asteAttive) {
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    		LocalDateTime scadenzaTime = LocalDateTime.parse(asta.getScadenza(), formatter);
+    		
+    		if(!scadenzaTime.isAfter(LocalDateTime.now())) {
+    			asta.setStato(StatoAsta.FALLITA);
+    			astaSilenziosaRepository.save(asta);
+    		}
+    	}
+    }
     
     @Scheduled(fixedRate = 1000)
     @Transactional

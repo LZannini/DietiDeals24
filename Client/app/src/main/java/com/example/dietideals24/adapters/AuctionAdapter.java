@@ -98,7 +98,6 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
             } else {
                 astaFoto.setImageResource(R.drawable.logo_text);
             }
-            //astaTipoImage.setImageResource(R.drawable.silenziosa); //<- foto del tipo
 
             if (asta instanceof Asta_Ribasso) {
                 Asta_Ribasso ribasso = (Asta_Ribasso) asta;
