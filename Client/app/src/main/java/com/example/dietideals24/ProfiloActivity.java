@@ -123,8 +123,7 @@ public class ProfiloActivity extends AppCompatActivity {
         buttonAsteCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RetrofitService retrofitService = new RetrofitService();
-                ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                ApiService apiService = RetrofitService.getRetrofit(ProfiloActivity.this).create(ApiService.class);
                 trovaAsteCreate(apiService);
             }
         });
@@ -156,8 +155,8 @@ public class ProfiloActivity extends AppCompatActivity {
             buttonOfferteFatte.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    RetrofitService retrofitService = new RetrofitService();
-                    ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                    ApiService apiService = RetrofitService.getRetrofit(ProfiloActivity.this).create(ApiService.class);
+
                     trovaOfferteFatte(apiService);
                 }
             });
@@ -165,8 +164,7 @@ public class ProfiloActivity extends AppCompatActivity {
             buttonSalva.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RetrofitService retrofitService = new RetrofitService();
-                    ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                    ApiService apiService = RetrofitService.getRetrofit(ProfiloActivity.this).create(ApiService.class);
 
                     utenteModificato = new Utente();
 

@@ -109,8 +109,8 @@ public class CercaAstaActivity extends AppCompatActivity {
         });
 
 
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
+
 
         vaiButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -79,9 +79,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
-        RetrofitService retrofitService = new RetrofitService();
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
 
         checkNotifiche(apiService);
 

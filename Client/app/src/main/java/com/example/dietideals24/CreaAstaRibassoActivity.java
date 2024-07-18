@@ -198,8 +198,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
                     astaR.setMinimo(valMinimo);
                     astaR.setTimer(time);
 
-                    RetrofitService retrofitService = new RetrofitService();
-                    ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                    ApiService apiService = RetrofitService.getRetrofit(CreaAstaRibassoActivity.this).create(ApiService.class);
 
                     apiService.creaAstaAlRibasso(astaR)
                             .enqueue(new Callback<Void>() {

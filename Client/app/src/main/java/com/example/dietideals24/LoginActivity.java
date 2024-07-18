@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,8 @@ import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.example.dietideals24.security.JwtAuthenticationResponse;
+import com.example.dietideals24.security.TokenManager;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText;
     private EditText passwordEditText;
     private TextView buttonRegistrazione;
+
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         });
         btnL = (Button) findViewById(R.id.login_button);
 
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        apiService = RetrofitService.getInstance(this).getRetrofit(this).create(ApiService.class);
         btnL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,27 +83,35 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                TokenManager tokenManager = new TokenManager(LoginActivity.this);
+
                 UtenteDTO utente = new UtenteDTO();
                 utente.setEmail(email);
                 utente.setPassword(password);
 
                 apiService.loginUtente(utente)
-                        .enqueue(new Callback<UtenteDTO>() {
+                        .enqueue(new Callback<JwtAuthenticationResponse>() {
                             @Override
-                            public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
+                            public void onResponse(Call<JwtAuthenticationResponse> call, Response<JwtAuthenticationResponse> response) {
                                 if(response.isSuccessful()) {
-                                    Toast.makeText(LoginActivity.this, "Login effettuato con successo!", Toast.LENGTH_SHORT).show();
-                                    UtenteDTO utenteDTO = response.body();
+                                    JwtAuthenticationResponse authResponse = response.body();
+                                    if (authResponse != null && authResponse.getAccessToken() != null) {
+                                        tokenManager.saveToken(authResponse.getAccessToken());
 
-                                    Utente utente_intent = creaUtente(utenteDTO);
-                                    openActivityHome(utente_intent);
-                                } else if(response.code() == 404) {
+                                        RetrofitService.resetInstance();
+                                        apiService = RetrofitService.getInstance(LoginActivity.this).getRetrofit(LoginActivity.this).create(ApiService.class);
+
+                                        recuperaDatiUtente();
+                                    }else {
+                                        Toast.makeText(LoginActivity.this, "Token non valido ricevuto", Toast.LENGTH_SHORT).show();
+                                        }
+                                } else if(response.code() == 401) {
                                     Toast.makeText(LoginActivity.this, "Email e/o password non corretti, riprova!", Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
-                            public void onFailure(Call<UtenteDTO> call, Throwable t) {
+                            public void onFailure(Call<JwtAuthenticationResponse> call, Throwable t) {
                                 Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                             }
                         });
@@ -118,15 +130,41 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
-    public void openActivitySceltaAccount() {
-        Intent intentR = new Intent(this, SceltaAccountActivity.class);
-        startActivity(intentR);
-    }
-
     public void openActivityHome(Utente utente) {
         Intent intentR = new Intent(this, HomeActivity.class);
         intentR.putExtra("utente", utente);
         startActivity(intentR);
+    }
+
+    private void recuperaDatiUtente() {
+        TokenManager tokenManager = new TokenManager(LoginActivity.this);
+        int userId = tokenManager.getUserIdFromToken();
+
+        if (userId != -1) {
+
+            apiService.recuperaUtente(userId)
+                    .enqueue(new Callback<UtenteDTO>() {
+                        @Override
+                        public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
+
+                            if(response.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "Login effettuato con successo", Toast.LENGTH_SHORT).show();
+                                UtenteDTO utenteDTO = response.body();
+                                Utente utente_intent = creaUtente(utenteDTO);
+                                openActivityHome(utente_intent);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Errore nel recupero dei dati utente", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UtenteDTO> call, Throwable t) {
+                            Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "Errore nel recupero dei dati utente", t);
+                        }
+                    });
+        } else {
+            Toast.makeText(LoginActivity.this, "Errore nell'estrazione dell'ID utente dal token", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private Utente creaUtente(UtenteDTO utenteDTO) {

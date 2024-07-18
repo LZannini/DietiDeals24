@@ -1,6 +1,7 @@
 package com.example.dietideals24.api;
 
 import com.example.dietideals24.dto.*;
+import com.example.dietideals24.security.JwtAuthenticationResponse;
 
 import java.util.List;
 
@@ -12,11 +13,12 @@ import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
+    @POST("/auth/login")
+    Call<JwtAuthenticationResponse> loginUtente(@Body UtenteDTO utenteDTO);
+
     @POST("/utente/registra")
     Call<UtenteDTO> registraUtente(@Body UtenteDTO utenteDTO);
-
-    @POST("/utente/login")
-    Call<UtenteDTO> loginUtente(@Body UtenteDTO utenteDTO);
 
     @GET("/utente/recupera")
     Call<UtenteDTO> recuperaUtente(@Query("id") int id);

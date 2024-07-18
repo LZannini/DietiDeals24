@@ -80,8 +80,8 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
         rifiutata = false;
 
 
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
+
 
         apiService.recuperaOffertePerUtente(utente.getId())
                 .enqueue(new Callback<List<OffertaDTO>>() {
@@ -362,8 +362,8 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
 
 
     private void submitNewOffer(Asta asta, float importo) {
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
+
 
         OffertaDTO offerta = new OffertaDTO();
         offerta.setId_asta(asta.getId());

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.example.dietideals24.retrofit.RetrofitService;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

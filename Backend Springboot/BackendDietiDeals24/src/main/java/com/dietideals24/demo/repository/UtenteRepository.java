@@ -27,4 +27,7 @@ public interface UtenteRepository extends CrudRepository<Utente, Integer>{
 	@Transactional
 	@Query("UPDATE Utente u SET u.password = :password WHERE u.id = :id")
 	void updatePassword(@Param("password") String password, @Param("id") int id);
+
+	@Query("SELECT u FROM Utente u WHERE u.email = :email")
+    Optional<Utente> findByEmail(@Param("email") String email);
 }

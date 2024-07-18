@@ -117,8 +117,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
                 astaI.setScadenza(scadenza);
                 astaI.setPrezzo(prezzo);
 
-                RetrofitService retrofitService = new RetrofitService();
-                ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
                 apiService.creaAstaInversa(astaI)
                         .enqueue(new Callback<Void>() {

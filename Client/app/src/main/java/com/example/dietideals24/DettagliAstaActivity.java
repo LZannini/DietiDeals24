@@ -100,6 +100,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         isRibasso = false;
         modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", false);
         fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
         asta = (Asta) getIntent().getSerializableExtra("asta");
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
         if (getIntent().getStringExtra("criterioRicerca") != null)
@@ -136,8 +137,8 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             creatorSection.setVisibility(View.GONE);
         }
 
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
+
 
         byte[] fotoBytes = asta.getFoto();
         if (fotoBytes != null) {
@@ -415,8 +416,8 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     }
 
     private void aggiornaDettagliAsta() {
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
+
 
         apiService.recuperaDettagliAstaRibasso(asta.getId())
                 .enqueue(new Callback<Asta_RibassoDTO>() {
@@ -517,8 +518,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                 .setCancelable(true)
                 .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        RetrofitService retrofitService = new RetrofitService();
-                        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                        ApiService apiService = RetrofitService.getRetrofit(DettagliAstaActivity.this).create(ApiService.class);
 
                         apiService.accettaOfferta(offerte.get(position).getId())
                                 .enqueue(new Callback<Void>() {
@@ -555,8 +555,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                 .setCancelable(true)
                 .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        RetrofitService retrofitService = new RetrofitService();
-                        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                        ApiService apiService = RetrofitService.getRetrofit(DettagliAstaActivity.this).create(ApiService.class);
 
                         Offerta offerta = offerte.get(position);
                         apiService.rifiutaOfferta(offerta.getId())

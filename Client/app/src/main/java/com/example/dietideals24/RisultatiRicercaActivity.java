@@ -133,8 +133,8 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
     @Override
     public void onAstaClick(int position, boolean isAttive) {
         astaSelezionata = listaAste.get(position);
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
+
         recuperaUtenteById(apiService);
     }
 

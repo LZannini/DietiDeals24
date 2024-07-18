@@ -105,8 +105,7 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
                 astaS.setCategoria(asta.getCategoria());
                 astaS.setScadenza(scadenza);
 
-                RetrofitService retrofitService = new RetrofitService();
-                ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
                 apiService.creaAstaSilenziosa(astaS)
                         .enqueue(new Callback<Void>() {

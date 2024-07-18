@@ -82,8 +82,7 @@ public class NotificaActivity extends AppCompatActivity {
             }
         });
 
-        RetrofitService retrofitService = new RetrofitService();
-        apiService = retrofitService.getRetrofit().create(ApiService.class);
+        apiService = RetrofitService.getInstance(this).getRetrofit(this).create(ApiService.class);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
