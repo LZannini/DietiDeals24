@@ -5,6 +5,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +26,7 @@ public class UtenteController {
     @Qualifier("UtenteService")
     private UtenteService utenteService;
 	
+	
 	@PostMapping("/utente/registra")
 	public ResponseEntity<UtenteDTO> registra(@RequestBody UtenteDTO utenteDTO) {
 		try {
@@ -31,15 +37,7 @@ public class UtenteController {
 	    }
 	}
 	
-	@PostMapping("/utente/login")
-	public ResponseEntity<UtenteDTO> login(@RequestBody UtenteDTO utenteDTO) {
-		try {
-			UtenteDTO utenteLoggato = utenteService.loginUtente(utenteDTO);
-			return ResponseEntity.ok(utenteLoggato);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
+	
 
 	@GetMapping("/utente/recupera")
 	public ResponseEntity<UtenteDTO> recupera(@RequestParam Integer id) {

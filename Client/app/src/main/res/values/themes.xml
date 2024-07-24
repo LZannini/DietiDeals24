@@ -14,4 +14,14 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="CustomDialogTheme" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="shapeAppearanceOverlay">@style/CustomDialogShape</item>
+    </style>
+
+    <style name="CustomDialogShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
 </resources>

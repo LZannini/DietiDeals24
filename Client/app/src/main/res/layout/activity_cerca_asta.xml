@@ -21,6 +21,19 @@
             android:background="@null"
             android:src="@drawable/baseline_arrow_back_24" />
 
+        <ImageButton
+            android:id="@+id/home_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right|top"
+            android:layout_marginTop="-40dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/home"
+            android:visibility="gone"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+
         <TextView
             android:id="@+id/text_cerca"
             android:layout_width="wrap_content"

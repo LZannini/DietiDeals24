@@ -1,6 +1,7 @@
 package com.example.dietideals24.api;
 
 import com.example.dietideals24.dto.*;
+import com.example.dietideals24.security.JwtAuthenticationResponse;
 
 import java.util.List;
 
@@ -12,11 +13,12 @@ import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
 public interface ApiService {
+
+    @POST("/auth/login")
+    Call<JwtAuthenticationResponse> loginUtente(@Body UtenteDTO utenteDTO);
+
     @POST("/utente/registra")
     Call<UtenteDTO> registraUtente(@Body UtenteDTO utenteDTO);
-
-    @POST("/utente/login")
-    Call<UtenteDTO> loginUtente(@Body UtenteDTO utenteDTO);
 
     @GET("/utente/recupera")
     Call<UtenteDTO> recuperaUtente(@Query("id") int id);
@@ -43,6 +45,9 @@ public interface ApiService {
     @GET("/asta/cercaPerChiaveAndCategoria")
     Call<List<AstaDTO>> cercaPerParolaChiaveAndCategoria(@Query("chiave") String chiave, @Query("categoria") String categoria);
 
+    @GET("/asta/cercaPerOfferteUtente")
+    Call<List<AstaDTO>> cercaPerOfferteUtente(@Query("id_utente") int id_utente);
+
     @POST("/asta/creaAstaInversa")
     Call<Void> creaAstaInversa(@Body Asta_InversaDTO astaDTO);
 
@@ -51,6 +56,9 @@ public interface ApiService {
 
     @POST("/asta/creaAstaSilenziosa")
     Call<Void> creaAstaSilenziosa(@Body Asta_SilenziosaDTO astaDTO);
+
+    @GET("asta/recupera")
+    Call<AstaDTO> recuperaAsta(@Query("id") int id);
 
     @GET("/asta/dettagliAstaInversa")
     Call<Asta_InversaDTO> recuperaDettagliAstaInversa(@Query("id") int id);
@@ -86,6 +94,9 @@ public interface ApiService {
 
     @GET("/offerta/recuperaOrdinate")
     Call<List<OffertaDTO>> recuperaOffertePerId(@Query("id_asta") Integer id_asta);
+
+    @GET("/offerta/recuperaPerUtente")
+    Call<List<OffertaDTO>> recuperaOffertePerUtente(@Query("id_utente") Integer id_utente);
 
     @PUT("/offerta/accetta")
     Call<Void> accettaOfferta(@Query("id_offerta") Integer id_offerta);

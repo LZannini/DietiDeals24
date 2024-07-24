@@ -1,6 +1,11 @@
 package com.dietideals24.demo.serviceimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.dietideals24.demo.models.Utente;
@@ -13,9 +18,16 @@ public class UtenteServiceImplements implements UtenteService {
 	
 	@Autowired
 	private UtenteRepository utenteRepository;
+    private final PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    public UtenteServiceImplements(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 	
 	@Override
 	public UtenteDTO registraUtente(UtenteDTO utenteDTO) {
+        utenteDTO.setPassword(passwordEncoder.encode(utenteDTO.getPassword()));
 		utenteRepository.save(UtenteServiceImplements.creaUtente(utenteDTO));
 			
         java.util.Optional<Utente> check_utente = utenteRepository.findByEmailAndPassword(utenteDTO.getEmail(), utenteDTO.getPassword());
@@ -30,13 +42,13 @@ public class UtenteServiceImplements implements UtenteService {
 	
 	@Override
 	public UtenteDTO loginUtente(UtenteDTO utenteDTO) {
-		java.util.Optional<Utente> check_utente = utenteRepository.findByEmailAndPassword(utenteDTO.getEmail(), utenteDTO.getPassword());
-        if (!check_utente.isPresent()) {
-        	throw new IllegalArgumentException("Utente non trovato!");	
-        } else {
-        	Utente utente = check_utente.get();
-        	return UtenteServiceImplements.creaUtenteDTO(utente);
-        }
+	    java.util.Optional<Utente> check_utente = utenteRepository.findByEmail(utenteDTO.getEmail());
+	    if (!check_utente.isPresent() || !passwordEncoder.matches(utenteDTO.getPassword(), check_utente.get().getPassword())) {
+	        throw new IllegalArgumentException("Utente non trovato o password errata!");
+	    } else {
+	        Utente utente = check_utente.get();
+	        return creaUtenteDTO(utente);
+	    }
 	}
 	
 
@@ -146,4 +158,6 @@ public class UtenteServiceImplements implements UtenteService {
 
         return utenteDTO;
     }
+
+	
 }

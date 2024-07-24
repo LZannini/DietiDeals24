@@ -1,5 +1,6 @@
 package com.dietideals24.demo.serviceimplements;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -96,8 +97,15 @@ public class AstaServiceImplements implements AstaService {
 	public AstaDTO trovaAsta(int id) {
 		Asta asta = astaRepository.getAsta(id);
 		AstaDTO astaDTO = null;
-		if (asta != null) 
+		if (asta != null) { 
 			astaDTO = creaAstaDTO(asta);
+			if(asta instanceof Asta_Ribasso)
+				astaDTO.setTipo("RIBASSO");
+			else if(asta instanceof Asta_Silenziosa)
+				astaDTO.setTipo("SILENZIOSA");
+			else if (asta instanceof Asta_Inversa)
+				astaDTO.setTipo("INVERSA");
+			}
 		
 		return astaDTO;
 	}
@@ -125,7 +133,26 @@ public class AstaServiceImplements implements AstaService {
 	@Override
 	public List<AstaDTO> trovaAsteUtente(int id_creatore) {
 		List<AstaDTO> aste_trovate = new ArrayList<>();
-		List<Asta> check_aste = astaRepository.filtraPerUtente(id_creatore, StatoAsta.ATTIVA);
+		List<Asta> check_aste = astaRepository.filtraPerUtente(id_creatore);
+		if (!check_aste.isEmpty()) {
+			for (Asta a : check_aste) {
+				AstaDTO astaDTO = creaAstaDTO(a);
+				if(a instanceof Asta_Ribasso) {
+					astaDTO.setTipo("RIBASSO");
+				} else if (a instanceof Asta_Silenziosa) {
+					astaDTO.setTipo("SILENZIOSA");
+				} else if (a instanceof Asta_Inversa) {
+					astaDTO.setTipo("INVERSA");
+				}
+				aste_trovate.add(astaDTO);
+			}
+		}
+		return aste_trovate;
+	}
+	
+	public List<AstaDTO> trovaAsteOfferteUtente(int id_utente) {
+		List<AstaDTO> aste_trovate = new ArrayList<>();
+		List<Asta> check_aste = astaRepository.filtraPerOfferteUtente(id_utente);
 		if (!check_aste.isEmpty()) {
 			for (Asta a : check_aste) {
 				AstaDTO astaDTO = creaAstaDTO(a);
@@ -211,6 +238,7 @@ public class AstaServiceImplements implements AstaService {
 		astaDTO.setDescrizione(asta.getDescrizione());
 		astaDTO.setFoto(asta.getFoto());
 		astaDTO.setStato(asta.getStato());
+		astaDTO.setVincitore(asta.getVincitore());
 		return astaDTO;
 	}
 	
@@ -240,12 +268,6 @@ public class AstaServiceImplements implements AstaService {
     
     private Asta_InversaDTO creaAstaInversaDTO(Asta_Inversa asta) {
 		Asta_InversaDTO astaDTO = new Asta_InversaDTO();
-		/*astaDTO.setNome(asta.getNome());
-		astaDTO.setId_asta(asta.getId());
-		astaDTO.setIdCreatore(asta.getId_creatore());
-		astaDTO.setCategoria(asta.getCategoria());
-		astaDTO.setDescrizione(asta.getDescrizione());
-		astaDTO.setFoto(asta.getFoto());*/
 		astaDTO.setPrezzo(asta.getPrezzo());
 		if(asta.getOffertaMinore() != null) {
 			astaDTO.setOffertaMinore(asta.getOffertaMinore());
@@ -256,12 +278,6 @@ public class AstaServiceImplements implements AstaService {
     
     private Asta_RibassoDTO creaAstaAlRibassoDTO(Asta_Ribasso asta) {
 		Asta_RibassoDTO astaDTO = new Asta_RibassoDTO();
-		/*astaDTO.setNome(asta.getNome());
-		astaDTO.setId_asta(asta.getId());
-		astaDTO.setIdCreatore(asta.getId_creatore());
-		astaDTO.setCategoria(asta.getCategoria());
-		astaDTO.setDescrizione(asta.getDescrizione());
-		astaDTO.setFoto(asta.getFoto());*/
 		astaDTO.setPrezzo(asta.getPrezzo());
 		astaDTO.setMinimo(asta.getMinimo());
 		astaDTO.setDecremento(asta.getDecremento());
@@ -271,15 +287,43 @@ public class AstaServiceImplements implements AstaService {
     
     private Asta_SilenziosaDTO creaAstaSilenziosaDTO(Asta_Silenziosa asta) {
 		Asta_SilenziosaDTO astaDTO = new Asta_SilenziosaDTO();
-		/*astaDTO.setNome(asta.getNome());
-		astaDTO.setId_asta(asta.getId());
-		astaDTO.setIdCreatore(asta.getId_creatore());
-		astaDTO.setCategoria(asta.getCategoria());
-		astaDTO.setDescrizione(asta.getDescrizione());
-		astaDTO.setFoto(asta.getFoto());*/
 		astaDTO.setScadenza(asta.getScadenza());
 		return astaDTO;
 	}
+    
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void scadenzaAsteInverse() {
+    	List<Asta_Inversa> asteAttive = astaInversaRepository.cercaAsteInverse(StatoAsta.ATTIVA);
+    	
+    	for(Asta_Inversa asta : asteAttive) {
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    		LocalDateTime scadenzaTime = LocalDateTime.parse(asta.getScadenza(), formatter);
+    		
+    		if(!scadenzaTime.isAfter(LocalDateTime.now())) {
+    			asta.setStato(StatoAsta.FALLITA);
+    			astaInversaRepository.save(asta);
+    		}
+    	}
+    }
+    
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void scadenzaAsteSilenziose() {
+    	List<Asta_Silenziosa> asteAttive = astaSilenziosaRepository.cercaAsteSilenziose(StatoAsta.ATTIVA);
+    	
+    	for(Asta_Silenziosa asta : asteAttive) {
+    		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    		LocalDateTime scadenzaTime = LocalDateTime.parse(asta.getScadenza(), formatter);
+    		
+    		if(!scadenzaTime.isAfter(LocalDateTime.now())) {
+    			asta.setStato(StatoAsta.FALLITA);
+    			astaSilenziosaRepository.save(asta);
+    		}
+    	}
+    }
     
     @Scheduled(fixedRate = 1000)
     @Transactional

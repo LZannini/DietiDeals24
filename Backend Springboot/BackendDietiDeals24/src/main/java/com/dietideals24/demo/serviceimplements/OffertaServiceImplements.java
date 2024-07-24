@@ -44,8 +44,8 @@ public class OffertaServiceImplements implements OffertaService {
 	}
 
 	@Override
-	public List<OffertaDTO> getOfferte(int id_asta) {
-		List<Offerta> offerte = offertaRepository.trovaOfferte(id_asta);
+	public List<OffertaDTO> getOfferteUtente(int id_utente) {
+		List<Offerta> offerte = offertaRepository.trovaOfferteUtente(id_utente);
 		if (offerte.isEmpty())
 			return null;
 		List<OffertaDTO> lista_offerteDTO = new ArrayList<>();

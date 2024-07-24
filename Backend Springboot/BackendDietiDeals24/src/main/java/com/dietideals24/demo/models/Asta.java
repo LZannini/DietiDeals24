@@ -14,6 +14,7 @@ public class Asta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int id_creatore;
+	private Integer vincitore;
 	private String nome;
 	private String descrizione;
 	private Categoria categoria;
@@ -86,6 +87,14 @@ public class Asta {
 	
 	public void setStato(StatoAsta stato) {
 		this.stato = stato;
+	}
+
+	public Integer getVincitore() {
+		return vincitore;
+	}
+
+	public void setVincitore(Integer vincitore) {
+		this.vincitore = vincitore;
 	}
 
 }

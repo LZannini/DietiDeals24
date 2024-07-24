@@ -199,8 +199,8 @@ public class SceltaAccountActivity extends AppCompatActivity {
 
     private void aggiornaTipoAccount(UtenteDTO utente) {
 
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
+
         Call<UtenteDTO> call = apiService.aggiornaUtente(utente);
 
         call.enqueue(new Callback<UtenteDTO>() {
@@ -215,7 +215,6 @@ public class SceltaAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
-                // Gestisci errore di connessione
                 Toast.makeText(SceltaAccountActivity.this, "Errore di connessione", Toast.LENGTH_SHORT).show();
             }
         });

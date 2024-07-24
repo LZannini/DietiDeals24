@@ -82,8 +82,7 @@ public class ModificaPasswordActivity extends AppCompatActivity {
                         utente.setId(id_utente);
                         utente.setPassword(nuovaPassword.getText().toString());
 
-                        RetrofitService retrofitService = new RetrofitService();
-                        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                        ApiService apiService = RetrofitService.getRetrofit(ModificaPasswordActivity.this).create(ApiService.class);
 
                         apiService.modificaPassword(utente)
                                 .enqueue(new Callback<UtenteDTO>() {

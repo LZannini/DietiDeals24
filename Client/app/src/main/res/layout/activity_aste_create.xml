@@ -30,6 +30,31 @@
             android:src="@drawable/home"
             tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_aste_attive"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:backgroundTint="#FF0000"
+                android:text="Aste Attive" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_aste_concluse"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:backgroundTint="#0E4273"
+                android:text="Aste Concluse" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/no_auctions_text"
             android:layout_width="wrap_content"
@@ -41,17 +66,20 @@
             android:textSize="18sp"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/your_auctions_title"
+        <Button
+            android:id="@+id/crea_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/text_container"
+            android:backgroundTint="#68D1DD"
             android:gravity="center"
-            android:text="Le tue aste"
+            android:padding="18dp"
+            android:text="Creane una!"
             android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/layout_attributi"
@@ -77,15 +105,6 @@
                 android:layout_weight="3"
                 android:gravity="center"
                 android:text="Nome"
-                android:textColor="@color/gray"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Prezzo"
                 android:textColor="@color/gray"
                 android:textSize="16sp" />
 

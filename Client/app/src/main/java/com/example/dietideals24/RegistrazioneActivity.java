@@ -99,8 +99,8 @@ public class RegistrazioneActivity extends AppCompatActivity {
 
         btnR = (Button) findViewById(R.id.registrati_button);
 
-        RetrofitService retrofitService = new RetrofitService();
-        ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+        ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
+
         btnR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

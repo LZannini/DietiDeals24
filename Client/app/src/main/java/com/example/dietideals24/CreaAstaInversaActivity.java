@@ -38,6 +38,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
 
     private Utente utente;
     private Asta asta;
+    private boolean fromHome;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
 
+        fromHome = getIntent().getBooleanExtra("fromHome", true);
         asta = (Asta) getIntent().getSerializableExtra("asta");
         utente = (Utente) getIntent().getSerializableExtra("utente");
 
@@ -115,8 +117,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
                 astaI.setScadenza(scadenza);
                 astaI.setPrezzo(prezzo);
 
-                RetrofitService retrofitService = new RetrofitService();
-                ApiService apiService = retrofitService.getRetrofit().create(ApiService.class);
+                ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
                 apiService.creaAstaInversa(astaI)
                         .enqueue(new Callback<Void>() {
@@ -149,6 +150,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
         intent.putExtra("utente", utente);
         intent.putExtra("tipoUtente", utente.getTipo());
         intent.putExtra("asta", asta);
+        intent.putExtra("fromHome", fromHome);
         startActivity(intent);
     }
 

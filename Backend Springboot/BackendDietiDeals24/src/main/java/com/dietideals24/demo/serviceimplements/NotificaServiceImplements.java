@@ -85,6 +85,7 @@ public class NotificaServiceImplements implements NotificaService {
 		NotificaDTO notificaDTO = new NotificaDTO();
 		notificaDTO.setId(notifica.getId());
 		notificaDTO.setId_utente(notifica.getId_utente());
+		notificaDTO.setId_asta(notifica.getId_asta());
 		notificaDTO.setTesto(notifica.getTesto());
 		notificaDTO.setData(notifica.getData());
 		notificaDTO.setLetta(notifica.isLetta());

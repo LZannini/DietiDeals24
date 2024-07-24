@@ -44,6 +44,17 @@
             android:layout_height="40dp"
             android:layout_gravity="right"
             android:src="@drawable/baseline_menu_24" />
+
+        <ImageButton
+            android:id="@+id/home_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/home"
+            android:visibility="gone"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
     </LinearLayout>
 
         <ImageView
@@ -184,6 +195,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:gravity="center"
             android:weightSum="2"
             android:layout_marginTop="20dp">
 
@@ -192,24 +204,23 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/text_container"
-                android:backgroundTint="#B6EFF6"
                 android:gravity="center"
                 android:padding="18dp"
                 android:text="Visualizza aste create"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="12sp"/>
 
-            <Button
-                android:id="@+id/asteVinte_button"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/leTueOfferte_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/text_container"
-                android:backgroundTint="#B6EFF6"
                 android:gravity="center"
                 android:padding="18dp"
-                android:text="Visualizza aste vinte"
+                android:text="Visualizza le tue offerte"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -220,6 +231,7 @@
             android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@drawable/text_container"
             android:backgroundTint="#B6EFF6"
             android:gravity="center"

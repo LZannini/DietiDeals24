@@ -1,5 +1,7 @@
 package com.dietideals24.demo.service;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.dietideals24.demo.models.dto.UtenteDTO;
 
 public interface UtenteService {
