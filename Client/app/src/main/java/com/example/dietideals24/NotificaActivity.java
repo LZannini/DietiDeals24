@@ -364,7 +364,6 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                     Toast.makeText(NotificaActivity.this, "Asta non trovata", Toast.LENGTH_SHORT).show();
 
             }
-
             @Override
             public void onFailure(Call<AstaDTO> call, Throwable t) {
                 Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
@@ -408,6 +407,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
         if (utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
         return u;
     }*/
+
 
     public Asta_Ribasso creaModelloAstaR(AstaDTO dto) {
         Asta_Ribasso asta = new Asta_Ribasso();
