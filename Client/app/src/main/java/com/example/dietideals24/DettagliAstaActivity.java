@@ -30,6 +30,7 @@ import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.Asta_InversaDTO;
 import com.example.dietideals24.dto.Asta_RibassoDTO;
 import com.example.dietideals24.dto.Asta_SilenziosaDTO;
+import com.example.dietideals24.dto.NotificaDTO;
 import com.example.dietideals24.dto.OffertaDTO;
 import com.example.dietideals24.enums.StatoAsta;
 import com.example.dietideals24.enums.StatoOfferta;
@@ -68,10 +69,12 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     private ImageButton btnBack;
     private Bitmap bitmap;
     private Asta asta;
+    private List<NotificaDTO> notifiche;
     private List<Asta> listaAste;
     private String criterioRicerca;
     private Utente utente;
     private boolean fromAsteCreate;
+    private boolean fromNotifica;
     private boolean fromDettagli;
     private boolean modificaAvvenuta;
     private boolean isRibasso;
@@ -109,6 +112,8 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         utenteProfilo = (Utente) getIntent().getSerializableExtra("utenteProfilo");
         fromAsteCreate = getIntent().getBooleanExtra("fromAsteCreate", false);
         utenteCreatore = (Utente) getIntent().getSerializableExtra("utenteCreatore");
+        fromNotifica = getIntent().getBooleanExtra("fromNotifica",false);
+        notifiche = (List<NotificaDTO>) getIntent().getSerializableExtra("listaNotifiche");
 
         userSection = findViewById(R.id.userSection);
         creatorSection = findViewById(R.id.creatorSection);
@@ -129,13 +134,14 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         btnBack = findViewById(R.id.back_button);
         ImageButton home_button = findViewById(R.id.home_button);
 
-        if (asta.getId_creatore() == utente.getId()) {
-            creatorSection.setVisibility(View.VISIBLE);
-            userSection.setVisibility(View.GONE);
-        } else {
-            userSection.setVisibility(View.VISIBLE);
-            creatorSection.setVisibility(View.GONE);
-        }
+
+    if (asta.getId_creatore() == utente.getId()) {
+        creatorSection.setVisibility(View.VISIBLE);
+        userSection.setVisibility(View.GONE);
+    } else {
+        userSection.setVisibility(View.VISIBLE);
+        creatorSection.setVisibility(View.GONE);
+    }
 
         ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
@@ -268,8 +274,10 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             public void onClick(View v) {
                 if (fromAsteCreate)
                     openActivityAsteCreate(listaAste, false);
+                else if(fromNotifica)
+                    openActivityNotifica();
                 else
-                    openActivityRisultatiRicerca();
+                openActivityRisultatiRicerca();
                 finish();
             }
         });
@@ -318,6 +326,8 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                                     Toast.makeText(DettagliAstaActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
                                                     if (fromAsteCreate)
                                                         openActivityAsteCreate(listaAste, false);
+                                                    else if(fromNotifica)
+                                                        openActivityNotifica();
                                                     else
                                                         openActivityRisultatiRicerca();
                                                 }
@@ -343,6 +353,8 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     public void onBackPressed() {
         if (fromAsteCreate)
             openActivityAsteCreate(listaAste, false);
+        else if(fromNotifica)
+            openActivityNotifica();
         else
             openActivityRisultatiRicerca();
         finish();
@@ -355,6 +367,16 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         intent.putExtra("utente", utente);
         intent.putExtra("fromHome", fromHome);
         startActivity(intent);
+    }
+
+    private void openActivityNotifica(){
+        Intent intent = new Intent(DettagliAstaActivity.this,NotificaActivity.class);
+        intent.putExtra("utente",utente);
+        intent.putExtra("asta_ricevuta",asta);
+        intent.putExtra("isLetta",true);
+        intent.putExtra("listaNotifiche", (Serializable) notifiche);
+        startActivity(intent);
+
     }
 
     public void openActivityHome() {
@@ -525,10 +547,17 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
                                         Toast.makeText(DettagliAstaActivity.this, "Hai accettato l'offerta con successo!", Toast.LENGTH_SHORT).show();
-                                        for(Asta a : listaAste) {
-                                            if(a.getId() == asta.getId()) a.setStato(StatoAsta.VENDUTA);
+                                        if(listaAste!=null) {
+                                            for (Asta a : listaAste) {
+                                                if (a.getId() == asta.getId())
+                                                    a.setStato(StatoAsta.VENDUTA);
+                                            }
+                                            openActivityAsteCreate(listaAste, true);
                                         }
-                                        openActivityAsteCreate(listaAste, true);
+                                        else
+                                            asta.setStato(StatoAsta.VENDUTA);
+
+
                                     }
 
                                     @Override

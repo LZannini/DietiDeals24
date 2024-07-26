@@ -61,8 +61,8 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
         ImageButton home_button = findViewById(R.id.home_button);
 
         String valFormattato = NumberFormat.getCurrencyInstance(Locale.ITALY).format(1.0);
-        prezzoEditText.setText(valFormattato);
-
+        prezzoEditText.setHint(valFormattato);
+        prezzoEditText.setText("");
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

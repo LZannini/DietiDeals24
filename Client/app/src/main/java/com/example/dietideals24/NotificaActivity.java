@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,7 @@ import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +52,8 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     private Utente utente;
     private Utente UtenteCreatore;
     private Asta asta_ricevuta;
+    private boolean astaInCaricamento = false;
+    private boolean isLetta;
     private NotificaDTO notifica;
     private ImageButton back_button;
     private TextView noResultsText;
@@ -61,6 +66,9 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
         setContentView(R.layout.activity_notifica);
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
+        asta_ricevuta = (Asta) getIntent().getSerializableExtra("asta_ricevuta");
+        isLetta = getIntent().getBooleanExtra("isLetta",false);
+
         noResultsText = findViewById(R.id.no_results_text);
 
         back_button = findViewById(R.id.back_button);
@@ -111,39 +119,42 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             btnSegnaTutte.setEnabled(false);
             btnRimuoviTutte.setEnabled(false);
             btnRimuoviLette.setEnabled(false);
+            Log.d("NotificaActivity", "Nessuna notifica disponibile.");
         }
 
-        adapter = new NotificaAdapter(this, listaNotifiche);
-        adapter.setOnAstaClickListener(this);
-        listView.setAdapter(adapter);
-        for(NotificaDTO notifica : listaNotifiche){
-            RecuperaAsta(notifica,apiService);
-        }
+            adapter = new NotificaAdapter(this, listaNotifiche);
+            adapter.setOnAstaClickListener(this::onAstaClicked);
+            listView.setAdapter(adapter);
+            Log.d("NotificaActivity", "Adapter impostato con successo. Numero di notifiche: " + listaNotifiche.size());
+            if (isLetta) segnaComeLetta(notifica, apiService);
 
-
-
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            NotificaDTO notifica = listaNotifiche.get(position);
-            segnaComeLetta(notifica, apiService);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setCancelable(false);
-            builder.setMessage(notifica.getTesto());
-
-            builder.setPositiveButton("Rimuovi", (dialog, which) -> {
-                rimuoviSelezionata(notifica, apiService);
-            });
-
-            builder.setNegativeButton("Chiudi", (dialog, which) -> {
-                dialog.dismiss();
-            });
-
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            if (!notifica.isLetta()) {
-                notifica.setLetta(true);
-                adapter.updateNotifica(notifica);
+            for (NotificaDTO notifica : listaNotifiche) {
+                RecuperaAsta(notifica, apiService);
             }
-        });
+
+
+            listView.setOnItemClickListener((parent, view, position, id) -> {
+                NotificaDTO notifica = listaNotifiche.get(position);
+                segnaComeLetta(notifica, apiService);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setCancelable(false);
+                builder.setMessage(notifica.getTesto());
+
+                builder.setPositiveButton("Rimuovi", (dialog, which) -> {
+                    rimuoviSelezionata(notifica, apiService);
+                });
+
+                builder.setNegativeButton("Chiudi", (dialog, which) -> {
+                    dialog.dismiss();
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                if (!notifica.isLetta()) {
+                    notifica.setLetta(true);
+                    adapter.updateNotifica(notifica);
+                }
+            });
 
 
     }
@@ -182,7 +193,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    for (NotificaDTO notifica : listaNotifiche) {
+                    for(NotificaDTO notifica : listaNotifiche) {
                         notifica.setLetta(true);
                     }
                     adapter.notifyDataSetChanged();
@@ -291,88 +302,89 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     }
 
     private void RecuperaAsta(NotificaDTO notifica, ApiService apiService) {
+            int id_asta = notifica.getId_Asta();
+            apiService.recuperaAsta(id_asta).enqueue(new Callback<AstaDTO>() {
+                @Override
+                public void onResponse(Call<AstaDTO> call, Response<AstaDTO> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        AstaDTO astadto = response.body();
+                        Asta asta = converteToModel(astadto);
+                        asta_ricevuta = asta;
+                        if (asta instanceof Asta_Inversa) {
+                            apiService.recuperaDettagliAstaInversa(id_asta).enqueue(new Callback<Asta_InversaDTO>() {
+                                @Override
+                                public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        String nome_asta = asta.getNome();
+                                        notifica.setNome_asta(nome_asta);
+                                        asta_ricevuta = (Asta_Inversa) asta;
+                                        adapter.notifyDataSetChanged();
+                                    } else
+                                        Toast.makeText(NotificaActivity.this, "Asta Inversa non trovata", Toast.LENGTH_SHORT).show();
 
-        int id_asta = notifica.getId_Asta();
-        apiService.recuperaAsta(id_asta).enqueue(new Callback<AstaDTO>() {
-            @Override
-            public void onResponse(Call<AstaDTO> call, Response<AstaDTO> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    AstaDTO astadto = response.body();
-                    Asta asta = converteToModel(astadto);
-                    if (asta instanceof Asta_Inversa) {
-                        apiService.recuperaDettagliAstaInversa(id_asta).enqueue(new Callback<Asta_InversaDTO>() {
-                            @Override
-                            public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    String nome_asta = asta.getNome();
-                                    notifica.setNome_asta(nome_asta);
-                                    asta_ricevuta = asta;
-                                    adapter.notifyDataSetChanged();
-                                } else
-                                    Toast.makeText(NotificaActivity.this, "Asta Inversa non trovata", Toast.LENGTH_SHORT).show();
+                                }
 
-                            }
+                                @Override
+                                public void onFailure(Call<Asta_InversaDTO> call, Throwable t) {
+                                    Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
+                                    Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
+                                }
+                            });
+                        } else if (asta instanceof Asta_Ribasso) {
+                            apiService.recuperaDettagliAstaRibasso(id_asta).enqueue(new Callback<Asta_RibassoDTO>() {
+                                @Override
+                                public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        String nome_asta = asta.getNome();
+                                        notifica.setNome_asta(nome_asta);
+                                        asta_ricevuta = (Asta_Ribasso) asta;
+                                        adapter.notifyDataSetChanged();
+                                    } else
+                                        Toast.makeText(NotificaActivity.this, "Asta Ribasso non trovata", Toast.LENGTH_SHORT).show();
 
-                            @Override
-                            public void onFailure(Call<Asta_InversaDTO> call, Throwable t) {
-                                Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
-                                Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
-                            }
-                        });
-                    } else if (asta instanceof Asta_Ribasso) {
-                        apiService.recuperaDettagliAstaRibasso(id_asta).enqueue(new Callback<Asta_RibassoDTO>() {
-                            @Override
-                            public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    String nome_asta = asta.getNome();
-                                    notifica.setNome_asta(nome_asta);
-                                    asta_ricevuta = asta;
-                                    adapter.notifyDataSetChanged();
-                                } else
-                                    Toast.makeText(NotificaActivity.this, "Asta Ribasso non trovata", Toast.LENGTH_SHORT).show();
+                                }
 
-                            }
+                                @Override
+                                public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
+                                    Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
+                                    Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
+                                }
+                            });
+                        } else if (asta instanceof Asta_Silenziosa) {
+                            apiService.recuperaDettagliAstaSilenziosa(id_asta).enqueue(new Callback<Asta_SilenziosaDTO>() {
+                                @Override
+                                public void onResponse(Call<Asta_SilenziosaDTO> call, Response<Asta_SilenziosaDTO> response) {
+                                    if (response.isSuccessful() && response.body() != null) {
+                                        String nome_asta = asta.getNome();
+                                        notifica.setNome_asta(nome_asta);
+                                        asta_ricevuta = (Asta_Silenziosa) asta;
+                                        adapter.notifyDataSetChanged();
+                                    } else
+                                        Toast.makeText(NotificaActivity.this, "Asta Silenziosa non trovata", Toast.LENGTH_SHORT).show();
 
-                            @Override
-                            public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
-                                Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
-                                Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
-                            }
-                        });
-                    } else if (asta instanceof Asta_Silenziosa) {
-                        apiService.recuperaDettagliAstaSilenziosa(id_asta).enqueue(new Callback<Asta_SilenziosaDTO>() {
-                            @Override
-                            public void onResponse(Call<Asta_SilenziosaDTO> call, Response<Asta_SilenziosaDTO> response) {
-                                if (response.isSuccessful() && response.body() != null) {
-                                    String nome_asta = asta.getNome();
-                                    notifica.setNome_asta(nome_asta);
-                                    asta_ricevuta = (Asta_Silenziosa) asta;
-                                    adapter.notifyDataSetChanged();
-                                } else
-                                    Toast.makeText(NotificaActivity.this, "Asta Silenziosa non trovata", Toast.LENGTH_SHORT).show();
+                                }
 
-                            }
+                                @Override
+                                public void onFailure(Call<Asta_SilenziosaDTO> call, Throwable t) {
+                                    Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
+                                    Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
+                                }
+                            });
+                        }
+                    } else
+                        Toast.makeText(NotificaActivity.this, "Asta non trovata", Toast.LENGTH_SHORT).show();
 
-                            @Override
-                            public void onFailure(Call<Asta_SilenziosaDTO> call, Throwable t) {
-                                Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
-                                Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
-                            }
-                        });
-                    }
-                } else
-                    Toast.makeText(NotificaActivity.this, "Asta non trovata", Toast.LENGTH_SHORT).show();
+                }
 
-            }
-            @Override
-            public void onFailure(Call<AstaDTO> call, Throwable t) {
-                Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
-                Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
-            }
-        });
+                @Override
+                public void onFailure(Call<AstaDTO> call, Throwable t) {
+                    Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
+                    Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
+                }
+            });
     }
 
-   /* private void recuperaUtenteCreatore(int id_creatore,int id_asta,ApiService apiService) {
+    private void recuperaUtenteCreatore(int id_creatore,ApiService apiService) {
         Call<UtenteDTO> call;
         call = apiService.recuperaUtente(id_creatore);
         call.enqueue(new Callback<UtenteDTO>() {
@@ -380,8 +392,10 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                 UtenteDTO user = response.body();
                 if (user != null) {
-                    UtenteCreatore = creaCreatoreAsta(user);
-                } else
+                        UtenteCreatore = creaCreatoreAsta(user);
+                        openActivityDettagliAsta();
+
+                }else
                     Toast.makeText(NotificaActivity.this, "Utente non trovato", Toast.LENGTH_SHORT).show();
 
             }
@@ -406,7 +420,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
         if (utenteDTO.getPaese() != null) u.setPaese(utenteDTO.getPaese());
         if (utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
         return u;
-    }*/
+    }
 
 
     public Asta_Ribasso creaModelloAstaR(AstaDTO dto) {
@@ -461,19 +475,39 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     }
 
     @Override
-    public void onAstaClicked(int id_asta){
-        openActivityDettagliAsta();
+    public void onAstaClicked(NotificaDTO notifica) {
+        if (!notifica.isLetta()) {
+            segnaComeLetta(notifica, apiService);
+        }
+
+        // Recupera l'asta in modo asincrono
+        RecuperaAsta(notifica, apiService);
+
+        // Usa un handler per ritardare l'esecuzione fino a quando l'asta è recuperata
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (asta_ricevuta != null)
+                    recuperaUtenteCreatore(asta_ricevuta.getId_creatore(),apiService);
+                else
+                    handler.postDelayed(this, 100);
+            }
+        }, 100);
     }
 
 
 
-    private void openActivityDettagliAsta(/*int idAsta*/) {
-        Intent intent = new Intent(this, DettagliAstaActivity.class);
-        //intent.putExtra("idAsta", idAsta);
-        intent.putExtra("Asta",asta_ricevuta);
-        //intent.putExtra("UtenteCreatore",UtenteCreatore);
-        intent.putExtra("utente", utente);
-        startActivity(intent);
+
+
+    private void openActivityDettagliAsta() {
+            Intent intent = new Intent(this, DettagliAstaActivity.class);
+            intent.putExtra("asta", asta_ricevuta);
+            intent.putExtra("utenteCreatore",UtenteCreatore);
+            intent.putExtra("utente", utente);
+            intent.putExtra("fromNotifica",true);
+            intent.putExtra("listaNotifiche",(Serializable) listaNotifiche);
+            startActivity(intent);
     }
 
 

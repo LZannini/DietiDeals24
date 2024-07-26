@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.dietideals24.dto.NotificaDTO;
+
 import java.util.List;
 
 public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
@@ -26,7 +27,7 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
     }
 
     public interface OnAstaClickListener {
-        void onAstaClicked(int idAsta);
+        void onAstaClicked(NotificaDTO notifica);
     }
 
     private final List<NotificaDTO> notifiche;
@@ -55,22 +56,19 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
 
         NotificaDTO notifica = getItem(position);
 
-        // Costruisci il testo mostrato nella TextView
         String testo = notifica.getTesto() + " ";
         String nomeAsta = notifica.getNome_asta() != null ? notifica.getNome_asta() : "";
         String data = notifica.getData();
         String nomeAstaData = nomeAsta + "\n" + data;
         int nomeAstaLength = nomeAsta.length();
 
-        // Imposta il testo nella TextView
         SpannableString spannableString = new SpannableString(testo + nomeAstaData);
 
-        // Aggiungi il nome dell'asta come testo cliccabile e in grassetto
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
                 if (onAstaClickListener != null) {
-                    onAstaClickListener.onAstaClicked(notifica.getId_Asta());
+                    onAstaClickListener.onAstaClicked(notifica);
                 }
             }
 
@@ -96,13 +94,6 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
         } else {
             viewHolder.textView.setTypeface(null, Typeface.NORMAL);
         }
-
-        convertView.setOnClickListener(v -> {
-            if (!notifica.isLetta()) {
-                notifica.setLetta(true);
-                notifyDataSetChanged();
-            }
-        });
 
 
         return convertView;
