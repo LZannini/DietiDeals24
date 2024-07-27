@@ -371,10 +371,9 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
 
     private void openActivityNotifica(){
         Intent intent = new Intent(DettagliAstaActivity.this,NotificaActivity.class);
+        intent.putExtra("listaNotifiche", (Serializable) notifiche);
         intent.putExtra("utente",utente);
         intent.putExtra("asta_ricevuta",asta);
-        intent.putExtra("isLetta",true);
-        intent.putExtra("listaNotifiche", (Serializable) notifiche);
         startActivity(intent);
 
     }

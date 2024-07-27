@@ -52,9 +52,6 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     private Utente utente;
     private Utente UtenteCreatore;
     private Asta asta_ricevuta;
-    private boolean astaInCaricamento = false;
-    private boolean isLetta;
-    private NotificaDTO notifica;
     private ImageButton back_button;
     private TextView noResultsText;
     private ApiService apiService;
@@ -67,7 +64,6 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
         asta_ricevuta = (Asta) getIntent().getSerializableExtra("asta_ricevuta");
-        isLetta = getIntent().getBooleanExtra("isLetta",false);
 
         noResultsText = findViewById(R.id.no_results_text);
 
@@ -119,43 +115,15 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             btnSegnaTutte.setEnabled(false);
             btnRimuoviTutte.setEnabled(false);
             btnRimuoviLette.setEnabled(false);
-            Log.d("NotificaActivity", "Nessuna notifica disponibile.");
         }
 
             adapter = new NotificaAdapter(this, listaNotifiche);
-            adapter.setOnAstaClickListener(this::onAstaClicked);
+            adapter.setOnAstaClickListener(this);
             listView.setAdapter(adapter);
-            Log.d("NotificaActivity", "Adapter impostato con successo. Numero di notifiche: " + listaNotifiche.size());
-            if (isLetta) segnaComeLetta(notifica, apiService);
 
             for (NotificaDTO notifica : listaNotifiche) {
                 RecuperaAsta(notifica, apiService);
             }
-
-
-            listView.setOnItemClickListener((parent, view, position, id) -> {
-                NotificaDTO notifica = listaNotifiche.get(position);
-                segnaComeLetta(notifica, apiService);
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setCancelable(false);
-                builder.setMessage(notifica.getTesto());
-
-                builder.setPositiveButton("Rimuovi", (dialog, which) -> {
-                    rimuoviSelezionata(notifica, apiService);
-                });
-
-                builder.setNegativeButton("Chiudi", (dialog, which) -> {
-                    dialog.dismiss();
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                if (!notifica.isLetta()) {
-                    notifica.setLetta(true);
-                    adapter.updateNotifica(notifica);
-                }
-            });
-
 
     }
 
@@ -302,6 +270,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     }
 
     private void RecuperaAsta(NotificaDTO notifica, ApiService apiService) {
+        if (notifica.getId_Asta() != 0) {
             int id_asta = notifica.getId_Asta();
             apiService.recuperaAsta(id_asta).enqueue(new Callback<AstaDTO>() {
                 @Override
@@ -382,6 +351,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                     Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                 }
             });
+        }
     }
 
     private void recuperaUtenteCreatore(int id_creatore,ApiService apiService) {
@@ -476,14 +446,9 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
 
     @Override
     public void onAstaClicked(NotificaDTO notifica) {
-        if (!notifica.isLetta()) {
-            segnaComeLetta(notifica, apiService);
-        }
 
-        // Recupera l'asta in modo asincrono
         RecuperaAsta(notifica, apiService);
 
-        // Usa un handler per ritardare l'esecuzione fino a quando l'asta è recuperata
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
@@ -494,9 +459,35 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                     handler.postDelayed(this, 100);
             }
         }, 100);
+
     }
 
+    @Override
+    public void onNotificaClicked(NotificaDTO notifica){
+        segnaComeLetta(notifica, apiService);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        if(notifica.getNome_asta() == null || notifica.getId_Asta() == 0)
+        builder.setMessage(notifica.getTesto());
+        else
+            builder.setMessage(notifica.getTesto() + ' ' + notifica.getNome_asta());
 
+        builder.setPositiveButton("Rimuovi", (dialog, which) -> {
+            rimuoviSelezionata(notifica, apiService);
+        });
+
+        builder.setNegativeButton("Chiudi", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        if (!notifica.isLetta()) {
+            notifica.setLetta(true);
+            adapter.updateNotifica(notifica);
+        }
+    }
 
 
 

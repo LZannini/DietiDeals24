@@ -28,6 +28,7 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
 
     public interface OnAstaClickListener {
         void onAstaClicked(NotificaDTO notifica);
+        void onNotificaClicked(NotificaDTO notifica);
     }
 
     private final List<NotificaDTO> notifiche;
@@ -64,7 +65,7 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
 
         SpannableString spannableString = new SpannableString(testo + nomeAstaData);
 
-        ClickableSpan clickableSpan = new ClickableSpan() {
+        ClickableSpan astaclickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
                 if (onAstaClickListener != null) {
@@ -80,10 +81,45 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
             }
         };
 
+        ClickableSpan testoClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                if (onAstaClickListener != null) {
+                    onAstaClickListener.onNotificaClicked(notifica);
+                }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(Color.BLACK);
+            }
+        };
+
+        ClickableSpan dataClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                if (onAstaClickListener != null) {
+                    onAstaClickListener.onNotificaClicked(notifica);
+                }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(Color.BLACK);
+            }
+        };
+
         int start = testo.length();
         int end = start + nomeAstaLength;
+        int endData= testo.length() + nomeAstaLength + data.length();
 
-        spannableString.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(testoClickableSpan, 0, start, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(dataClickableSpan, end+1, endData, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(astaclickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         viewHolder.textView.setText(spannableString);
@@ -94,7 +130,6 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
         } else {
             viewHolder.textView.setTypeface(null, Typeface.NORMAL);
         }
-
 
         return convertView;
     }
