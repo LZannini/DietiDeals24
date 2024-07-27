@@ -16,14 +16,17 @@ public class Notifica {
 	private int id_utente;
 	private String testo;
 	private LocalDateTime data;
+	private int id_asta;
 	private boolean letta;
 	
-	public Notifica(int id, int id_utente, String testo, LocalDateTime data, boolean letta) {
+	public Notifica(int id, int id_utente, String testo,int id_asta, LocalDateTime data, boolean letta) {
 		this.id = id;
 		this.id_utente = id_utente;
-		this.testo = testo;
+        this.testo = testo;
+        this.id_asta = id_asta;
 		this.data = data;
 		this.letta = letta;
+
 	}
 		
 	public Notifica() {}
@@ -66,6 +69,14 @@ public class Notifica {
 
 	public void setLetta(boolean letta) {
 		this.letta = letta;
+	}
+
+	public int getId_asta() {
+		return id_asta;
+	}
+
+	public void setId_asta(int id_asta) {
+		this.id_asta = id_asta;
 	}
 	
 }

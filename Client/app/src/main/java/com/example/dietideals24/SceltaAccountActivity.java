@@ -215,7 +215,6 @@ public class SceltaAccountActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
-                // Gestisci errore di connessione
                 Toast.makeText(SceltaAccountActivity.this, "Errore di connessione", Toast.LENGTH_SHORT).show();
             }
         });

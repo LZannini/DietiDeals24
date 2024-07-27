@@ -9,14 +9,23 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
+import com.example.dietideals24.dto.AstaDTO;
+import com.example.dietideals24.dto.Asta_InversaDTO;
+import com.example.dietideals24.dto.Asta_RibassoDTO;
+import com.example.dietideals24.dto.Asta_SilenziosaDTO;
 import com.example.dietideals24.dto.NotificaDTO;
 import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Asta_Inversa;
+import com.example.dietideals24.models.Asta_Ribasso;
+import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
 
 import com.example.dietideals24.retrofit.RetrofitService;
@@ -167,6 +176,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     public void onBackPressed() {

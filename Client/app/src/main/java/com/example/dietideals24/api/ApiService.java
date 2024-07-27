@@ -57,6 +57,9 @@ public interface ApiService {
     @POST("/asta/creaAstaSilenziosa")
     Call<Void> creaAstaSilenziosa(@Body Asta_SilenziosaDTO astaDTO);
 
+    @GET("asta/recupera")
+    Call<AstaDTO> recuperaAsta(@Query("id") int id);
+
     @GET("/asta/dettagliAstaInversa")
     Call<Asta_InversaDTO> recuperaDettagliAstaInversa(@Query("id") int id);
 

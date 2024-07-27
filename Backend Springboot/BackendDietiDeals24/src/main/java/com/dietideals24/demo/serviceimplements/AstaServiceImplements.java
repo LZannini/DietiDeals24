@@ -97,8 +97,15 @@ public class AstaServiceImplements implements AstaService {
 	public AstaDTO trovaAsta(int id) {
 		Asta asta = astaRepository.getAsta(id);
 		AstaDTO astaDTO = null;
-		if (asta != null) 
+		if (asta != null) { 
 			astaDTO = creaAstaDTO(asta);
+			if(asta instanceof Asta_Ribasso)
+				astaDTO.setTipo("RIBASSO");
+			else if(asta instanceof Asta_Silenziosa)
+				astaDTO.setTipo("SILENZIOSA");
+			else if (asta instanceof Asta_Inversa)
+				astaDTO.setTipo("INVERSA");
+			}
 		
 		return astaDTO;
 	}
