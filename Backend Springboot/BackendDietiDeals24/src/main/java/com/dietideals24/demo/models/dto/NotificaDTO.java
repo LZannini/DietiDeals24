@@ -8,10 +8,9 @@ public class NotificaDTO implements Serializable {
 	
 	private int id;
 	private int id_utente;
+	private Integer id_asta;
 	private String testo;
 	private LocalDateTime data;
-	private int id_asta;
-	private String nome_asta;
 	private boolean letta;
 	
 	public int getId() {
@@ -53,19 +52,11 @@ public class NotificaDTO implements Serializable {
 		this.letta = letta;
 	}
 
-	public int getId_asta() {
+	public Integer getId_asta() {
 		return id_asta;
 	}
 
-	public void setId_asta(int id_asta) {
+	public void setId_asta(Integer id_asta) {
 		this.id_asta = id_asta;
-	}
-
-	public String getNome_asta() {
-		return nome_asta;
-	}
-
-	public void setNome_asta(String nome_asta) {
-		this.nome_asta = nome_asta;
 	}
 }
