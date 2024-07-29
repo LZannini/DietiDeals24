@@ -112,7 +112,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         utenteProfilo = (Utente) getIntent().getSerializableExtra("utenteProfilo");
         fromAsteCreate = getIntent().getBooleanExtra("fromAsteCreate", false);
         utenteCreatore = (Utente) getIntent().getSerializableExtra("utenteCreatore");
-        fromNotifica = getIntent().getBooleanExtra("fromNotifica",false);
+        fromNotifica = getIntent().getBooleanExtra("fromNotifica", false);
         notifiche = (List<NotificaDTO>) getIntent().getSerializableExtra("listaNotifiche");
 
         userSection = findViewById(R.id.userSection);
@@ -135,13 +135,13 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         ImageButton home_button = findViewById(R.id.home_button);
 
 
-    if (asta.getId_creatore() == utente.getId()) {
-        creatorSection.setVisibility(View.VISIBLE);
-        userSection.setVisibility(View.GONE);
-    } else {
-        userSection.setVisibility(View.VISIBLE);
-        creatorSection.setVisibility(View.GONE);
-    }
+        if (asta.getId_creatore() == utente.getId()) {
+            creatorSection.setVisibility(View.VISIBLE);
+            userSection.setVisibility(View.GONE);
+        } else {
+            userSection.setVisibility(View.VISIBLE);
+            creatorSection.setVisibility(View.GONE);
+        }
 
         ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
@@ -155,7 +155,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         etTitle.setText(asta.getNome());
         etDescription.setText(asta.getDescrizione());
         tvCategoryValue.setText(asta.getCategoria().toString());
-        if(fromAsteCreate && !fromDettagli)
+        if (fromAsteCreate && !fromDettagli)
             tvCreatorValue.setText(utenteProfilo.getUsername());
         else
             tvCreatorValue.setText(utenteCreatore.getUsername());
@@ -217,7 +217,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
                             Asta_InversaDTO astaRicevuta = response.body();
 
-                            if(astaRicevuta.getOffertaMinore() != null) {
+                            if (astaRicevuta.getOffertaMinore() != null) {
                                 tvLowestOfferValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(astaRicevuta.getOffertaMinore()));
                             } else {
                                 tvLowestOfferValue.setText("Ancora nessuna offerta per questa asta.");
@@ -246,15 +246,15 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                     .enqueue(new Callback<List<OffertaDTO>>() {
                         @Override
                         public void onResponse(Call<List<OffertaDTO>> call, Response<List<OffertaDTO>> response) {
-                            if(response.isSuccessful() && response.body() != null) {
+                            if (response.isSuccessful() && response.body() != null) {
                                 List<OffertaDTO> offerteResponse = response.body();
                                 List<Offerta> offerteList = creaListModelloOfferta(offerteResponse);
-                                for(Offerta o : offerteList) {
+                                for (Offerta o : offerteList) {
                                     offerte.add(o);
                                     adapter.notifyDataSetChanged();
                                 }
 
-                            } else if(response.body() != null) {
+                            } else if (response.body() != null) {
                                 userSection.setVisibility(View.GONE);
                             }
 
@@ -274,10 +274,10 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             public void onClick(View v) {
                 if (fromAsteCreate)
                     openActivityAsteCreate(listaAste, false);
-                else if(fromNotifica)
+                else if (fromNotifica)
                     openActivityNotifica();
                 else
-                openActivityRisultatiRicerca();
+                    openActivityRisultatiRicerca();
                 finish();
             }
         });
@@ -290,7 +290,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             }
         });
 
-        if(asta.getId_creatore() != utente.getId() && !fromAsteCreate) {
+        if (asta.getId_creatore() != utente.getId() && !fromAsteCreate) {
             tvCreatorValue.setTypeface(tvCreatorValue.getTypeface(), Typeface.BOLD);
             tvCreatorValue.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -300,53 +300,59 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             });
         }
 
-        btnSubmitOffer.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(DettagliAstaActivity.this);
-            builder.setMessage("Sei sicuro di voler presentare l'offerta?")
-                    .setCancelable(true)
-                    .setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            OffertaDTO offerta = new OffertaDTO();
-                            offerta.setId_asta(asta.getId());
-                            offerta.setId_utente(utente.getId());
-                            offerta.setValore(Float.parseFloat(etOffer.getText().toString()));
-                            offerta.setStato(StatoOfferta.ATTESA);
 
-                            LocalDateTime currentDateTime = LocalDateTime.now();
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                            String dateTimeString = currentDateTime.format(formatter);
+            btnSubmitOffer.setOnClickListener(v -> {
+                if (!etOffer.getText().toString().isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(DettagliAstaActivity.this);
+                builder.setMessage("Sei sicuro di voler presentare l'offerta?")
+                        .setCancelable(true)
+                        .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                OffertaDTO offerta = new OffertaDTO();
+                                offerta.setId_asta(asta.getId());
+                                offerta.setId_utente(utente.getId());
+                                offerta.setValore(Float.parseFloat(etOffer.getText().toString()));
+                                offerta.setStato(StatoOfferta.ATTESA);
+
+                                LocalDateTime currentDateTime = LocalDateTime.now();
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                                String dateTimeString = currentDateTime.format(formatter);
 
 
-                            offerta.setData(dateTimeString);
+                                offerta.setData(dateTimeString);
 
-                            apiService.creaOfferta(offerta)
-                                            .enqueue(new Callback<Void>() {
-                                                @Override
-                                                public void onResponse(Call<Void> call, Response<Void> response) {
-                                                    Toast.makeText(DettagliAstaActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
-                                                    if (fromAsteCreate)
-                                                        openActivityAsteCreate(listaAste, false);
-                                                    else if(fromNotifica)
-                                                        openActivityNotifica();
-                                                    else
-                                                        openActivityRisultatiRicerca();
-                                                }
+                                apiService.creaOfferta(offerta)
+                                        .enqueue(new Callback<Void>() {
+                                            @Override
+                                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                                Toast.makeText(DettagliAstaActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
+                                                if (fromAsteCreate)
+                                                    openActivityAsteCreate(listaAste, false);
+                                                else if (fromNotifica)
+                                                    openActivityNotifica();
+                                                else
+                                                    openActivityRisultatiRicerca();
+                                            }
 
-                                                @Override
-                                                public void onFailure(Call<Void> call, Throwable t) {
-                                                    Toast.makeText(DettagliAstaActivity.this, "Errore durante la creazione dell'offerta!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                            finish();
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    })
-                    .show();
-        });
+                                            @Override
+                                            public void onFailure(Call<Void> call, Throwable t) {
+                                                Toast.makeText(DettagliAstaActivity.this, "Errore durante la creazione dell'offerta!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        })
+                        .show();
+            }else
+                    Toast.makeText(DettagliAstaActivity.this, "Bisogna inserire un importo valido!", Toast.LENGTH_SHORT).show();
+
+            });
+
     }
 
     @Override

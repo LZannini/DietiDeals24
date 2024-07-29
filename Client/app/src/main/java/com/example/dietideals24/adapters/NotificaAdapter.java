@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.dietideals24.dto.NotificaDTO;
+import com.example.dietideals24.utils.FormattaData;
 
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
 
         String testo = notifica.getTesto() + " ";
         String nomeAsta = notifica.getNome_asta() != null ? notifica.getNome_asta() : "";
-        String data = notifica.getData();
+        String data = FormattaData.formatta(notifica.getData());
         String nomeAstaData = nomeAsta + "\n" + data;
         int nomeAstaLength = nomeAsta.length();
 
@@ -76,7 +77,7 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
-                ds.setUnderlineText(false);
+                ds.setUnderlineText(true);
                 ds.setColor(Color.BLACK);
             }
         };

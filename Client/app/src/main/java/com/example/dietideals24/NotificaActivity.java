@@ -4,20 +4,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.dietideals24.adapters.NotificaAdapter;
 import com.example.dietideals24.api.ApiService;
@@ -34,7 +31,6 @@ import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Notifica;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
-import com.google.gson.Gson;
 
 import java.io.Serializable;
 import java.util.List;
@@ -57,6 +53,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     private ApiService apiService;
     private Button btnSegnaTutte, btnRimuoviLette, btnRimuoviTutte;
 
+    @SuppressLint("SuspiciousIndentation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +119,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             listView.setAdapter(adapter);
 
             for (NotificaDTO notifica : listaNotifiche) {
+                if(notifica.getId_Asta()!=0)
                 RecuperaAsta(notifica, apiService);
             }
 
@@ -270,7 +268,6 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     }
 
     private void RecuperaAsta(NotificaDTO notifica, ApiService apiService) {
-        if (notifica.getId_Asta() != 0) {
             int id_asta = notifica.getId_Asta();
             apiService.recuperaAsta(id_asta).enqueue(new Callback<AstaDTO>() {
                 @Override
@@ -351,7 +348,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                     Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                 }
             });
-        }
+
     }
 
     private void recuperaUtenteCreatore(int id_creatore,ApiService apiService) {
@@ -448,6 +445,9 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     public void onAstaClicked(NotificaDTO notifica) {
 
         RecuperaAsta(notifica, apiService);
+
+        if(!notifica.isLetta())
+            segnaComeLetta(notifica,apiService);
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
