@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.dietideals24.dto.NotificaDTO;
+import com.example.dietideals24.utils.FormattaData;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
 
     public interface OnAstaClickListener {
         void onAstaClicked(NotificaDTO notifica);
+        void onNotificaClicked(NotificaDTO notifica);
     }
 
     private final List<NotificaDTO> notifiche;
@@ -58,17 +60,49 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
 
         String testo = notifica.getTesto() + " ";
         String nomeAsta = notifica.getNome_asta() != null ? notifica.getNome_asta() : "";
-        String data = notifica.getData();
+        String data = FormattaData.formatta(notifica.getData());
         String nomeAstaData = nomeAsta + "\n" + data;
         int nomeAstaLength = nomeAsta.length();
 
         SpannableString spannableString = new SpannableString(testo + nomeAstaData);
 
-        ClickableSpan clickableSpan = new ClickableSpan() {
+        ClickableSpan astaclickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
                 if (onAstaClickListener != null) {
                     onAstaClickListener.onAstaClicked(notifica);
+                }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+                ds.setColor(Color.BLACK);
+            }
+        };
+
+        ClickableSpan testoClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                if (onAstaClickListener != null) {
+                    onAstaClickListener.onNotificaClicked(notifica);
+                }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(Color.BLACK);
+            }
+        };
+
+        ClickableSpan dataClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                if (onAstaClickListener != null) {
+                    onAstaClickListener.onNotificaClicked(notifica);
                 }
             }
 
@@ -82,8 +116,11 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
 
         int start = testo.length();
         int end = start + nomeAstaLength;
+        int endData= testo.length() + nomeAstaLength + data.length();
 
-        spannableString.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(testoClickableSpan, 0, start, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(dataClickableSpan, end+1, endData, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(astaclickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         viewHolder.textView.setText(spannableString);
@@ -94,7 +131,6 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
         } else {
             viewHolder.textView.setTypeface(null, Typeface.NORMAL);
         }
-
 
         return convertView;
     }
