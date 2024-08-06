@@ -15,40 +15,48 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 	
-	@Autowired
-	 private JwtAuthenticationEntryPoint unauthorizedHandler;
-
-	@Autowired
-	private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-	
-	@Autowired
+	private final JwtAuthenticationEntryPoint unauthorizedHandler;
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final UserDetailsService userDetailsService;
-
-	public SecurityConfig(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;	 
-    }	
+	
+	public SecurityConfig(JwtAuthenticationEntryPoint unauthorizedHandler,
+	                      JwtAuthenticationFilter jwtAuthenticationFilter,
+	                      UserDetailsService userDetailsService) {
+	    this.unauthorizedHandler = unauthorizedHandler;
+	    this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+	    this.userDetailsService = userDetailsService;
+	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	    http
-	    	.csrf().disable()
-	        .authorizeHttpRequests(authorize -> authorize
-	            .requestMatchers("/auth/login", "/utente/registra").permitAll()
-	            .anyRequest().authenticated()
-	        )
-	        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-            .and()
-	        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-	        
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+        .csrf().disable()
+        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+        .and()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers("/auth/**", "/utente/registra", "/oauth2/**").permitAll()
+            .anyRequest().authenticated()
+        )
+        .oauth2Login()
+            .authorizationEndpoint()
+                .baseUri("/oauth2/authorize")
+                .and()
+            .redirectionEndpoint()
+                .baseUri("/oauth2/callback/*")
+                .and()
+        .and()
+        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-	    return http.build();
-	}
+
+        return http.build();
+    }
 	    
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -63,19 +71,6 @@ public class SecurityConfig {
 	            .and()
 	            .build();
 	}
-	
-    /*
-	@Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		http
-        .authorizeRequests()
-        .requestMatchers("/**").permitAll() // Consenti l'accesso a tutte le risorse
-        .anyRequest().permitAll() // Consenti l'accesso a tutte le altre richieste
-        .and()
-        .csrf().disable() // Disabilita CSRF per semplificare la comunicazione da Postman
-        .headers().frameOptions().disable();
-		return http.build();
-	} */
 }
 	
 

@@ -1,5 +1,7 @@
 package com.dietideals24.demo.serviceimplements;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -158,6 +160,18 @@ public class UtenteServiceImplements implements UtenteService {
 
         return utenteDTO;
     }
+
+	@Override
+	public Utente recuperaUtenteByEmail(String email) {
+		Optional<Utente> u = utenteRepository.findByEmail(email);
+		Utente utente = null;
+		
+		if(u.isPresent()) {
+			utente = u.get();
+		}
+		
+		return utente;
+	}
 
 	
 }
