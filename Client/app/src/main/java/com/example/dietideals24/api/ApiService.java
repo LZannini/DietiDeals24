@@ -17,6 +17,9 @@ public interface ApiService {
     @POST("/auth/login")
     Call<JwtAuthenticationResponse> loginUtente(@Body UtenteDTO utenteDTO);
 
+    @POST("/auth/google")
+    Call<JwtAuthenticationResponse> loginGoogle(@Query("idToken") String idToken);
+
     @POST("/utente/registra")
     Call<UtenteDTO> registraUtente(@Body UtenteDTO utenteDTO);
 

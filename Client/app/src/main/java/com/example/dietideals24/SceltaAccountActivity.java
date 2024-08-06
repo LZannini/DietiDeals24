@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ public class SceltaAccountActivity extends AppCompatActivity {
 
     private AlertDialog.Builder builder;
     private Utente utente;
+    private boolean fromLogin;
     private UtenteDTO currentUser;
     private LinearLayout venditoreButt;
     private LinearLayout compratoreButt;
@@ -38,6 +40,7 @@ public class SceltaAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scelta_account);
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
+        fromLogin = getIntent().getBooleanExtra("fromLogin", true);
 
         venditoreButt = findViewById(R.id.button_vendi);
         compratoreButt = findViewById(R.id.button_compra);
@@ -52,19 +55,26 @@ public class SceltaAccountActivity extends AppCompatActivity {
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivityProfilo(utente);
+                if (fromLogin) {
+                    openActivityLogin();
+                } else {
+                    openActivityProfilo(utente);
+                }
                 finish();
             }
         });
 
-        home_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivityHome(utente);
-                finish();
-            }
-        });
-
+        if(fromLogin) {
+            home_button.setVisibility(View.INVISIBLE);
+        } else {
+            home_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openActivityHome(utente);
+                    finish();
+                }
+            });
+        }
 
         venditoreButt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +109,11 @@ public class SceltaAccountActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        openActivityProfilo(utente);
+        if (fromLogin) {
+            openActivityLogin();
+        } else {
+            openActivityProfilo(utente);
+        }
         finish();
     }
 
@@ -113,6 +127,12 @@ public class SceltaAccountActivity extends AppCompatActivity {
     public void openActivityHome(Utente utente) {
         Intent intentR = new Intent(this, HomeActivity.class);
         intentR.putExtra("utente", utente);
+        intentR.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intentR);
+    }
+
+    public void openActivityLogin(){
+        Intent intentR = new Intent(this, LoginActivity.class);
         startActivity(intentR);
     }
 
@@ -148,7 +168,7 @@ public class SceltaAccountActivity extends AppCompatActivity {
 
     private void change(TipoUtente nuovoTipo) {
         builder = new AlertDialog.Builder(SceltaAccountActivity.this);
-        builder.setMessage("Sei sicuro di voler cambiare il tuo Tipo di Account?")
+        builder.setMessage("Sei sicuro di voler selezionare il tuo Tipo di Account?")
                 .setCancelable(true)
                 .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -156,7 +176,11 @@ public class SceltaAccountActivity extends AppCompatActivity {
                         currentUser = ConverteDTO(utente);
                         aggiornaTipoAccount(currentUser);
                         utente = creaUtente(currentUser);
-                        AggiornaButton();
+                        if(fromLogin) {
+                            openActivityHome(utente);
+                        } else {
+                            AggiornaButton();
+                        }
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

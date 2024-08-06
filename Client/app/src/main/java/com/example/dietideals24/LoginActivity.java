@@ -1,5 +1,6 @@
 package com.example.dietideals24;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,11 +9,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,12 @@ import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 import com.example.dietideals24.security.JwtAuthenticationResponse;
 import com.example.dietideals24.security.TokenManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,12 +42,16 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
     private Button btnL;
     private EditText emailEditText;
     private EditText passwordEditText;
     private TextView buttonRegistrazione;
+    private ImageView buttonGoogle;
 
     private ApiService apiService;
+    private TokenManager tokenManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEditText = findViewById(R.id.email_input);
         passwordEditText = findViewById(R.id.password_input);
+
+        tokenManager = new TokenManager(this);
+        tokenManager.deleteToken();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -59,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         btnL = (Button) findViewById(R.id.login_button);
+        buttonGoogle = (ImageView) findViewById(R.id.google_button);
 
         apiService = RetrofitService.getInstance(this).getRetrofit(this).create(ApiService.class);
         btnL.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                TokenManager tokenManager = new TokenManager(LoginActivity.this);
+                tokenManager = new TokenManager(LoginActivity.this);
 
                 UtenteDTO utente = new UtenteDTO();
                 utente.setEmail(email);
@@ -118,6 +135,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        buttonGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                accediConGoogle();
+            }
+        });
     }
 
     @Override
@@ -136,6 +166,15 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
+    public void openActivitySceltaAccount(Utente utente) {
+        Intent intentR = new Intent(this, SceltaAccountActivity.class);
+        intentR.putExtra("utente", utente);
+        intentR.putExtra("fromLogin", true);
+        Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "ciao");
+        intentR.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intentR);
+    }
+
     private void recuperaDatiUtente() {
         TokenManager tokenManager = new TokenManager(LoginActivity.this);
         int userId = tokenManager.getUserIdFromToken();
@@ -151,7 +190,11 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(LoginActivity.this, "Login effettuato con successo", Toast.LENGTH_SHORT).show();
                                 UtenteDTO utenteDTO = response.body();
                                 Utente utente_intent = creaUtente(utenteDTO);
-                                openActivityHome(utente_intent);
+                                if (utente_intent.getTipo().toString().equals(TipoUtente.NESSUNO.toString())) {
+                                    openActivitySceltaAccount(utente_intent);
+                                } else {
+                                    openActivityHome(utente_intent);
+                                }
                             } else {
                                 Toast.makeText(LoginActivity.this, "Errore nel recupero dei dati utente", Toast.LENGTH_SHORT).show();
                             }
@@ -176,8 +219,59 @@ public class LoginActivity extends AppCompatActivity {
         utente.setBiografia(utenteDTO.getBiografia());
         utente.setSitoweb(utenteDTO.getSitoweb());
         utente.setPaese(utenteDTO.getPaese());
-        utente.setTipo(utenteDTO.getTipo());
         utente.setAvatar(utenteDTO.getAvatar());
+        utente.setTipo(utenteDTO.getTipo());
+
         return utente;
     }
+
+    private void accediConGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null) {
+                    String idToken = account.getIdToken();
+                    impostaToken(idToken);
+                }
+            } catch (ApiException e) {
+                Log.w("LoginActivity", "signInResult:failed code=" + e.getStatusCode());
+                Toast.makeText(this, "Sign-in failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void impostaToken(String idToken) {
+        apiService.loginGoogle(idToken).enqueue(new Callback<JwtAuthenticationResponse>() {
+            @Override
+            public void onResponse(Call<JwtAuthenticationResponse> call, Response<JwtAuthenticationResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    JwtAuthenticationResponse authResponse = response.body();
+                    TokenManager tokenManager = new TokenManager(LoginActivity.this);
+                    tokenManager.saveToken(authResponse.getAccessToken());
+                    RetrofitService.resetInstance();
+                    apiService = RetrofitService.getInstance(LoginActivity.this).getRetrofit(LoginActivity.this).create(ApiService.class);
+
+                    recuperaDatiUtente();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Login with Google failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JwtAuthenticationResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }

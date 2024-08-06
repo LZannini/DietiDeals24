@@ -353,6 +353,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private void openActivitySceltaAccount(Utente utente) {
         Intent intentR = new Intent(this, SceltaAccountActivity.class);
         intentR.putExtra("utente", utente);
+        intentR.putExtra("fromLogin", false);
         intentR.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentR);
     }
