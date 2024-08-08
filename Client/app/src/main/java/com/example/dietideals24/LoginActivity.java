@@ -47,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private TextView buttonRegistrazione;
     private ImageView buttonGoogle;
-
     private ApiService apiService;
     private TokenManager tokenManager;
 
