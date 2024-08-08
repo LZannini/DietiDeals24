@@ -90,7 +90,9 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
                 adapter.notifyDataSetChanged();
                 if(aste_attive == null || aste_attive.isEmpty()) {
                     noAuctionsText.setVisibility(View.VISIBLE);
-                    btnCrea.setVisibility(View.VISIBLE);
+                    if(utente_home.getId() == utente.getId()) {
+                        btnCrea.setVisibility(View.VISIBLE);
+                    }
                     int childCount = layout_attributi.getChildCount();
                     for (int i = 0; i < childCount; i++) {
                         View child = layout_attributi.getChildAt(i);
@@ -147,7 +149,9 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
 
         if(attiva && (aste_attive == null || aste_attive.isEmpty())) {
             noAuctionsText.setVisibility(View.VISIBLE);
-            btnCrea.setVisibility(View.VISIBLE);
+            if(utente_home.getId() == utente.getId()) {
+                btnCrea.setVisibility(View.VISIBLE);
+            }
             int childCount = layout_attributi.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View child = layout_attributi.getChildAt(i);

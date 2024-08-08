@@ -2,7 +2,6 @@ package com.example.dietideals24.adapters;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +82,7 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
             this.onAstaListener = onAstaListener;
             this.isClickable = isAttive;
 
-            itemView.setOnClickListener(this); // This refers to AuctionViewHolder which implements OnClickListener
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Asta asta) {
@@ -92,27 +91,21 @@ public class AuctionAdapter extends RecyclerView.Adapter<AuctionAdapter.AuctionV
 
             astaFoto.setImageBitmap(null);
             byte[] fotoBytes = asta.getFoto();
+
             if (fotoBytes != null) {
                 bitmap = BitmapFactory.decodeByteArray(fotoBytes, 0, fotoBytes.length);
                 astaFoto.setImageBitmap(bitmap);
-            } else {
-                astaFoto.setImageResource(R.drawable.logo_text);
-            }
-
-            if (asta instanceof Asta_Ribasso) {
-                Asta_Ribasso ribasso = (Asta_Ribasso) asta;
-                astaTipoImage.setImageResource(R.drawable.ribasso);
-                Log.d("AuctionAdapter", "Asta di tipo Ribasso: " + ribasso.getNome());
-            } else if (asta instanceof Asta_Silenziosa) {
-                Asta_Silenziosa silenziosa = (Asta_Silenziosa) asta;
-                astaTipoImage.setImageResource(R.drawable.silenziosa);
-                Log.d("AuctionAdapter", "Asta di tipo Silenziosa: " + silenziosa.getNome());
-            } else if (asta instanceof Asta_Inversa) {
-                Asta_Inversa inversa = (Asta_Inversa) asta;
-                astaTipoImage.setImageResource(R.drawable.inversa);
-                Log.d("AuctionAdapter", "Asta di tipo Inversa: " + inversa.getNome());
             } else
-                Log.d("AuctionAdapter", "Tipo di asta sconosciuto: " + asta.getNome());
+                astaFoto.setImageResource(R.drawable.logo_text);
+
+
+            if (asta instanceof Asta_Ribasso)
+                astaTipoImage.setImageResource(R.drawable.ribasso);
+             else if (asta instanceof Asta_Silenziosa)
+                astaTipoImage.setImageResource(R.drawable.silenziosa);
+             else if (asta instanceof Asta_Inversa)
+                astaTipoImage.setImageResource(R.drawable.inversa);
+
 
             itemView.setClickable(isClickable);
             itemView.setEnabled(isClickable);

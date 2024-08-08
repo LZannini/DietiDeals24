@@ -1,25 +1,25 @@
 package com.dietideals24.demo.configurations;
 
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import com.dietideals24.demo.serviceimplements.CustomUserDetails;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Component
@@ -27,7 +27,11 @@ public class JwtTokenProvider {
 
     private final Key key;
     private final int jwtExpirationInMs;
-
+    
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    private String googleClientId;
+    
+    private static final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     public JwtTokenProvider(
             @Value("${app.jwtSecret}") String jwtSecret,
             @Value("${app.jwtExpirationInMs}") int jwtExpirationInMs) {
@@ -51,6 +55,33 @@ public class JwtTokenProvider {
                 .signWith(key)
                 .compact();
     }
+    
+    public GoogleIdToken.Payload verifyGoogleToken(String idTokenString) throws GeneralSecurityException, IOException {
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), JSON_FACTORY)
+                .setAudience(Collections.singletonList(googleClientId))
+                .build();
+
+        GoogleIdToken idToken = verifier.verify(idTokenString);
+        if (idToken != null) {
+            return idToken.getPayload();
+  
+        } else {
+            throw new GeneralSecurityException("Invalid ID token.");
+        }
+    }
+
+    public String generateTokenFromUserId(int userId) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
+
+        return Jwts.builder()
+                .setSubject(Integer.toString(userId))
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key)
+                .compact();
+    }
+
 
     public String getUsernameFromJWT(String token) {
         Claims claims = Jwts.parserBuilder()

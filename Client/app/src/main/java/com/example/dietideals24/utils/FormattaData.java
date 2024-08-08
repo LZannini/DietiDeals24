@@ -12,20 +12,8 @@ import java.time.temporal.ChronoUnit;
 public class FormattaData {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String formatta(String data) {
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
-        LocalDateTime date = null;
-
-        try {
-            date = LocalDateTime.parse(data, formatter2);
-        } catch (Exception e) {
-            try {
-                date = LocalDateTime.parse(data, formatter1);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                return "Data non valida";
-            }
-        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
+        LocalDateTime date = LocalDateTime.parse(data, formatter);
 
         LocalDate today = LocalDate.now();
         LocalDate dataDate = date.toLocalDate();

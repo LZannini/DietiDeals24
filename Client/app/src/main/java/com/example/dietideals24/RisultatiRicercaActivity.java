@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -143,7 +144,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         call = apiService.recuperaUtente(astaSelezionata.getId_creatore());
         call.enqueue(new Callback<UtenteDTO>() {
             @Override
-            public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
+            public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
                 UtenteDTO user = response.body();
                 if (user != null) {
                     utenteCreatore = creaCreatoreAsta(user);
@@ -155,7 +156,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
             }
 
             @Override
-            public void onFailure(Call<UtenteDTO> call, Throwable t) {
+            public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
                 Toast.makeText(RisultatiRicercaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(RisultatiRicercaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }

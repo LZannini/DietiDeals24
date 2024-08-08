@@ -108,6 +108,4 @@ public class Utente {
 	public void setTipo(TipoUtente tipo) {
 		this.tipo = tipo;
 	}
-
-	
 }

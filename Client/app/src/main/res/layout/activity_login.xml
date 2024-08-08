@@ -76,33 +76,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
-            android:hint="Oppure accedi con"
+            android:hint="Oppure"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="186dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/google_button"
-                android:layout_width="64dp"
-                android:layout_height="62dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/image_google"></ImageView>
-
-            <ImageView
-                android:id="@+id/facebook_button"
-                android:layout_width="64dp"
-                android:layout_height="62dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/image_facebook"></ImageView>
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/google_button"
+            android:layout_width="206dp"
+            android:layout_height="63dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/android_light_rd_ctn"></ImageView>
 
         <Button
             android:id="@+id/login_button"

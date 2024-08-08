@@ -90,6 +90,7 @@ public class ProfiloActivity extends AppCompatActivity {
         textUsername = findViewById((R.id.text_nomeProfilo));
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.hide();
 
         if(fromDettagli) {
@@ -212,7 +213,7 @@ public class ProfiloActivity extends AppCompatActivity {
                     apiService.aggiornaUtente(utenteModificatoDTO)
                             .enqueue(new Callback<UtenteDTO>() {
                                 @Override
-                                public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
+                                public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
                                     if(response.isSuccessful()) {
                                         UtenteDTO utenteRicevuto = response.body();
                                         if (utenteRicevuto != null && utenteRicevuto.getAvatar() != null) {
@@ -242,7 +243,7 @@ public class ProfiloActivity extends AppCompatActivity {
                                 }
 
                                 @Override
-                                public void onFailure(Call<UtenteDTO> call, Throwable t) {
+                                public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
                                     Toast.makeText(ProfiloActivity.this, "Errore di connessione", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -289,7 +290,7 @@ public class ProfiloActivity extends AppCompatActivity {
                 }
             }
         });
-        popup.show();;
+        popup.show();
     }
 
 
@@ -353,6 +354,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private void openActivitySceltaAccount(Utente utente) {
         Intent intentR = new Intent(this, SceltaAccountActivity.class);
         intentR.putExtra("utente", utente);
+        intentR.putExtra("fromLogin", false);
         intentR.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentR);
     }
@@ -406,7 +408,7 @@ public class ProfiloActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<List<AstaDTO>>() {
             @Override
-            public void onResponse(Call<List<AstaDTO>> call, Response<List<AstaDTO>> response) {
+            public void onResponse(@NonNull Call<List<AstaDTO>> call, @NonNull Response<List<AstaDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<AstaDTO> asteResponse = response.body();
                     List<Asta> asteList = creaListaModelloAsta(asteResponse);
@@ -429,7 +431,7 @@ public class ProfiloActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<AstaDTO>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<AstaDTO>> call, @NonNull Throwable t) {
                 Toast.makeText(ProfiloActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(ProfiloActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
@@ -481,12 +483,16 @@ public class ProfiloActivity extends AppCompatActivity {
     public List<Asta> creaListaModelloAsta(List<AstaDTO> listaDto) {
         List<Asta> asteList = new ArrayList<>();
         for (AstaDTO dto : listaDto) {
-            if (dto.getTipo().equals("RIBASSO")) {
-                asteList.add(creaModelloAstaR(dto));
-            } else if (dto.getTipo().equals("SILENZIOSA")) {
-                asteList.add(creaModelloAstaS(dto));
-            } else if (dto.getTipo().equals("INVERSA")) {
-                asteList.add(creaModelloAstaI(dto));
+            switch (dto.getTipo()) {
+                case "RIBASSO":
+                    asteList.add(creaModelloAstaR(dto));
+                    break;
+                case "SILENZIOSA":
+                    asteList.add(creaModelloAstaS(dto));
+                    break;
+                case "INVERSA":
+                    asteList.add(creaModelloAstaI(dto));
+                    break;
             }
         }
         return asteList;
