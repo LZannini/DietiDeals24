@@ -1,6 +1,8 @@
 package com.dietideals24.demo.models;
 
 import com.dietideals24.demo.enums.Categoria;
+import com.dietideals24.demo.enums.StatoAsta;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -18,6 +20,10 @@ public class Asta_Silenziosa extends Asta {
 	}
 	
 	public Asta_Silenziosa() {}
+
+	public Asta_Silenziosa(StatoAsta stato) {
+		this.setStato(stato);
+	}
 
 	public String getScadenza() {
 		return scadenza;

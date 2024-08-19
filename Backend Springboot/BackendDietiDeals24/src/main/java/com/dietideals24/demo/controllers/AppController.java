@@ -13,12 +13,6 @@ public class AppController {
     	return "Welcome to Google!!";
     }
 	
-	 @GetMapping("/facebook")
-	    public String welcomeFacebook() {
-	        return "Welcome to Facebook!!";
-	    }
-    
-	
     @GetMapping("/user")
     public Principal user(Principal principal) {
     	System.out.println("username: " + principal.getName());

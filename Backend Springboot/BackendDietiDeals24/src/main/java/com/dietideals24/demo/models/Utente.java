@@ -27,10 +27,11 @@ public class Utente {
 	private TipoUtente tipo;
 	private byte[] avatar;
 	
-	public Utente(String username, String email, String password) {
+	public Utente(String username, String email, String password, TipoUtente tipo) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
+		this.tipo = tipo;
 	}
 	
 	public Utente() {

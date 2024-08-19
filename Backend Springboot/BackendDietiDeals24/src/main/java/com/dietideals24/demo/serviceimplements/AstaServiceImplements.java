@@ -211,6 +211,7 @@ public class AstaServiceImplements implements AstaService {
 
 	@Override
 	public List<AstaDTO> trovaAstePerParolaChiaveAndCategoria(String chiave, Categoria categoria) {
+		if(chiave == null || categoria == null) return null;
 		List<AstaDTO> aste_trovate = new ArrayList<>();
 		List<Asta> check_aste = astaRepository.filtraPerCategoriaAndParoleChiave(chiave, categoria, StatoAsta.ATTIVA);
 		if (!check_aste.isEmpty()) {

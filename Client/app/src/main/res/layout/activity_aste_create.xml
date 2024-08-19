@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="16dp"
-            android:text="Al momento non esistono aste attive create da te."
+            android:text="Al momento non esistono aste attive create da questo utente."
             android:textColor="@color/black"
             android:textSize="18sp"
             android:visibility="gone" />

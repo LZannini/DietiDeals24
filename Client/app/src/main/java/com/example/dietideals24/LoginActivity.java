@@ -1,6 +1,13 @@
 package com.example.dietideals24;
 
+<<<<<<< Updated upstream
 import androidx.annotation.NonNull;
+=======
+<<<<<<< HEAD
+=======
+import androidx.annotation.NonNull;
+>>>>>>> a79df5e6f12bd57ede716f2a587b09c7a20fbb3e
+>>>>>>> Stashed changes
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+=======
+>>>>>>> a79df5e6f12bd57ede716f2a587b09c7a20fbb3e
+>>>>>>> Stashed changes
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +63,13 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private TextView buttonRegistrazione;
     private ImageView buttonGoogle;
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> a79df5e6f12bd57ede716f2a587b09c7a20fbb3e
+>>>>>>> Stashed changes
     private ApiService apiService;
     private TokenManager tokenManager;
 
@@ -82,9 +105,41 @@ public class LoginActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                if(credenzialiValide(email, password)) {
+                    tokenManager = new TokenManager(LoginActivity.this);
 
-                if (email.length() == 0 || password.length() == 0) {
+                    UtenteDTO utente = new UtenteDTO();
+                    utente.setEmail(email);
+                    utente.setPassword(password);
+
+                    apiService.loginUtente(utente)
+                            .enqueue(new Callback<JwtAuthenticationResponse>() {
+                                @Override
+                                public void onResponse(Call<JwtAuthenticationResponse> call, Response<JwtAuthenticationResponse> response) {
+                                    if (response.isSuccessful()) {
+                                        JwtAuthenticationResponse authResponse = response.body();
+                                        if (authResponse != null && authResponse.getAccessToken() != null) {
+                                            tokenManager.saveToken(authResponse.getAccessToken());
+
+                                            RetrofitService.resetInstance();
+                                            apiService = RetrofitService.getInstance(LoginActivity.this).getRetrofit(LoginActivity.this).create(ApiService.class);
+
+                                            recuperaDatiUtente();
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Token non valido ricevuto", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else if (response.code() == 401) {
+                                        Toast.makeText(LoginActivity.this, "Email e/o password non corretti, riprova!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<JwtAuthenticationResponse> call, Throwable t) {
+                                    Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
+                                }
+                            });
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                     builder.setMessage("Bisogna riempire tutti i campi!")
                             .setCancelable(false)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -97,6 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                     passwordEditText.setText("");
                     return;
                 }
+<<<<<<< Updated upstream
 
                 tokenManager = new TokenManager(LoginActivity.this);
 
@@ -130,6 +186,8 @@ public class LoginActivity extends AppCompatActivity {
                                 Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                             }
                         });
+=======
+>>>>>>> Stashed changes
             }
         });
 
@@ -171,6 +229,10 @@ public class LoginActivity extends AppCompatActivity {
         Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "ciao");
         intentR.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intentR);
+    }
+
+    public boolean credenzialiValide(String email, String password) {
+        return email != null && !email.isEmpty() && password != null && !password.isEmpty();
     }
 
     private void recuperaDatiUtente() {
@@ -250,7 +312,15 @@ public class LoginActivity extends AppCompatActivity {
     private void impostaToken(String idToken) {
         apiService.loginGoogle(idToken).enqueue(new Callback<JwtAuthenticationResponse>() {
             @Override
+<<<<<<< Updated upstream
             public void onResponse(@NonNull Call<JwtAuthenticationResponse> call, @NonNull Response<JwtAuthenticationResponse> response) {
+=======
+<<<<<<< HEAD
+            public void onResponse(Call<JwtAuthenticationResponse> call, Response<JwtAuthenticationResponse> response) {
+=======
+            public void onResponse(@NonNull Call<JwtAuthenticationResponse> call, @NonNull Response<JwtAuthenticationResponse> response) {
+>>>>>>> a79df5e6f12bd57ede716f2a587b09c7a20fbb3e
+>>>>>>> Stashed changes
                 if (response.isSuccessful() && response.body() != null) {
                     JwtAuthenticationResponse authResponse = response.body();
                     TokenManager tokenManager = new TokenManager(LoginActivity.this);
@@ -265,7 +335,15 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
+<<<<<<< Updated upstream
             public void onFailure(@NonNull Call<JwtAuthenticationResponse> call, @NonNull Throwable t) {
+=======
+<<<<<<< HEAD
+            public void onFailure(Call<JwtAuthenticationResponse> call, Throwable t) {
+=======
+            public void onFailure(@NonNull Call<JwtAuthenticationResponse> call, @NonNull Throwable t) {
+>>>>>>> a79df5e6f12bd57ede716f2a587b09c7a20fbb3e
+>>>>>>> Stashed changes
                 Toast.makeText(LoginActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });

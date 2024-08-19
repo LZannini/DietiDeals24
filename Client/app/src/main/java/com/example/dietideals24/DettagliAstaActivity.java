@@ -60,7 +60,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DettagliAstaActivity extends AppCompatActivity implements OfferAdapter.OnOffertaListener {
-
     private LinearLayout userSection, creatorSection;
     private EditText etTitle, etDescription, etOffer;
     private TextView tvPrice, tvCategoryValue, tvCreatorValue, tvPriceValue, tvDecrementValue, tvTimerValue, tvLowestOffer, tvLowestOfferValue;
@@ -148,6 +147,8 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
 
         ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
+        LocalDateTime dataCorrente = LocalDateTime.now();
+
 
         byte[] fotoBytes = asta.getFoto();
         if (fotoBytes != null) {
@@ -204,7 +205,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
 
                             LocalDateTime scadenzaAsta = LocalDateTime.parse(astaRicevuta.getScadenza(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-                            tvTimerValue.setText(calcolaTempoRimanente(scadenzaAsta));
+                            tvTimerValue.setText(calcolaTempoRimanente(scadenzaAsta, dataCorrente));
                         }
 
                         @Override
@@ -228,7 +229,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                             tvPriceValue.setText(NumberFormat.getCurrencyInstance(Locale.ITALY).format(astaRicevuta.getPrezzo()));
 
                             LocalDateTime scadenzaAsta = LocalDateTime.parse(astaRicevuta.getScadenza(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                            tvTimerValue.setText(calcolaTempoRimanente(scadenzaAsta));
+                            tvTimerValue.setText(calcolaTempoRimanente(scadenzaAsta, dataCorrente));
                         }
 
                         @Override
@@ -502,10 +503,22 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         handler.removeCallbacks(timerRunnable);
     }
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
     @SuppressLint("NewApi")
     private String calcolaTempoRimanente(LocalDateTime endDateTime) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(endDateTime)) {
+=======
+    public static String calcolaTempoRimanente(LocalDateTime endDateTime, LocalDateTime now) {
+        if (endDateTime == null || now == null) {
+            return "Data non valida";
+        }
+
+        if (now.isAfter(endDateTime) || now.isEqual(endDateTime)) {
+>>>>>>> Stashed changes
             return "Scaduta";
         }
 

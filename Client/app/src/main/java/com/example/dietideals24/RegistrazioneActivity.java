@@ -130,7 +130,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (password.equals(confPass)) {
+                if (password.equals(confPass) && passwordValida(password)) {
                     try {
                         UtenteDTO utente = new UtenteDTO();
                         utente.setUsername(username);
@@ -167,8 +167,21 @@ public class RegistrazioneActivity extends AppCompatActivity {
                     }
 
 
-                } else {
+                } else if (!password.equals(confPass)){
                     builder.setMessage("Le password non corrispondono, riprova")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    usernameEditText.setText("");
+                    emailEditText.setText("");
+                    passwordEditText.setText("");
+                    confPasswordEditText.setText("");
+                } else {
+                    builder.setMessage("Le password deve contenere almeno 8 caratteri, una maiuscola, un numero e un carattere speciale.")
                             .setCancelable(false)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -196,5 +209,26 @@ public class RegistrazioneActivity extends AppCompatActivity {
     public void openActivityLogin(){
         Intent intentR = new Intent(this, LoginActivity.class);
         startActivity(intentR);
+    }
+
+    private boolean passwordValida(String password) {
+
+        if (password.length() < 8) {
+            return false;
+        }
+
+        if (!password.matches(".*[A-Z].*")) {
+            return false;
+        }
+
+        if (!password.matches(".*[0-9].*")) {
+            return false;
+        }
+
+        if (!password.matches(".*[.!@#\\$%^&*].*")) {
+            return false;
+        }
+
+        return true;
     }
 }

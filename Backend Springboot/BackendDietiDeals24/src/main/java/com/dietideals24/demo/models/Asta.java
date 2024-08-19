@@ -33,6 +33,10 @@ public class Asta {
 		
 	}
 
+	public Asta(StatoAsta stato) {
+		this.stato = stato;
+	}
+
 	public int getId() {
 		return id;
 	}

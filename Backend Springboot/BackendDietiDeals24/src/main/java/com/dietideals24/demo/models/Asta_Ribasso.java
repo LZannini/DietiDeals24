@@ -3,6 +3,8 @@ package com.dietideals24.demo.models;
 import org.springframework.data.annotation.Id;
 
 import com.dietideals24.demo.enums.Categoria;
+import com.dietideals24.demo.enums.StatoAsta;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +34,10 @@ public class Asta_Ribasso extends Asta {
 	}
 	
 	public Asta_Ribasso() {}
+
+	public Asta_Ribasso(StatoAsta stato) {
+		this.setStato(stato);
+	}
 
 	public float getPrezzo() {
 		return prezzo;

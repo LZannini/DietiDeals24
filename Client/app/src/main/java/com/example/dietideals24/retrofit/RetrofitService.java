@@ -42,12 +42,35 @@ public class RetrofitService {
             Request original = chain.request();
             TokenManager tokenManager = new TokenManager(context);
             String token = tokenManager.getToken();
+<<<<<<< Updated upstream
+
+=======
+<<<<<<< Updated upstream
+<<<<<<< HEAD
+            Log.d("TokenDebug", "Interceptor chiamato, token: " + token);
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
+            if (token != null) {
+                Request.Builder requestBuilder = original.newBuilder()
+                        .header("Authorization", "Bearer " + token);
+                Request request = requestBuilder.build();
+
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+                Log.d("RetrofitService", "Request Headers: " + request.headers().toString());
+=======
 
             if (token != null) {
                 Request.Builder requestBuilder = original.newBuilder()
                         .header("Authorization", "Bearer " + token);
                 Request request = requestBuilder.build();
 
+>>>>>>> a79df5e6f12bd57ede716f2a587b09c7a20fbb3e
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
                 return chain.proceed(request);
             }
 

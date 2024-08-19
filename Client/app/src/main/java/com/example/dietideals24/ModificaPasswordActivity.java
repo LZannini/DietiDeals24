@@ -19,6 +19,17 @@ import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+import org.mindrot.jbcrypt.BCrypt;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,6 +42,7 @@ public class ModificaPasswordActivity extends AppCompatActivity {
     private Button salvaButton;
     private ImageButton back_button;
     private Utente utente;
+    private static String messaggioErrore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +84,7 @@ public class ModificaPasswordActivity extends AppCompatActivity {
         salvaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nuovaPassword.getText().toString().equals(confermaPassword.getText().toString()) && vecchiaPassword.getText().toString().equals(pass_utente)) {
+                if(passwordValida(nuovaPassword.getText().toString(), confermaPassword.getText().toString(), vecchiaPassword.getText().toString()) && BCrypt.checkpw(vecchiaPassword.getText().toString(), pass_utente)) {
                     try {
                         UtenteDTO utente = new UtenteDTO();
                         utente.setId(id_utente);
@@ -83,8 +95,16 @@ public class ModificaPasswordActivity extends AppCompatActivity {
                         apiService.modificaPassword(utente)
                                 .enqueue(new Callback<UtenteDTO>() {
                                     @Override
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
                                     public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
                                         if(response.isSuccessful()) {
+=======
+                                    public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
+                                        if (response.isSuccessful()) {
+>>>>>>> Stashed changes
                                             UtenteDTO utenteAggiornato = response.body();
                                             Utente utente_intent = creaUtente(utenteAggiornato);
                                             Toast.makeText(ModificaPasswordActivity.this, "Password modificata con successo!", Toast.LENGTH_SHORT).show();
@@ -100,11 +120,12 @@ public class ModificaPasswordActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                } else if(!nuovaPassword.getText().toString().equals(confermaPassword.getText().toString())){
-                    builder.setMessage("Le password non corrispondono, riprova.")
+                } else if(!BCrypt.checkpw(vecchiaPassword.getText().toString(), pass_utente)){
+                    builder.setMessage("La password corrente inserita non è valida.")
                             .setCancelable(false)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
                                 }
                             });
                     AlertDialog alert = builder.create();
@@ -112,11 +133,12 @@ public class ModificaPasswordActivity extends AppCompatActivity {
                     vecchiaPassword.setText("");
                     nuovaPassword.setText("");
                     confermaPassword.setText("");
-                } else if(!vecchiaPassword.getText().toString().equals(pass_utente)) {
-                    builder.setMessage("Le password corrente inserita non è corretta, riprova.")
+                } else {
+                    builder.setMessage(messaggioErrore)
                             .setCancelable(false)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
                                 }
                             });
                     AlertDialog alert = builder.create();
@@ -160,5 +182,43 @@ public class ModificaPasswordActivity extends AppCompatActivity {
         Intent intentP = new Intent(this, ProfiloActivity.class);
         intentP.putExtra("utente", utente);
         startActivity(intentP);
+    }
+
+    public static boolean passwordValida(String nuovaPassword, String confermaPassword, String vecchiaPassword) {
+        if (nuovaPassword.equals(vecchiaPassword)) {
+            messaggioErrore = "La nuova password deve essere diversa dalla vecchia password.";
+            return false;
+        }
+
+        if (!nuovaPassword.equals(confermaPassword)) {
+            messaggioErrore = "Le password non corrispondono, riprova.";
+            return false;
+        }
+
+        if (nuovaPassword.length() < 8) {
+            messaggioErrore = "La nuova password deve contenere almeno 8 caratteri.";
+            return false;
+        }
+
+        if (!nuovaPassword.matches(".*[A-Z].*")) {
+            messaggioErrore = "La nuova password deve contenere almeno una lettera maiuscola.";
+            return false;
+        }
+
+        if (!nuovaPassword.matches(".*[0-9].*")) {
+            messaggioErrore = "La nuova password deve contenere almeno un numero.";
+            return false;
+        }
+
+        if (!nuovaPassword.matches(".*[.!@#\\$%^&*].*")) {
+            messaggioErrore = "La nuova password deve contenere almeno un carattere speciale.";
+            return false;
+        }
+
+        return true;
+    }
+
+    public static String getMessaggioErrore() {
+        return messaggioErrore;
     }
 }

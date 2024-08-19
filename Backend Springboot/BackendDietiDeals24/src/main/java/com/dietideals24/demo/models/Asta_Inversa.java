@@ -1,6 +1,8 @@
 package com.dietideals24.demo.models;
 
 import com.dietideals24.demo.enums.Categoria;
+import com.dietideals24.demo.enums.StatoAsta;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -23,6 +25,10 @@ public class Asta_Inversa extends Asta {
 	
 	public Asta_Inversa() {
 		
+	}
+
+	public Asta_Inversa(StatoAsta stato) {
+		this.setStato(stato);
 	}
 
 	public float getPrezzo() {

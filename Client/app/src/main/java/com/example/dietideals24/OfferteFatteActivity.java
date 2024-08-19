@@ -363,7 +363,6 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
     private void submitNewOffer(Asta asta, float importo) {
         ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
-
         OffertaDTO offerta = new OffertaDTO();
         offerta.setId_asta(asta.getId());
         offerta.setId_utente(utente.getId());
