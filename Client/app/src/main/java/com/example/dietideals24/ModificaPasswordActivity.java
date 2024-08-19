@@ -1,5 +1,6 @@
 package com.example.dietideals24;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,17 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.UtenteDTO;
-import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,7 +83,7 @@ public class ModificaPasswordActivity extends AppCompatActivity {
                         apiService.modificaPassword(utente)
                                 .enqueue(new Callback<UtenteDTO>() {
                                     @Override
-                                    public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
+                                    public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
                                         if(response.isSuccessful()) {
                                             UtenteDTO utenteAggiornato = response.body();
                                             Utente utente_intent = creaUtente(utenteAggiornato);
@@ -97,7 +93,7 @@ public class ModificaPasswordActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(Call<UtenteDTO> call, Throwable t) {
+                                    public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
                                         Toast.makeText(ModificaPasswordActivity.this, "Errore durante la modifica della password, riprova!", Toast.LENGTH_SHORT).show();
                                     }
                                 });

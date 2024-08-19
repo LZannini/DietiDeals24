@@ -1,5 +1,6 @@
 package com.example.dietideals24;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,9 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private TextView buttonRegistrazione;
     private ImageView buttonGoogle;
-
     private ApiService apiService;
     private TokenManager tokenManager;
 
@@ -65,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         tokenManager.deleteToken();
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.hide();
 
         buttonRegistrazione = (TextView) findViewById(R.id.textView_registrati);
@@ -109,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                 apiService.loginUtente(utente)
                         .enqueue(new Callback<JwtAuthenticationResponse>() {
                             @Override
-                            public void onResponse(Call<JwtAuthenticationResponse> call, Response<JwtAuthenticationResponse> response) {
+                            public void onResponse(@NonNull Call<JwtAuthenticationResponse> call, @NonNull Response<JwtAuthenticationResponse> response) {
                                 if(response.isSuccessful()) {
                                     JwtAuthenticationResponse authResponse = response.body();
                                     if (authResponse != null && authResponse.getAccessToken() != null) {
@@ -128,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFailure(Call<JwtAuthenticationResponse> call, Throwable t) {
+                            public void onFailure(@NonNull Call<JwtAuthenticationResponse> call, @NonNull Throwable t) {
                                 Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                             }
                         });
@@ -184,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
             apiService.recuperaUtente(userId)
                     .enqueue(new Callback<UtenteDTO>() {
                         @Override
-                        public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
+                        public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
 
                             if(response.isSuccessful()) {
                                 Toast.makeText(LoginActivity.this, "Login effettuato con successo", Toast.LENGTH_SHORT).show();
@@ -201,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<UtenteDTO> call, Throwable t) {
+                        public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
                             Logger.getLogger(LoginActivity.class.getName()).log(Level.SEVERE, "Errore nel recupero dei dati utente", t);
                         }
                     });
@@ -252,7 +250,7 @@ public class LoginActivity extends AppCompatActivity {
     private void impostaToken(String idToken) {
         apiService.loginGoogle(idToken).enqueue(new Callback<JwtAuthenticationResponse>() {
             @Override
-            public void onResponse(Call<JwtAuthenticationResponse> call, Response<JwtAuthenticationResponse> response) {
+            public void onResponse(@NonNull Call<JwtAuthenticationResponse> call, @NonNull Response<JwtAuthenticationResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     JwtAuthenticationResponse authResponse = response.body();
                     TokenManager tokenManager = new TokenManager(LoginActivity.this);
@@ -267,7 +265,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JwtAuthenticationResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<JwtAuthenticationResponse> call, @NonNull Throwable t) {
                 Toast.makeText(LoginActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });

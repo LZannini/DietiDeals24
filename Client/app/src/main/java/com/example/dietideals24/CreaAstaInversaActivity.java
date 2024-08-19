@@ -1,5 +1,6 @@
 package com.example.dietideals24;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,15 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.Asta_InversaDTO;
-import com.example.dietideals24.dto.Asta_SilenziosaDTO;
-import com.example.dietideals24.dto.UtenteDTO;
-import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -40,6 +37,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
     private Asta asta;
     private boolean fromHome;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

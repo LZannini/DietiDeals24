@@ -1,5 +1,6 @@
 package com.example.dietideals24;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,14 +17,11 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dietideals24.api.ApiService;
-import com.example.dietideals24.dto.Asta_RibassoDTO;
 import com.example.dietideals24.dto.Asta_SilenziosaDTO;
-import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -36,6 +34,7 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
     private Asta asta;
     private boolean fromHome;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +44,7 @@ public class CreaAstaSilenziosaActivity extends AppCompatActivity {
         actionBar.hide();
 
         fromHome = getIntent().getBooleanExtra("fromHome", true);
-        Asta asta = (Asta) getIntent().getSerializableExtra("asta");
+        asta = (Asta) getIntent().getSerializableExtra("asta");
         utente = (Utente) getIntent().getSerializableExtra("utente");
 
         DatePicker datePicker = findViewById(R.id.datePicker);

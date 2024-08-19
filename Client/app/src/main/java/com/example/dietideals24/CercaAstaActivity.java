@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.AstaDTO;
-import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.Categoria;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Asta_Inversa;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;

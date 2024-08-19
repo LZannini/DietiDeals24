@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -91,13 +92,15 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     private boolean fromHome;
     private OfferAdapter adapter;
 
-    @SuppressLint("MissingInflatedId")
+
+    @SuppressLint({"MissingInflatedId","NewApi"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettagli_asta);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.hide();
 
         isRibasso = false;
@@ -166,7 +169,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             apiService.recuperaDettagliAstaRibasso(asta.getId())
                     .enqueue(new Callback<Asta_RibassoDTO>() {
                         @Override
-                        public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
+                        public void onResponse(@NonNull Call<Asta_RibassoDTO> call, @NonNull Response<Asta_RibassoDTO> response) {
                             Asta_RibassoDTO astaRicevuta = response.body();
 
                             tvLowestOffer.setVisibility(View.GONE);
@@ -184,7 +187,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         }
 
                         @Override
-                        public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
+                        public void onFailure(@NonNull Call<Asta_RibassoDTO> call, @NonNull Throwable t) {
 
                         }
                     });
@@ -193,7 +196,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             apiService.recuperaDettagliAstaSilenziosa(asta.getId())
                     .enqueue(new Callback<Asta_SilenziosaDTO>() {
                         @Override
-                        public void onResponse(Call<Asta_SilenziosaDTO> call, Response<Asta_SilenziosaDTO> response) {
+                        public void onResponse(@NonNull Call<Asta_SilenziosaDTO> call, @NonNull Response<Asta_SilenziosaDTO> response) {
                             Asta_SilenziosaDTO astaRicevuta = response.body();
 
                             tvLowestOffer.setVisibility(View.GONE);
@@ -205,7 +208,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         }
 
                         @Override
-                        public void onFailure(Call<Asta_SilenziosaDTO> call, Throwable t) {
+                        public void onFailure(@NonNull Call<Asta_SilenziosaDTO> call, @NonNull Throwable t) {
 
                         }
                     });
@@ -214,7 +217,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             apiService.recuperaDettagliAstaInversa(asta.getId())
                     .enqueue(new Callback<Asta_InversaDTO>() {
                         @Override
-                        public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
+                        public void onResponse(@NonNull Call<Asta_InversaDTO> call, @NonNull Response<Asta_InversaDTO> response) {
                             Asta_InversaDTO astaRicevuta = response.body();
 
                             if (astaRicevuta.getOffertaMinore() != null) {
@@ -229,7 +232,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         }
 
                         @Override
-                        public void onFailure(Call<Asta_InversaDTO> call, Throwable t) {
+                        public void onFailure(@NonNull Call<Asta_InversaDTO> call, @NonNull Throwable t) {
 
                         }
                     });
@@ -245,7 +248,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             apiService.recuperaOffertePerId(asta.getId())
                     .enqueue(new Callback<List<OffertaDTO>>() {
                         @Override
-                        public void onResponse(Call<List<OffertaDTO>> call, Response<List<OffertaDTO>> response) {
+                        public void onResponse(@NonNull Call<List<OffertaDTO>> call, @NonNull Response<List<OffertaDTO>> response) {
                             if (response.isSuccessful() && response.body() != null) {
                                 List<OffertaDTO> offerteResponse = response.body();
                                 List<Offerta> offerteList = creaListModelloOfferta(offerteResponse);
@@ -261,7 +264,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         }
 
                         @Override
-                        public void onFailure(Call<List<OffertaDTO>> call, Throwable t) {
+                        public void onFailure(@NonNull Call<List<OffertaDTO>> call, @NonNull Throwable t) {
                         }
                     });
         }
@@ -324,7 +327,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                 apiService.creaOfferta(offerta)
                                         .enqueue(new Callback<Void>() {
                                             @Override
-                                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                                                 Toast.makeText(DettagliAstaActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
                                                 if (fromAsteCreate)
                                                     openActivityAsteCreate(listaAste, false);
@@ -335,7 +338,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                             }
 
                                             @Override
-                                            public void onFailure(Call<Void> call, Throwable t) {
+                                            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                                                 Toast.makeText(DettagliAstaActivity.this, "Errore durante la creazione dell'offerta!", Toast.LENGTH_SHORT).show();
                                             }
                                         });
@@ -449,13 +452,13 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         apiService.recuperaDettagliAstaRibasso(asta.getId())
                 .enqueue(new Callback<Asta_RibassoDTO>() {
                     @Override
-                    public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
+                    public void onResponse(@NonNull Call<Asta_RibassoDTO> call, @NonNull Response<Asta_RibassoDTO> response) {
                         Asta_RibassoDTO asta = response.body();
                         updateUI(asta);
                     }
 
                     @Override
-                    public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Asta_RibassoDTO> call, @NonNull Throwable t) {
                     }
                 });
     }
@@ -499,6 +502,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         handler.removeCallbacks(timerRunnable);
     }
 
+    @SuppressLint("NewApi")
     private String calcolaTempoRimanente(LocalDateTime endDateTime) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(endDateTime)) {
@@ -550,7 +554,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         apiService.accettaOfferta(offerte.get(position).getId())
                                 .enqueue(new Callback<Void>() {
                                     @Override
-                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                                         Toast.makeText(DettagliAstaActivity.this, "Hai accettato l'offerta con successo!", Toast.LENGTH_SHORT).show();
                                         if(listaAste!=null) {
                                             for (Asta a : listaAste) {
@@ -566,7 +570,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Void> call, Throwable t) {
+                                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                                         Logger.getLogger(DettagliAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                     }
                                 });
@@ -595,14 +599,14 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         apiService.rifiutaOfferta(offerta.getId())
                                 .enqueue(new Callback<Void>() {
                                     @Override
-                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                                         offerte.remove(offerta);
                                         adapter.notifyItemRemoved(position);
                                         Toast.makeText(DettagliAstaActivity.this, "Hai rifiutato l'offerta con successo!", Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Void> call, Throwable t) {
+                                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                                         Logger.getLogger(DettagliAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                     }
                                 });

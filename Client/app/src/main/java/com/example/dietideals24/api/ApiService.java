@@ -32,7 +32,6 @@ public interface ApiService {
     @POST("/utente/modPassword")
     Call<UtenteDTO> modificaPassword(@Body UtenteDTO utenteDTO);
 
-
     @GET("/asta/cercaTutte")
     Call<List<AstaDTO>> cercaTutte();
 
@@ -72,7 +71,6 @@ public interface ApiService {
     @GET("/asta/dettagliAstaSilenziosa")
     Call<Asta_SilenziosaDTO> recuperaDettagliAstaSilenziosa(@Query("id") int id);
 
-
     @GET("/notifica/mostraTutte")
     Call<List<NotificaDTO>> mostraNotifiche(@Query("id_utente") Integer id_utente);
 
@@ -90,7 +88,6 @@ public interface ApiService {
 
     @PUT("/notifica/segnaTutte")
     Call<Void> segnaTutteLeNotifiche(@Query("id_utente") Integer id_utente);
-
 
     @POST("/offerta/crea")
     Call<Void> creaOfferta(@Body OffertaDTO offertaDTO);

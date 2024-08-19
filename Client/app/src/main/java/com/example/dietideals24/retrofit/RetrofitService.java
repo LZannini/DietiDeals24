@@ -1,7 +1,6 @@
 package com.example.dietideals24.retrofit;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.dietideals24.security.TokenManager;
 import com.example.dietideals24.utils.ByteArrayToBase64TypeAdapter;
@@ -43,13 +42,12 @@ public class RetrofitService {
             Request original = chain.request();
             TokenManager tokenManager = new TokenManager(context);
             String token = tokenManager.getToken();
-            Log.d("TokenDebug", "Interceptor chiamato, token: " + token);
+
             if (token != null) {
                 Request.Builder requestBuilder = original.newBuilder()
                         .header("Authorization", "Bearer " + token);
                 Request request = requestBuilder.build();
 
-                Log.d("RetrofitService", "Request Headers: " + request.headers().toString());
                 return chain.proceed(request);
             }
 
@@ -61,7 +59,7 @@ public class RetrofitService {
                 .create();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.178.119:8080")
+                .baseUrl("http://192.168.31.15:8080")
                 .client(httpClient.build())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
