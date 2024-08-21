@@ -39,6 +39,9 @@ public class AstaServiceImplements implements AstaService {
 	private Asta_Ribasso_Repository astaAlRibassoRepository;
 	@Autowired
 	private Asta_Silenziosa_Repository astaSilenziosaRepository;
+	
+	@Autowired 
+	private OffertaServiceImplements offertaService;
 
 	@Override
 	@Transactional
@@ -292,7 +295,7 @@ public class AstaServiceImplements implements AstaService {
 		return astaDTO;
 	}
     
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "* * * * * ?")
     @Transactional
     public void scadenzaAsteInverse() {
     	List<Asta_Inversa> asteAttive = astaInversaRepository.cercaAsteInverse(StatoAsta.ATTIVA);
@@ -303,8 +306,14 @@ public class AstaServiceImplements implements AstaService {
     		LocalDateTime scadenzaTime = LocalDateTime.parse(asta.getScadenza(), formatter);
     		
     		if(!scadenzaTime.isAfter(LocalDateTime.now())) {
-    			asta.setStato(StatoAsta.FALLITA);
-    			astaInversaRepository.save(asta);
+    			if(asta.getOffertaMinore() == null) {
+    				asta.setStato(StatoAsta.FALLITA);
+    			} else {
+    				offertaService.setOffertaAccettata(asta.getIdOffertaMinore());
+    				asta.setStato(StatoAsta.VENDUTA);
+    			}
+				astaInversaRepository.save(asta);
+
     		}
     	}
     }

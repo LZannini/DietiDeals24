@@ -16,6 +16,7 @@ public class Asta_Inversa extends Asta {
 	private float prezzo;
 	private Float offertaMinore;
 	private String scadenza;
+	private Integer id_offertaMinore;
 	
 	public Asta_Inversa(int id_creatore, String nome, String descrizione, Categoria categoria, byte[] foto, float prezzo, String scadenza) {
 		super(id_creatore, nome, descrizione, categoria, foto);
@@ -53,5 +54,13 @@ public class Asta_Inversa extends Asta {
 
 	public void setOffertaMinore(Float offertaMinore) {
 		this.offertaMinore = offertaMinore;
+	}
+	
+	public Integer getIdOffertaMinore() {
+		return id_offertaMinore;
+	}
+	
+	public void setIdOffertaMinore(Integer id_offertaMinore) {
+		this.id_offertaMinore = id_offertaMinore;
 	}
 }
