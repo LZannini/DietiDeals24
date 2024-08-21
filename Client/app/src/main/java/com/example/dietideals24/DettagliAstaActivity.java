@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dietideals24.adapters.OfferAdapter;
 import com.example.dietideals24.api.ApiService;
+import com.example.dietideals24.dataholder.AsteDataHolder;
 import com.example.dietideals24.dto.Asta_InversaDTO;
 import com.example.dietideals24.dto.Asta_RibassoDTO;
 import com.example.dietideals24.dto.Asta_SilenziosaDTO;
@@ -77,7 +77,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     private boolean fromNotifica;
     private boolean fromDettagli;
     private boolean modificaAvvenuta;
-    private boolean isRibasso;
+    private boolean isSilenziosa;
     private Utente utenteProfilo;
     private Utente utenteCreatore;
     List<Offerta> offerte = new ArrayList<>();
@@ -91,23 +91,20 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     private boolean fromHome;
     private OfferAdapter adapter;
 
-
-    @SuppressLint({"MissingInflatedId","NewApi"})
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettagli_asta);
 
         ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
         actionBar.hide();
 
-        isRibasso = false;
+        isSilenziosa = false;
         modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", false);
         fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
         fromHome = getIntent().getBooleanExtra("fromHome", true);
         asta = (Asta) getIntent().getSerializableExtra("asta");
-        listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
         if (getIntent().getStringExtra("criterioRicerca") != null)
             criterioRicerca = getIntent().getStringExtra("criterioRicerca");
         utente = (Utente) getIntent().getSerializableExtra("utente");
@@ -116,6 +113,8 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         utenteCreatore = (Utente) getIntent().getSerializableExtra("utenteCreatore");
         fromNotifica = getIntent().getBooleanExtra("fromNotifica", false);
         notifiche = (List<NotificaDTO>) getIntent().getSerializableExtra("listaNotifiche");
+        listaAste = AsteDataHolder.getInstance().getListaAste();
+
 
         userSection = findViewById(R.id.userSection);
         creatorSection = findViewById(R.id.creatorSection);
@@ -166,11 +165,10 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
 
         if (asta instanceof Asta_Ribasso) {
             ivTypeValue.setImageResource(R.drawable.ribasso);
-            isRibasso = true;
             apiService.recuperaDettagliAstaRibasso(asta.getId())
                     .enqueue(new Callback<Asta_RibassoDTO>() {
                         @Override
-                        public void onResponse(@NonNull Call<Asta_RibassoDTO> call, @NonNull Response<Asta_RibassoDTO> response) {
+                        public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
                             Asta_RibassoDTO astaRicevuta = response.body();
 
                             tvLowestOffer.setVisibility(View.GONE);
@@ -188,16 +186,17 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<Asta_RibassoDTO> call, @NonNull Throwable t) {
+                        public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
 
                         }
                     });
         } else if (asta instanceof Asta_Silenziosa) {
             ivTypeValue.setImageResource(R.drawable.silenziosa);
+            isSilenziosa = true;
             apiService.recuperaDettagliAstaSilenziosa(asta.getId())
                     .enqueue(new Callback<Asta_SilenziosaDTO>() {
                         @Override
-                        public void onResponse(@NonNull Call<Asta_SilenziosaDTO> call, @NonNull Response<Asta_SilenziosaDTO> response) {
+                        public void onResponse(Call<Asta_SilenziosaDTO> call, Response<Asta_SilenziosaDTO> response) {
                             Asta_SilenziosaDTO astaRicevuta = response.body();
 
                             tvLowestOffer.setVisibility(View.GONE);
@@ -209,7 +208,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<Asta_SilenziosaDTO> call, @NonNull Throwable t) {
+                        public void onFailure(Call<Asta_SilenziosaDTO> call, Throwable t) {
 
                         }
                     });
@@ -218,7 +217,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             apiService.recuperaDettagliAstaInversa(asta.getId())
                     .enqueue(new Callback<Asta_InversaDTO>() {
                         @Override
-                        public void onResponse(@NonNull Call<Asta_InversaDTO> call, @NonNull Response<Asta_InversaDTO> response) {
+                        public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
                             Asta_InversaDTO astaRicevuta = response.body();
 
                             if (astaRicevuta.getOffertaMinore() != null) {
@@ -233,13 +232,13 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<Asta_InversaDTO> call, @NonNull Throwable t) {
+                        public void onFailure(Call<Asta_InversaDTO> call, Throwable t) {
 
                         }
                     });
         }
 
-        if (asta.getId_creatore() == utente.getId() && !isRibasso) {
+        if (asta.getId_creatore() == utente.getId() && isSilenziosa) {
             RecyclerView recyclerView = findViewById(R.id.recyclerViewOfferte);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setVisibility(View.VISIBLE);
@@ -249,7 +248,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             apiService.recuperaOffertePerId(asta.getId())
                     .enqueue(new Callback<List<OffertaDTO>>() {
                         @Override
-                        public void onResponse(@NonNull Call<List<OffertaDTO>> call, @NonNull Response<List<OffertaDTO>> response) {
+                        public void onResponse(Call<List<OffertaDTO>> call, Response<List<OffertaDTO>> response) {
                             if (response.isSuccessful() && response.body() != null) {
                                 List<OffertaDTO> offerteResponse = response.body();
                                 List<Offerta> offerteList = creaListModelloOfferta(offerteResponse);
@@ -265,7 +264,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<List<OffertaDTO>> call, @NonNull Throwable t) {
+                        public void onFailure(Call<List<OffertaDTO>> call, Throwable t) {
                         }
                     });
         }
@@ -277,7 +276,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
             @Override
             public void onClick(View v) {
                 if (fromAsteCreate)
-                    openActivityAsteCreate(listaAste, false);
+                    openActivityAsteCreate(false);
                 else if (fromNotifica)
                     openActivityNotifica();
                 else
@@ -328,10 +327,10 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                 apiService.creaOfferta(offerta)
                                         .enqueue(new Callback<Void>() {
                                             @Override
-                                            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                            public void onResponse(Call<Void> call, Response<Void> response) {
                                                 Toast.makeText(DettagliAstaActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
                                                 if (fromAsteCreate)
-                                                    openActivityAsteCreate(listaAste, false);
+                                                    openActivityAsteCreate(false);
                                                 else if (fromNotifica)
                                                     openActivityNotifica();
                                                 else
@@ -339,7 +338,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                             }
 
                                             @Override
-                                            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                            public void onFailure(Call<Void> call, Throwable t) {
                                                 Toast.makeText(DettagliAstaActivity.this, "Errore durante la creazione dell'offerta!", Toast.LENGTH_SHORT).show();
                                             }
                                         });
@@ -362,7 +361,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     @Override
     public void onBackPressed() {
         if (fromAsteCreate)
-            openActivityAsteCreate(listaAste, false);
+            openActivityAsteCreate(false);
         else if(fromNotifica)
             openActivityNotifica();
         else
@@ -372,7 +371,6 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
 
     private void openActivityRisultatiRicerca() {
         Intent intent = new Intent(this, RisultatiRicercaActivity.class);
-        intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("criterioRicerca", criterioRicerca);
         intent.putExtra("utente", utente);
         intent.putExtra("fromHome", fromHome);
@@ -394,9 +392,8 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         startActivity(intentR);
     }
 
-    private void openActivityAsteCreate(List<Asta> listaAste, boolean offertaAccettata) {
+    private void openActivityAsteCreate(boolean offertaAccettata) {
         Intent intent = new Intent(this, AsteCreateActivity.class);
-        intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("utente_home", utente);
         intent.putExtra("utente", utenteCreatore);
         intent.putExtra("utenteCreatore", utenteCreatore);
@@ -453,13 +450,13 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         apiService.recuperaDettagliAstaRibasso(asta.getId())
                 .enqueue(new Callback<Asta_RibassoDTO>() {
                     @Override
-                    public void onResponse(@NonNull Call<Asta_RibassoDTO> call, @NonNull Response<Asta_RibassoDTO> response) {
+                    public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
                         Asta_RibassoDTO asta = response.body();
                         updateUI(asta);
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<Asta_RibassoDTO> call, @NonNull Throwable t) {
+                    public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
                     }
                 });
     }
@@ -503,22 +500,12 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         handler.removeCallbacks(timerRunnable);
     }
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-    @SuppressLint("NewApi")
-    private String calcolaTempoRimanente(LocalDateTime endDateTime) {
-        LocalDateTime now = LocalDateTime.now();
-        if (now.isAfter(endDateTime)) {
-=======
     public static String calcolaTempoRimanente(LocalDateTime endDateTime, LocalDateTime now) {
         if (endDateTime == null || now == null) {
             return "Data non valida";
         }
 
         if (now.isAfter(endDateTime) || now.isEqual(endDateTime)) {
->>>>>>> Stashed changes
             return "Scaduta";
         }
 
@@ -567,14 +554,14 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         apiService.accettaOfferta(offerte.get(position).getId())
                                 .enqueue(new Callback<Void>() {
                                     @Override
-                                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
                                         Toast.makeText(DettagliAstaActivity.this, "Hai accettato l'offerta con successo!", Toast.LENGTH_SHORT).show();
                                         if(listaAste!=null) {
                                             for (Asta a : listaAste) {
                                                 if (a.getId() == asta.getId())
                                                     a.setStato(StatoAsta.VENDUTA);
                                             }
-                                            openActivityAsteCreate(listaAste, true);
+                                            openActivityAsteCreate(true);
                                         }
                                         else
                                             asta.setStato(StatoAsta.VENDUTA);
@@ -583,7 +570,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                                     }
 
                                     @Override
-                                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                    public void onFailure(Call<Void> call, Throwable t) {
                                         Logger.getLogger(DettagliAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                     }
                                 });
@@ -612,14 +599,14 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                         apiService.rifiutaOfferta(offerta.getId())
                                 .enqueue(new Callback<Void>() {
                                     @Override
-                                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
                                         offerte.remove(offerta);
                                         adapter.notifyItemRemoved(position);
                                         Toast.makeText(DettagliAstaActivity.this, "Hai rifiutato l'offerta con successo!", Toast.LENGTH_SHORT).show();
                                     }
 
                                     @Override
-                                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                    public void onFailure(Call<Void> call, Throwable t) {
                                         Logger.getLogger(DettagliAstaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                     }
                                 });

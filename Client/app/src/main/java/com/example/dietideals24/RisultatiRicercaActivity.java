@@ -8,9 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +20,7 @@ import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.example.dietideals24.dataholder.AsteDataHolder;
 
 import java.io.Serializable;
 import java.util.List;
@@ -84,7 +85,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         RecyclerView recyclerView = findViewById(R.id.risultati_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
+        listaAste = AsteDataHolder.getInstance().getListaAste();
         AuctionAdapter adapter = new AuctionAdapter(listaAste,this, true, false);
         recyclerView.setAdapter(adapter);
 
@@ -109,7 +110,6 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
 
     private void openActivityDettagliAsta() {
         Intent intent = new Intent(this, DettagliAstaActivity.class);
-        intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("criterioRicerca", criterioRicerca);
         intent.putExtra("utente", utente);
         intent.putExtra("asta", astaSelezionata);
@@ -144,7 +144,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         call = apiService.recuperaUtente(astaSelezionata.getId_creatore());
         call.enqueue(new Callback<UtenteDTO>() {
             @Override
-            public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
+            public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                 UtenteDTO user = response.body();
                 if (user != null) {
                     utenteCreatore = creaCreatoreAsta(user);
@@ -156,7 +156,7 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
             }
 
             @Override
-            public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
+            public void onFailure(Call<UtenteDTO> call, Throwable t) {
                 Toast.makeText(RisultatiRicercaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(RisultatiRicercaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }

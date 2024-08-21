@@ -1,20 +1,31 @@
 package com.example.dietideals24;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
+import com.example.dietideals24.dto.AstaDTO;
+import com.example.dietideals24.dto.Asta_InversaDTO;
+import com.example.dietideals24.dto.Asta_RibassoDTO;
+import com.example.dietideals24.dto.Asta_SilenziosaDTO;
 import com.example.dietideals24.dto.NotificaDTO;
+import com.example.dietideals24.dto.UtenteDTO;
+import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Asta_Inversa;
+import com.example.dietideals24.models.Asta_Ribasso;
+import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
 
 import com.example.dietideals24.retrofit.RetrofitService;
@@ -111,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<List<NotificaDTO>>() {
             @Override
-            public void onResponse(@NonNull Call<List<NotificaDTO>> call, @NonNull Response<List<NotificaDTO>> response) {
+            public void onResponse(Call<List<NotificaDTO>> call, Response<List<NotificaDTO>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     List<NotificaDTO> notifiche = response.body();
                     boolean nonLetta = false;
@@ -128,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<NotificaDTO>> call, @NonNull Throwable t) {
+            public void onFailure(Call<List<NotificaDTO>> call, Throwable t) {
                 Toast.makeText(HomeActivity.this, "Errore durante il caricamento delle notifiche, riprova!", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(HomeActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
@@ -143,7 +154,7 @@ public class HomeActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<List<NotificaDTO>>() {
             @Override
-            public void onResponse(@NonNull Call<List<NotificaDTO>> call, @NonNull Response<List<NotificaDTO>> response) {
+            public void onResponse(Call<List<NotificaDTO>> call, Response<List<NotificaDTO>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     List<NotificaDTO> notifiche = response.body();
                     Intent intent = new Intent(HomeActivity.this, NotificaActivity.class);
@@ -159,7 +170,7 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<NotificaDTO>> call, @NonNull Throwable t) {
+            public void onFailure(Call<List<NotificaDTO>> call, Throwable t) {
                 Toast.makeText(HomeActivity.this, "Errore durante il caricamento delle notifiche, riprova!", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(HomeActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }

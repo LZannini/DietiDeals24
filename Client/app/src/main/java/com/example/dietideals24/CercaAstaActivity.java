@@ -3,6 +3,7 @@ package com.example.dietideals24;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.example.dietideals24.models.Asta_Ribasso;
 import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.example.dietideals24.dataholder.AsteDataHolder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -183,8 +185,9 @@ public class CercaAstaActivity extends AppCompatActivity {
                         if (a.getId_creatore() != utente.getId())
                             aste.add(a);
                     }
+                    AsteDataHolder.getInstance().setListaAste(aste);
+
                     Intent intent = new Intent(CercaAstaActivity.this, RisultatiRicercaActivity.class);
-                    intent.putExtra("listaAste", (Serializable) aste);
                     intent.putExtra("criterioRicerca", finalSearchCriteria);
                     intent.putExtra("utente", utente);
                     startActivity(intent);

@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Asta;
+import com.example.dietideals24.models.Asta_Ribasso;
 import com.example.dietideals24.models.Utente;
 
 public class TipoAstaActivity extends AppCompatActivity {
@@ -35,7 +38,6 @@ public class TipoAstaActivity extends AppCompatActivity {
         ImageButton home_button = findViewById(R.id.home_button);
 
         ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
         actionBar.hide();
 
         fromHome = getIntent().getBooleanExtra("fromHome", true);

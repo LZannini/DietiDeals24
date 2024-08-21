@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.dietideals24.adapters.AuctionAdapter;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
+import com.example.dietideals24.dataholder.AsteDataHolder;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.Serializable;
@@ -48,11 +49,12 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aste_create);
 
+        listaAste = AsteDataHolder.getInstance().getListaAste();
+
         modificaAvvenuta = getIntent().getBooleanExtra("modificaAvvenuta", false);
         fromHome = getIntent().getBooleanExtra("fromHome", true);
         fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
         utente = (Utente) getIntent().getSerializableExtra("utente");
-        listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
         utente_home = (Utente) getIntent().getSerializableExtra("utente_home");
 
         aste_attive = new ArrayList<>();
@@ -188,7 +190,6 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
 
     private void openActivityDettagliAsta() {
         Intent intent = new Intent(this, DettagliAstaActivity.class);
-        intent.putExtra("listaAste", (Serializable) listaAste);
         intent.putExtra("utenteCreatore", utente);
         intent.putExtra("utente", utente_home);
         intent.putExtra("utenteProfilo", utente_home);

@@ -1,6 +1,5 @@
 package com.example.dietideals24;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +32,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -85,7 +86,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
         apiService.recuperaOffertePerUtente(utente.getId())
                 .enqueue(new Callback<List<OffertaDTO>>() {
                     @Override
-                    public void onResponse(@NonNull Call<List<OffertaDTO>> call, @NonNull Response<List<OffertaDTO>> response) {
+                    public void onResponse(Call<List<OffertaDTO>> call, Response<List<OffertaDTO>> response) {
                         if(response.isSuccessful() && response.body() != null) {
                             List<OffertaDTO> offerteResponse = response.body();
                             List<Offerta> offerteList = creaListModelloOfferta(offerteResponse);
@@ -131,7 +132,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<List<OffertaDTO>> call, @NonNull Throwable t) {
+                    public void onFailure(Call<List<OffertaDTO>> call, Throwable t) {
                         Toast.makeText(OfferteFatteActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                         Logger.getLogger(OfferteFatteActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                     }
@@ -155,7 +156,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
                 rifiutata = false;
                 btnAttive.setBackgroundColor(Color.parseColor("#FF0000"));
                 btnVinte.setBackgroundColor(Color.parseColor("#0E4273"));
-                btnRifiutate.setBackgroundColor(Color.parseColor("#0E5273"));
+                btnRifiutate.setBackgroundColor(Color.parseColor("#0E5273"));;
                 btnPerse.setBackgroundColor(Color.parseColor("#0E4273"));
                 adapter.setAste(aste_attive, attiva);
                 adapter.notifyDataSetChanged();
@@ -185,7 +186,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
                 }
                 btnVinte.setBackgroundColor(Color.parseColor("#FF0000"));
                 btnAttive.setBackgroundColor(Color.parseColor("#0E4273"));
-                btnRifiutate.setBackgroundColor(Color.parseColor("#0E5273"));
+                btnRifiutate.setBackgroundColor(Color.parseColor("#0E5273"));;
                 btnPerse.setBackgroundColor(Color.parseColor("#0E4273"));
                 adapter.setAste(aste_vinte, attiva);
                 adapter.notifyDataSetChanged();
@@ -206,7 +207,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
                 }
                 btnRifiutate.setBackgroundColor(Color.parseColor("#FF0000"));
                 btnAttive.setBackgroundColor(Color.parseColor("#0E4273"));
-                btnVinte.setBackgroundColor(Color.parseColor("#0E5273"));
+                btnVinte.setBackgroundColor(Color.parseColor("#0E5273"));;
                 btnPerse.setBackgroundColor(Color.parseColor("#0E4273"));
                 adapter.setAste(aste_rifiutate, rifiutata);
                 adapter.notifyDataSetChanged();
@@ -227,7 +228,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
                 }
                 btnPerse.setBackgroundColor(Color.parseColor("#FF0000"));
                 btnAttive.setBackgroundColor(Color.parseColor("#0E4273"));
-                btnRifiutate.setBackgroundColor(Color.parseColor("#0E5273"));
+                btnRifiutate.setBackgroundColor(Color.parseColor("#0E5273"));;
                 btnVinte.setBackgroundColor(Color.parseColor("#0E4273"));
                 adapter.setAste(aste_perse, attiva);
                 adapter.notifyDataSetChanged();
@@ -359,7 +360,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
         dialog.show();
     }
 
-    @SuppressLint("NewApi")
+
     private void submitNewOffer(Asta asta, float importo) {
         ApiService apiService = RetrofitService.getRetrofit(this).create(ApiService.class);
 
@@ -378,7 +379,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
         apiService.creaOfferta(offerta)
                 .enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                    public void onResponse(Call<Void> call, Response<Void> response) {
                         Toast.makeText(OfferteFatteActivity.this, "Offerta presentata con successo!", Toast.LENGTH_SHORT).show();
                         if(rifiutata) {
                             aste_attive.add(asta);
@@ -386,7 +387,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                    public void onFailure(Call<Void> call, Throwable t) {
                         Toast.makeText(OfferteFatteActivity.this, "Errore durante la creazione dell'offerta!", Toast.LENGTH_SHORT).show();
                     }
                 });

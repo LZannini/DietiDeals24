@@ -1,6 +1,5 @@
 package com.example.dietideals24;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -88,7 +87,6 @@ public class RegistrazioneActivity extends AppCompatActivity {
         });
 
         ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
         actionBar.hide();
 
         buttonLogin = (TextView) findViewById(R.id.textView_accedi);
@@ -147,7 +145,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
                         apiService.registraUtente(utente)
                                 .enqueue(new Callback<UtenteDTO>() {
                                     @Override
-                                    public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
+                                    public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                                         if(response.isSuccessful()) {
                                             Toast.makeText(RegistrazioneActivity.this, "Registrazione effettuata con successo!", Toast.LENGTH_SHORT).show();
                                             openActivityLogin();
@@ -157,7 +155,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
+                                    public void onFailure(Call<UtenteDTO> call, Throwable t) {
                                         Toast.makeText(RegistrazioneActivity.this, "Errore durante la registrazione!", Toast.LENGTH_SHORT).show();
                                         Logger.getLogger(RegistrazioneActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                     }

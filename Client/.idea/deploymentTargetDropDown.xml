@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="deploymentTargetDropDown">
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
     <targetSelectedWithDropDown>
       <Target>
         <type value="QUICK_BOOT_TARGET" />
@@ -17,8 +12,7 @@
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2024-08-17T12:41:18.303283400Z" />
->>>>>>> Stashed changes
+    <timeTargetWasSelectedWithDropDown value="2024-08-21T14:37:51.297414500Z" />
     <targetsSelectedWithDialog>
       <Target>
         <type value="QUICK_BOOT_TARGET" />
@@ -39,29 +33,5 @@
         </deviceKey>
       </Target>
     </targetsSelectedWithDialog>
-=======
->>>>>>> Stashed changes
-    <value>
-      <entry key="app">
-        <State>
-          <targetSelectedWithDropDown>
-            <Target>
-              <type value="QUICK_BOOT_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\User\.android\avd\Nexus_4_API_28.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-08-08T00:54:30.309745400Z" />
-        </State>
-      </entry>
-    </value>
-<<<<<<< Updated upstream
-=======
->>>>>>> a79df5e6f12bd57ede716f2a587b09c7a20fbb3e
->>>>>>> Stashed changes
   </component>
 </project>

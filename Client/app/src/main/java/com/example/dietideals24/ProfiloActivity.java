@@ -31,6 +31,7 @@ import com.example.dietideals24.models.Asta_Ribasso;
 import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.example.dietideals24.dataholder.AsteDataHolder;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -90,7 +91,6 @@ public class ProfiloActivity extends AppCompatActivity {
         textUsername = findViewById((R.id.text_nomeProfilo));
 
         ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
         actionBar.hide();
 
         if(fromDettagli) {
@@ -213,7 +213,7 @@ public class ProfiloActivity extends AppCompatActivity {
                     apiService.aggiornaUtente(utenteModificatoDTO)
                             .enqueue(new Callback<UtenteDTO>() {
                                 @Override
-                                public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
+                                public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                                     if(response.isSuccessful()) {
                                         UtenteDTO utenteRicevuto = response.body();
                                         if (utenteRicevuto != null && utenteRicevuto.getAvatar() != null) {
@@ -243,7 +243,7 @@ public class ProfiloActivity extends AppCompatActivity {
                                 }
 
                                 @Override
-                                public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
+                                public void onFailure(Call<UtenteDTO> call, Throwable t) {
                                     Toast.makeText(ProfiloActivity.this, "Errore di connessione", Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -290,7 +290,7 @@ public class ProfiloActivity extends AppCompatActivity {
                 }
             }
         });
-        popup.show();
+        popup.show();;
     }
 
 
@@ -373,8 +373,9 @@ public class ProfiloActivity extends AppCompatActivity {
                     for (Asta a : asteList) {
                         aste.add(a);
                     }
+                    AsteDataHolder.getInstance().setListaAste(aste);
+
                     Intent intent = new Intent(ProfiloActivity.this, AsteCreateActivity.class);
-                    intent.putExtra("listaAste", (Serializable) aste);
                     intent.putExtra("utente_home", utenteModificato);
                     intent.putExtra("utente", utenteOriginale);
                     intent.putExtra("fromDettagli", fromDettagli);
@@ -408,7 +409,7 @@ public class ProfiloActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<List<AstaDTO>>() {
             @Override
-            public void onResponse(@NonNull Call<List<AstaDTO>> call, @NonNull Response<List<AstaDTO>> response) {
+            public void onResponse(Call<List<AstaDTO>> call, Response<List<AstaDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<AstaDTO> asteResponse = response.body();
                     List<Asta> asteList = creaListaModelloAsta(asteResponse);
@@ -431,7 +432,7 @@ public class ProfiloActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<AstaDTO>> call, @NonNull Throwable t) {
+            public void onFailure(Call<List<AstaDTO>> call, Throwable t) {
                 Toast.makeText(ProfiloActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(ProfiloActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
@@ -483,16 +484,12 @@ public class ProfiloActivity extends AppCompatActivity {
     public List<Asta> creaListaModelloAsta(List<AstaDTO> listaDto) {
         List<Asta> asteList = new ArrayList<>();
         for (AstaDTO dto : listaDto) {
-            switch (dto.getTipo()) {
-                case "RIBASSO":
-                    asteList.add(creaModelloAstaR(dto));
-                    break;
-                case "SILENZIOSA":
-                    asteList.add(creaModelloAstaS(dto));
-                    break;
-                case "INVERSA":
-                    asteList.add(creaModelloAstaI(dto));
-                    break;
+            if (dto.getTipo().equals("RIBASSO")) {
+                asteList.add(creaModelloAstaR(dto));
+            } else if (dto.getTipo().equals("SILENZIOSA")) {
+                asteList.add(creaModelloAstaS(dto));
+            } else if (dto.getTipo().equals("INVERSA")) {
+                asteList.add(creaModelloAstaI(dto));
             }
         }
         return asteList;

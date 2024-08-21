@@ -1,6 +1,5 @@
 package com.example.dietideals24.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -43,7 +42,6 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
         this.notifiche = objects;
     }
 
-    @SuppressLint("NewApi")
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -54,9 +52,9 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
             viewHolder = new ViewHolder();
             viewHolder.textView = convertView.findViewById(android.R.id.text1);
             convertView.setTag(viewHolder);
-        } else
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
-
+        }
 
         NotificaDTO notifica = getItem(position);
 
@@ -71,9 +69,9 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
         ClickableSpan astaclickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                if (onAstaClickListener != null)
+                if (onAstaClickListener != null) {
                     onAstaClickListener.onAstaClicked(notifica);
-
+                }
             }
 
             @Override
@@ -87,8 +85,9 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
         ClickableSpan testoClickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                if (onAstaClickListener != null)
+                if (onAstaClickListener != null) {
                     onAstaClickListener.onNotificaClicked(notifica);
+                }
             }
 
             @Override
@@ -127,11 +126,11 @@ public class NotificaAdapter extends ArrayAdapter<NotificaDTO> {
         viewHolder.textView.setText(spannableString);
         viewHolder.textView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        if(!notifica.isLetta())
+        if (!notifica.isLetta()) {
             viewHolder.textView.setTypeface(null, Typeface.BOLD);
-         else
+        } else {
             viewHolder.textView.setTypeface(null, Typeface.NORMAL);
-
+        }
 
         return convertView;
     }

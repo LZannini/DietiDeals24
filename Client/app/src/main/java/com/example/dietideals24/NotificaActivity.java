@@ -1,6 +1,5 @@
 package com.example.dietideals24;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -158,7 +157,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
         Call<Void> call = apiService.segnaTutteLeNotifiche(utente.getId());
         call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     for(NotificaDTO notifica : listaNotifiche) {
                         notifica.setLetta(true);
@@ -171,7 +170,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             }
 
             @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(NotificaActivity.this, "Errore durante la marcatura delle notifiche, riprova!", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
@@ -181,9 +180,8 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     private void rimuoviNotificheLette(ApiService apiService) {
         Call<Void> call = apiService.rimuoviAllNotificheLette(utente.getId());
         call.enqueue(new Callback<Void>() {
-            @SuppressLint("NewApi")
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     listaNotifiche.removeIf(NotificaDTO::isLetta);
                     adapter.notifyDataSetChanged();
@@ -194,7 +192,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             }
 
             @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(NotificaActivity.this, "Errore durante l'eliminazione delle notifiche lette, riprova!", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
@@ -205,7 +203,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
         Call<Void> call = apiService.svuotaNotifiche(utente.getId());
         call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     listaNotifiche.clear();
                     adapter.notifyDataSetChanged();
@@ -216,7 +214,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             }
 
             @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(NotificaActivity.this, "Errore durante l'eliminazione delle notifiche, riprova!", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
@@ -228,7 +226,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             Call<Void> call = apiService.rimuoviNotifica(notifica.getId());
             call.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
                         adapter.removeNotifica(notifica);
                         Toast.makeText(NotificaActivity.this, "Notifica rimossa", Toast.LENGTH_SHORT).show();
@@ -238,7 +236,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                public void onFailure(Call<Void> call, Throwable t) {
                     Toast.makeText(NotificaActivity.this, "Errore durante la rimozione della notifica, riprova!", Toast.LENGTH_SHORT).show();
                     Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                 }
@@ -251,7 +249,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             Call<Void> call = apiService.segnaNotifica(notifica.getId());
             call.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
                         notifica.setLetta(true);
                         adapter.updateNotifica(notifica);
@@ -261,7 +259,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                public void onFailure(Call<Void> call, Throwable t) {
                     Toast.makeText(NotificaActivity.this, "Errore durante la marcatura della notifica, riprova!", Toast.LENGTH_SHORT).show();
                     Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                 }
@@ -273,7 +271,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             int id_asta = notifica.getId_Asta();
             apiService.recuperaAsta(id_asta).enqueue(new Callback<AstaDTO>() {
                 @Override
-                public void onResponse(@NonNull Call<AstaDTO> call, @NonNull Response<AstaDTO> response) {
+                public void onResponse(Call<AstaDTO> call, Response<AstaDTO> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         AstaDTO astadto = response.body();
                         Asta asta = converteToModel(astadto);
@@ -281,7 +279,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                         if (asta instanceof Asta_Inversa) {
                             apiService.recuperaDettagliAstaInversa(id_asta).enqueue(new Callback<Asta_InversaDTO>() {
                                 @Override
-                                public void onResponse(@NonNull Call<Asta_InversaDTO> call, @NonNull Response<Asta_InversaDTO> response) {
+                                public void onResponse(Call<Asta_InversaDTO> call, Response<Asta_InversaDTO> response) {
                                     if (response.isSuccessful() && response.body() != null) {
                                         String nome_asta = asta.getNome();
                                         notifica.setNome_asta(nome_asta);
@@ -293,7 +291,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                                 }
 
                                 @Override
-                                public void onFailure(@NonNull Call<Asta_InversaDTO> call, @NonNull Throwable t) {
+                                public void onFailure(Call<Asta_InversaDTO> call, Throwable t) {
                                     Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                                     Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                 }
@@ -301,7 +299,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                         } else if (asta instanceof Asta_Ribasso) {
                             apiService.recuperaDettagliAstaRibasso(id_asta).enqueue(new Callback<Asta_RibassoDTO>() {
                                 @Override
-                                public void onResponse(@NonNull Call<Asta_RibassoDTO> call, @NonNull Response<Asta_RibassoDTO> response) {
+                                public void onResponse(Call<Asta_RibassoDTO> call, Response<Asta_RibassoDTO> response) {
                                     if (response.isSuccessful() && response.body() != null) {
                                         String nome_asta = asta.getNome();
                                         notifica.setNome_asta(nome_asta);
@@ -313,7 +311,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                                 }
 
                                 @Override
-                                public void onFailure(@NonNull Call<Asta_RibassoDTO> call, @NonNull Throwable t) {
+                                public void onFailure(Call<Asta_RibassoDTO> call, Throwable t) {
                                     Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                                     Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                 }
@@ -321,7 +319,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                         } else if (asta instanceof Asta_Silenziosa) {
                             apiService.recuperaDettagliAstaSilenziosa(id_asta).enqueue(new Callback<Asta_SilenziosaDTO>() {
                                 @Override
-                                public void onResponse(@NonNull Call<Asta_SilenziosaDTO> call, @NonNull Response<Asta_SilenziosaDTO> response) {
+                                public void onResponse(Call<Asta_SilenziosaDTO> call, Response<Asta_SilenziosaDTO> response) {
                                     if (response.isSuccessful() && response.body() != null) {
                                         String nome_asta = asta.getNome();
                                         notifica.setNome_asta(nome_asta);
@@ -333,7 +331,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                                 }
 
                                 @Override
-                                public void onFailure(@NonNull Call<Asta_SilenziosaDTO> call, @NonNull Throwable t) {
+                                public void onFailure(Call<Asta_SilenziosaDTO> call, Throwable t) {
                                     Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                                     Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                                 }
@@ -345,7 +343,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<AstaDTO> call, @NonNull Throwable t) {
+                public void onFailure(Call<AstaDTO> call, Throwable t) {
                     Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                     Logger.getLogger(NotificaActivity.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
                 }
@@ -358,7 +356,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
         call = apiService.recuperaUtente(id_creatore);
         call.enqueue(new Callback<UtenteDTO>() {
             @Override
-            public void onResponse(@NonNull Call<UtenteDTO> call, @NonNull Response<UtenteDTO> response) {
+            public void onResponse(Call<UtenteDTO> call, Response<UtenteDTO> response) {
                 UtenteDTO user = response.body();
                 if (user != null) {
                         UtenteCreatore = creaCreatoreAsta(user);
@@ -370,7 +368,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
             }
 
             @Override
-            public void onFailure(@NonNull Call<UtenteDTO> call, @NonNull Throwable t) {
+            public void onFailure(Call<UtenteDTO> call, Throwable t) {
                 Toast.makeText(NotificaActivity.this, "Errore di Connessione", Toast.LENGTH_SHORT).show();
                 Logger.getLogger(Notifica.class.getName()).log(Level.SEVERE, "Errore rilevato", t);
             }
@@ -433,18 +431,12 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
 
     public Asta converteToModel(AstaDTO asta) {
         Asta a = new Asta();
-
-        switch (asta.getTipo()) {
-            case "RIBASSO":
-                a = creaModelloAstaR(asta);
-                break;
-            case "SILENZIOSA":
-                a = creaModelloAstaS(asta);
-                break;
-            case "INVERSA":
-                a = creaModelloAstaI(asta);
-                break;
-        }
+        if (asta.getTipo().equals("RIBASSO"))
+            a = creaModelloAstaR(asta);
+        else if (asta.getTipo().equals("SILENZIOSA"))
+            a = creaModelloAstaS(asta);
+        else if (asta.getTipo().equals("INVERSA"))
+            a = creaModelloAstaI(asta);
 
         return a;
     }

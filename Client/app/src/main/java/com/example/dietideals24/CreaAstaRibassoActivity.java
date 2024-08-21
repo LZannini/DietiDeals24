@@ -3,6 +3,7 @@ package com.example.dietideals24;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.Asta_RibassoDTO;
+import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
@@ -34,6 +36,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
     private ImageButton incrPrezzoIniziale;
     private Utente utente;
     private Asta asta;
+
     private EditText prezzoMinimo;
     private ImageButton decrPrezzoMinimo;
     private ImageButton incrPrezzoMinimo;
@@ -60,7 +63,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         actionBar.hide();
 
         fromHome = getIntent().getBooleanExtra("fromHome", true);
-        asta = (Asta) getIntent().getSerializableExtra("asta");
+        Asta asta = (Asta) getIntent().getSerializableExtra("asta");
         utente = (Utente) getIntent().getSerializableExtra("utente");
 
 
