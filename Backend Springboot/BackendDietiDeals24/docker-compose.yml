@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_PASSWORD: "dieti_deals"  
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/dietideals24
+    ports:
+      - "8080:8080"
+

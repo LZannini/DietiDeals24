@@ -83,7 +83,7 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
 
         createButton.setOnClickListener(v -> {
             int day = datePicker.getDayOfMonth();
-            int month = datePicker.getMonth();
+            int month = datePicker.getMonth() + 1;
             int year = datePicker.getYear();
             int hour = timePicker.getHour();
             int minute = timePicker.getMinute();
