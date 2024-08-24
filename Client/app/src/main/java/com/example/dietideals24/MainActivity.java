@@ -8,14 +8,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import com.example.dietideals24.retrofit.RetrofitService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAnalytics mfBanalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();

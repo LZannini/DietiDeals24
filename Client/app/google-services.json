@@ -1,1 +1,29 @@
-{"installed":{"client_id":"627611651068-95hbrcep9e5d7gcg9g82s08ij0fdb0uh.apps.googleusercontent.com","project_id":"dietideals24-422116","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs"}}
+{
+  "project_info": {
+    "project_number": "779727832939",
+    "project_id": "analisi-dietideals24",
+    "storage_bucket": "analisi-dietideals24.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779727832939:android:d8daac33b04044153e6e2e",
+        "android_client_info": {
+          "package_name": "com.example.dietideals24"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0TDrwCdBC-r6PXDxRcigiM2tLlWgf4Ig"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
