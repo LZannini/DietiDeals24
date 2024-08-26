@@ -46,6 +46,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -63,7 +64,7 @@ import retrofit2.Response;
 public class DettagliAstaActivity extends AppCompatActivity implements OfferAdapter.OnOffertaListener {
     private LinearLayout userSection, creatorSection;
     private EditText etTitle, etDescription, etOffer;
-    private TextView tvPrice, tvCategoryValue, tvCreatorValue, tvPriceValue, tvDecrementValue, tvTimerValue, tvLowestOffer, tvLowestOfferValue;
+    private TextView tvCategoryValue, tvCreatorValue, tvPriceValue, tvDecrementValue, tvTimerValue, tvLowestOffer, tvLowestOfferValue;
     private ImageView ivTypeValue;
     private Button btnSubmitOffer;
     private ImageView ivFoto;
@@ -130,7 +131,6 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
         ivTypeValue = findViewById(R.id.ivTypeValue);
         tvCreatorValue = findViewById(R.id.tvCreatorValue);
         tvPriceValue = findViewById(R.id.tvPriceValue);
-        tvPrice = findViewById(R.id.tvPrice);
         tvDecrementValue = findViewById(R.id.tvDecrementValue);
         tvTimerValue = findViewById(R.id.tvTimerValue);
         tvLowestOffer = findViewById(R.id.tvLowestOffer);
@@ -310,7 +310,19 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
 
 
             btnSubmitOffer.setOnClickListener(v -> {
-                if (!etOffer.getText().toString().isEmpty()) {
+                float valoreOfferto = Float.parseFloat(etOffer.getText().toString());
+                float prezzoNumerico = Float.MAX_VALUE;
+                if(!isSilenziosa) {
+                    NumberFormat format = NumberFormat.getInstance(Locale.ITALY);
+                    Number number = null;
+                    try {
+                        number = format.parse(tvPriceValue.getText().toString().replace("€", "").trim());
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    prezzoNumerico = number.floatValue();
+                }
+                if (!etOffer.getText().toString().isEmpty() && valoreOfferto > 0 && valoreOfferto <= prezzoNumerico) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(DettagliAstaActivity.this);
                 builder.setMessage("Sei sicuro di voler presentare l'offerta?")
                         .setCancelable(true)
