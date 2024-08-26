@@ -19,6 +19,7 @@ import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -38,11 +39,15 @@ public class ModificaPasswordActivity extends AppCompatActivity {
     private ImageButton back_button;
     private Utente utente;
     private static String messaggioErrore;
+    private FirebaseAnalytics mfBanalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifica_password);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("ModificaPasswordActivity");
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
         int id_utente = utente.getId();
@@ -203,6 +208,13 @@ public class ModificaPasswordActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 
     public static String getMessaggioErrore() {

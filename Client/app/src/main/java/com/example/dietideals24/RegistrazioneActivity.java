@@ -20,6 +20,7 @@ import com.example.dietideals24.api.ApiService;
 import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class RegistrazioneActivity extends AppCompatActivity {
 
     private Button btnR;
     private EditText usernameEditText;
+    private FirebaseAnalytics mfBanalytics;
     private EditText emailEditText;
     private EditText passwordEditText;
     private EditText confPasswordEditText;
@@ -47,6 +49,9 @@ public class RegistrazioneActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrazione);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("RegistrazioneActivity");
 
         usernameEditText = findViewById(R.id.username_input);
         emailEditText = findViewById(R.id.email_input);
@@ -228,5 +233,12 @@ public class RegistrazioneActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }

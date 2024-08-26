@@ -32,6 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private TextView buttonRegistrazione;
     private ImageView buttonGoogle;
-
+    private FirebaseAnalytics mfBanalytics;
     private ApiService apiService;
     private TokenManager tokenManager;
 
@@ -57,6 +58,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("LoginActivity");
 
         emailEditText = findViewById(R.id.email_input);
         passwordEditText = findViewById(R.id.password_input);
@@ -276,5 +280,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+    }
 }

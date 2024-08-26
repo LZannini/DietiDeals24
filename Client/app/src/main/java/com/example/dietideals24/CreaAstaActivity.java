@@ -31,6 +31,7 @@ import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -51,11 +52,15 @@ public class CreaAstaActivity extends AppCompatActivity {
     private Utente utente;
     private boolean fromHome, modificaAvvenuta;
     private List<Asta> listaAste;
+    private FirebaseAnalytics mfBanalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea_asta);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("CreaAstaActivity");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -215,5 +220,12 @@ public class CreaAstaActivity extends AppCompatActivity {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }

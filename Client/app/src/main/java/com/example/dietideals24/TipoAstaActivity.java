@@ -15,6 +15,7 @@ import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Asta_Ribasso;
 import com.example.dietideals24.models.Utente;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class TipoAstaActivity extends AppCompatActivity {
 
@@ -25,11 +26,15 @@ public class TipoAstaActivity extends AppCompatActivity {
     private Utente utente;
     private Asta asta;
     private boolean fromHome;
+    private FirebaseAnalytics mfBanalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tipo_asta);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("TipoAstaActivity");
 
         buttonSilenziosa = findViewById(R.id.button_silenziosa);
         buttonRibasso = findViewById(R.id.button_ribasso);
@@ -151,5 +156,12 @@ public class TipoAstaActivity extends AppCompatActivity {
         intentR.putExtra("utente", utente);
         intentR.putExtra("fromHome", fromHome);
         startActivity(intentR);
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }

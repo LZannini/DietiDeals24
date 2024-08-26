@@ -19,6 +19,7 @@ import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.dataholder.AsteDataHolder;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,11 +44,15 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
     private Boolean modificaAvvenuta;
     private boolean attiva, fromHome;
     private AuctionAdapter adapter;
+    private FirebaseAnalytics mfBanalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aste_create);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("AsteCreateActivity");
 
         listaAste = AsteDataHolder.getInstance().getListaAste();
 
@@ -217,6 +222,13 @@ public class AsteCreateActivity extends AppCompatActivity implements AuctionAdap
             astaSelezionata = aste_attive.get(position);
             openActivityDettagliAsta();
         }
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }
 

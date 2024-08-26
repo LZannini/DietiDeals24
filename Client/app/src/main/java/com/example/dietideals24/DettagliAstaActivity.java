@@ -42,6 +42,7 @@ import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Offerta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
@@ -81,6 +82,7 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     private Utente utenteProfilo;
     private Utente utenteCreatore;
     List<Offerta> offerte = new ArrayList<>();
+    private FirebaseAnalytics mfBanalytics;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final int POLLING_INTERVAL = 1000;
@@ -96,6 +98,9 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettagli_asta);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("DettagliAstaActivity");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -619,6 +624,13 @@ public class DettagliAstaActivity extends AppCompatActivity implements OfferAdap
                     }
                 })
                 .show();
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }
 

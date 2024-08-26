@@ -21,6 +21,7 @@ import com.example.dietideals24.dto.UtenteDTO;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -36,6 +37,7 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
     private ImageButton incrPrezzoIniziale;
     private Utente utente;
     private Asta asta;
+    private FirebaseAnalytics mfBanalytics;
 
     private EditText prezzoMinimo;
     private ImageButton decrPrezzoMinimo;
@@ -58,6 +60,9 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea_asta_ribasso);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("CreaAstaRibassoActivity");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -272,5 +277,12 @@ public class CreaAstaRibassoActivity extends AppCompatActivity {
         Intent intentH = new Intent(this, HomeActivity.class);
         intentH.putExtra("utente", utente);
         startActivity(intentH);
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }

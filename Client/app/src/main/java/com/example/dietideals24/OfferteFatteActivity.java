@@ -27,6 +27,7 @@ import com.example.dietideals24.models.Offerta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -52,6 +53,7 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
     private ImageButton back_button;
     private MaterialButton btnAttive, btnVinte, btnRifiutate, btnPerse;
     private Button btnCrea;
+    private FirebaseAnalytics mfBanalytics;
     private LinearLayout layout_attributi;
     private Asta astaSelezionata;
     private Boolean fromDettagli;
@@ -66,6 +68,9 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offerte_fatte);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("OfferteFatteActivity");
 
         utente = (Utente) getIntent().getSerializableExtra("utente_home");
         listaAste = (List<Asta>) getIntent().getSerializableExtra("listaAste");
@@ -391,5 +396,12 @@ public class OfferteFatteActivity extends AppCompatActivity implements AuctionAd
                         Toast.makeText(OfferteFatteActivity.this, "Errore durante la creazione dell'offerta!", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }

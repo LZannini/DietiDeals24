@@ -29,6 +29,7 @@ import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Utente;
 
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,11 +50,15 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout buttonDisconnetti;
     private AlertDialog.Builder builder;
     private Utente utente;
+    private FirebaseAnalytics mfBanalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("HomeActivity");
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
 
@@ -228,4 +233,10 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intentR);
     }
 
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+    }
 }

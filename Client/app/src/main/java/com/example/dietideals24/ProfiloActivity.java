@@ -34,6 +34,7 @@ import com.example.dietideals24.retrofit.RetrofitService;
 import com.example.dietideals24.dataholder.AsteDataHolder;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -56,6 +57,7 @@ public class ProfiloActivity extends AppCompatActivity {
     private EditText bioEditText;
     private EditText webSiteEditText;
     private EditText countryEditText;
+    private FirebaseAnalytics mfBanalytics;
     private MaterialTextView textUsername;
     private LinearLayout pulsantiAste;
     private Button buttonSalva, buttonAsteCreate, buttonOfferteFatte;
@@ -72,6 +74,9 @@ public class ProfiloActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilo);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("ProfiloActivity");
 
         fromDettagli = getIntent().getBooleanExtra("fromDettagli", false);
         fromHome = getIntent().getBooleanExtra("fromHome", true);
@@ -493,5 +498,12 @@ public class ProfiloActivity extends AppCompatActivity {
             }
         }
         return asteList;
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }

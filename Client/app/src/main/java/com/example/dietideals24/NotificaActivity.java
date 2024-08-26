@@ -31,6 +31,7 @@ import com.example.dietideals24.models.Asta_Silenziosa;
 import com.example.dietideals24.models.Notifica;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 import java.util.List;
@@ -47,6 +48,7 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     private List<NotificaDTO> listaNotifiche;
     private Utente utente;
     private Utente UtenteCreatore;
+    private FirebaseAnalytics mfBanalytics;
     private Asta asta_ricevuta;
     private ImageButton back_button;
     private TextView noResultsText;
@@ -58,6 +60,9 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifica);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("NotificaActivity");
 
         utente = (Utente) getIntent().getSerializableExtra("utente");
         asta_ricevuta = (Asta) getIntent().getSerializableExtra("asta_ricevuta");
@@ -513,5 +518,12 @@ public class NotificaActivity extends AppCompatActivity implements NotificaAdapt
         Intent intentH = new Intent(this, HomeActivity.class);
         intentH.putExtra("utente", utente);
         startActivity(intentH);
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }

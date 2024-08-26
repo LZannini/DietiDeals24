@@ -21,6 +21,7 @@ import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
 import com.example.dietideals24.dataholder.AsteDataHolder;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.Serializable;
 import java.util.List;
@@ -40,11 +41,15 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
     private List<Asta> listaAste;
     private LinearLayout layout_attributi;
     private boolean fromHome;
+    private FirebaseAnalytics mfBanalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_risultati_ricerca);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("RisultatiRicercaActivity");
 
         TextView noResultsText = findViewById(R.id.no_results_text);
         ImageButton back_button = findViewById(R.id.back_button);
@@ -175,5 +180,12 @@ public class RisultatiRicercaActivity extends AppCompatActivity implements Aucti
         if (utenteDTO.getPaese() != null) u.setPaese(utenteDTO.getPaese());
         if (utenteDTO.getSitoweb() != null) u.setSitoweb(utenteDTO.getSitoweb());
         return u;
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }

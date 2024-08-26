@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("MainActivity");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -41,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         }, 1500);
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 
     @Override

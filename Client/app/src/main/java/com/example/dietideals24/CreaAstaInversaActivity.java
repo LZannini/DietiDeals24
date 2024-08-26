@@ -24,6 +24,7 @@ import com.example.dietideals24.enums.TipoUtente;
 import com.example.dietideals24.models.Asta;
 import com.example.dietideals24.models.Utente;
 import com.example.dietideals24.retrofit.RetrofitService;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -39,11 +40,15 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
     private Utente utente;
     private Asta asta;
     private boolean fromHome;
+    private FirebaseAnalytics mfBanalytics;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crea_asta_inversa);
+
+        mfBanalytics = FirebaseAnalytics.getInstance(this);
+        logActivityEvent("CreaAstaInversaActivity");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
@@ -158,6 +163,13 @@ public class CreaAstaInversaActivity extends AppCompatActivity {
         Intent intentH = new Intent(this, HomeActivity.class);
         intentH.putExtra("utente", utente);
         startActivity(intentH);
+    }
+
+    private void logActivityEvent(String activityName) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, activityName);
+        bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, activityName);
+        mfBanalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
     }
 }
 
